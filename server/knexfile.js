@@ -14,6 +14,7 @@ module.exports = {
     useNullAsDefault: true,
     connection: {
       filename: filenameTest,
+      timezone: 'UTC',
     },
     migrations: {
       directory: path.join(BASE_PATH, 'migrations'),
