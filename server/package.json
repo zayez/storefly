@@ -1,0 +1,27 @@
+{
+  "name": "storefly-api",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "coverage": "nyc --reporter=text npm run test",
+    "start:dev": "NODE_ENV=development nodemon server.js",
+    "start:test": "NODE_ENV=test nodemon server.js",
+    "start:prod": "NODE_ENV=production nodemon server.js",
+    "conf": "NODE_ENV=test node config/index.js",
+    "test": "NODE_ENV=test tape tests/**/*.js | tap-min",
+    "test:watch": "ls tests/**/*.js | npm run test:watch:run",
+    "test:watch:run": "NODE_ENV=test entr -r tape tests/**/*.js | tap-spec-emoji"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.19",
+    "supertest": "^6.2.4",
+    "tap-min": "^2.0.0",
+    "tap-spec-emoji": "^6.1.2",
+    "tape": "^5.5.3"
+  }
+}
