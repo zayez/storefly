@@ -29,12 +29,12 @@ test('as a user', (t) => {
         firstName: 'zack',
         lastName: 'dug',
       })
-      // .expect('Accept', 'application/json')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
       .expect(201)
-      .end(function (err, res) {
-        const body = res.body
-        assert.equal(body.title, 'Created', 'user was created')
-        assert.error(err)
+      .then((res) => {
+        assert.equal(res.body.title, 'Created', 'User was created')
+        assert.ok(res.body instanceof Object && res.body.constructor === Object)
         assert.end()
       })
   })
@@ -66,11 +66,12 @@ test('as a customer', (t) => {
         email: 'zack@apple.com',
         password: '4321',
       })
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
       .expect(200)
-      .end(function (err, res) {
-        const body = res.body
-        assert.equal(body.title, 'Ok', 'user signed in')
-        assert.error(err)
+      .then((res) => {
+        assert.equal(res.body.title, 'Ok', 'user signed in')
+        assert.notEqual(res.body.token, '', 'token is not empty')
         assert.end()
       })
   })
