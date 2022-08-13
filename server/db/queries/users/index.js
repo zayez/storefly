@@ -1,4 +1,4 @@
-const knex = require('../../connection')
+const knex = require('../..')
 const bcrypt = require('bcrypt')
 const { format, parseISO } = require('date-fns')
 
@@ -58,7 +58,7 @@ async function clearUsers(createdAfter) {
 
   const users = await knex('users')
     .select('id')
-    .where('created_at', '>=', `${time}`)
+    .where('createdAt', '>=', `${time}`)
 
   const usersId = users.map((u) => u.id)
 

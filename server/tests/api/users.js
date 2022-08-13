@@ -2,14 +2,13 @@ const test = require('tape')
 const request = require('supertest')
 const server = require('../../server')
 const agent = request.agent(server)
+const knex = require('../../db')
 
 const { logAdmin, logUser } = require('../infrastructure/login')
-const { clearUsers } = require('../../db/queries/users')
-
-let timeStart
 
 test('setup', async (t) => {
-  timeStart = new Date().toISOString()
+  await knex.migrate.latest()
+  await knex.seed.run()
   t.end()
 })
 
@@ -30,6 +29,7 @@ test('as a user', (t) => {
         firstName: 'zack',
         lastName: 'dug',
       })
+      // .expect('Accept', 'application/json')
       .expect(201)
       .end(function (err, res) {
         const body = res.body
@@ -77,6 +77,6 @@ test('as a customer', (t) => {
 })
 
 test('teardown', async (t) => {
-  await clearUsers(timeStart)
+  await knex.seed.run()
   t.end()
 })

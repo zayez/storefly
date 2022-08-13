@@ -7,7 +7,7 @@ const {
 let knex
 
 test('setup', (t) => {
-  knex = require('../../db/connection')
+  knex = require('../../db')
 
   t.end()
 })
