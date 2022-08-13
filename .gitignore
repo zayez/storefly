@@ -4,5 +4,6 @@ node_modules/
 .env
 .env.test
 .nyc_output
-data/
 todo.md
+server/data/*
+!/**/.gitkeep

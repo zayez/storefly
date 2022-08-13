@@ -1,19 +1,18 @@
 const path = require('path')
 require('dotenv').config()
-const dbDir = 'data'
-const dbName = 'storefly-db.db'
+
+const dbName = 'storefly-db'
+const dbDev = path.join(__dirname, `data`, `${dbName}-dev.db`)
+const dbTest = path.join(__dirname, `data`, `${dbName}-test.db`)
 
 const BASE_PATH = path.join(__dirname, 'db')
-
-const filenameDev = path.join(__dirname, dbDir, 'development', dbName)
-const filenameTest = path.join(__dirname, dbDir, 'test', dbName)
 
 module.exports = {
   test: {
     client: 'sqlite3',
     useNullAsDefault: true,
     connection: {
-      filename: filenameTest,
+      filename: dbTest,
       timezone: 'UTC',
     },
     migrations: {
@@ -27,7 +26,8 @@ module.exports = {
     client: 'sqlite3',
     useNullAsDefault: true,
     connection: {
-      filename: filenameDev,
+      filename: dbDev,
+      timezone: 'UTC',
     },
     migrations: {
       directory: path.join(BASE_PATH, 'migrations'),
@@ -42,9 +42,10 @@ module.exports = {
     connection: {
       host: process.env.DB_HOST || 'localhost',
       port: process.env.DB_PORT || '4002',
-      database: process.env.DB_NAME || 'storefly-db',
+      database: process.env.DB_NAME || dbName,
       user: process.env.DB_USER || 'root',
       password: process.env.DB_PASS || 'root',
+      timezone: 'UTC',
     },
   },
 }
