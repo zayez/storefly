@@ -89,9 +89,9 @@ async function fetchCategory(id) {
   }
 }
 
-async function fetchCategories(id) {
+async function fetchCategories(page = 1) {
   try {
-    const categories = await getCategories()
+    const categories = await getCategories(page)
     if (categories) {
       return {
         action: ActionStatus.Ok,

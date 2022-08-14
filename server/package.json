@@ -32,6 +32,7 @@
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^2.2.0",
+    "knex-paginate": "^3.0.1",
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
     "koa-compose": "^4.1.0",

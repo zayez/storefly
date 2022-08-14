@@ -37,6 +37,14 @@ const DeleteCategory = Joi.object().keys({
   id: Joi.number(),
 })
 
+const FetchCategoryParams = Joi.object().keys({
+  id: Joi.number().required(),
+})
+
+const FetchCategoriesQuery = Joi.object().keys({
+  page: Joi.number(),
+})
+
 const schemas = {
   signUp: SignUp,
   signIn: SignIn,
@@ -44,6 +52,8 @@ const schemas = {
   category: Category,
   updateCategory: UpdateCategory,
   deleteCategory: DeleteCategory,
+  fetchCategoryParams: FetchCategoryParams,
+  fetchCategoriesQuery: FetchCategoriesQuery,
   id: Id,
 }
 

@@ -8,6 +8,8 @@ const {
   isValidCategory,
   isValidUpdateCategory,
   isValidDeleteCategory,
+  isValidFetchCategoryParams,
+  isValidFetchCategoriesQuery,
 } = require('../middlewares/validations')
 const { getResponse } = require('../helpers/routeHelpers')
 const {
@@ -87,7 +89,7 @@ router.delete(
 
 router.get(
   '/categories/:id',
-  compose([authenticate, authorizeAdmin]),
+  compose([authenticate, authorizeAdmin, isValidFetchCategoryParams]),
   async (ctx) => {
     try {
       const id = ctx.params.id
@@ -109,10 +111,11 @@ router.get(
 
 router.get(
   '/categories',
-  compose([authenticate, authorizeAdmin]),
+  compose([authenticate, authorizeAdmin, isValidFetchCategoriesQuery]),
   async (ctx) => {
     try {
-      const { action, data } = await fetchCategories()
+      const { page } = ctx.request.query
+      const { action, data } = await fetchCategories(page)
       const { code, title, message } = getResponse(action)
 
       ctx.status = code

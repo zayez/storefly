@@ -36,6 +36,24 @@ async function validateQuery({ ctx, next }, schema) {
   }
 }
 
+async function validateParams({ ctx, next }, schema) {
+  try {
+    const result = schema.validate(ctx.params, {
+      abortEarly: false,
+    })
+    if (result.error) {
+      ctx.response.status = 400
+      ctx.response.body = result.error
+      return
+    }
+
+    ctx.request.body = result.value
+    return await next()
+  } catch (err) {
+    ctx.throw(400, err.message)
+  }
+}
+
 function getResponse(action) {
   let code, title, message
   switch (action) {
@@ -100,5 +118,6 @@ function getResponse(action) {
 module.exports = {
   validateBody,
   validateQuery,
+  validateParams,
   getResponse,
 }

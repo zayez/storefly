@@ -20,8 +20,11 @@ async function getCategory(id) {
   return await knex('categories').select('*').where({ id }).first()
 }
 
-async function getCategories() {
-  return await knex('categories').select('*')
+async function getCategories(page = 1) {
+  const categories = await knex('categories')
+    .select('*')
+    .paginate({ perPage: 25, currentPage: page })
+  return categories.data
 }
 
 async function findCategoryById(id) {
