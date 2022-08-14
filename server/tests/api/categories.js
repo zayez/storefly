@@ -167,6 +167,20 @@ test('[as admin] should be able retrieve', (t) => {
     assert.end()
   })
 
+  t.test('should be able to retrieve a category', (assert) => {
+    agent
+      .get(`/categories/2`)
+      .set('Authorization', token)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .then((res) => {
+        assert.equal(res.body.title, 'Ok', 'Category retrieved')
+        assert.equal(res.body.category.title, 'Eletronics', 'equal name')
+        assert.end()
+      })
+  })
+
   t.test('should be able to retrieve all categories', (assert) => {
     agent
       .get(`/categories`)

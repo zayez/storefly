@@ -38,22 +38,27 @@ exports.seed = async (knex) => {
 
   await knex('categories').insert({
     title: 'Cars',
+    id: 1,
   })
 
   await knex('categories').insert({
     title: 'Eletronics',
+    id: 2,
   })
 
   await knex('categories').insert({
     title: 'Books',
+    id: 3,
   })
 
   await knex('categories').insert({
     title: 'Clothes',
+    id: 4,
   })
 
   await knex('categories').insert({
     title: 'Drinks',
+    id: 5,
   })
 }
 
