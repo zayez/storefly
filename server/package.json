@@ -20,6 +20,7 @@
   "devDependencies": {
     "dotenv": "^16.0.1",
     "nodemon": "^2.0.19",
+    "nyc": "^15.1.0",
     "supertest": "^6.2.4",
     "tap-min": "^2.0.0",
     "tap-spec-emoji": "^6.1.2",
