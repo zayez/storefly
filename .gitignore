@@ -1,7 +1,7 @@
 node_modules/
 *.log
 .vscode
-.env
+.env*
 .env.test
 .nyc_output
 todo.md
