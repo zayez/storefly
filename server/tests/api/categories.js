@@ -214,8 +214,10 @@ test('[as admin] should be able retrieve', (t) => {
     await knex.seed.run()
     assert.end()
   })
-
-  t.end()
 })
 
-test('teardown', async (t) => {})
+test('teardown', async (t) => {
+  await server.close()
+  await knex.destroy()
+  t.end()
+})
