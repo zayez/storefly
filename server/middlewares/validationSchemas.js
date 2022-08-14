@@ -24,10 +24,26 @@ const User = Joi.object().keys({
   roles: Joi.array().items(Joi.string().valid(...Roles)),
 })
 
+const Category = Joi.object().keys({
+  title: Joi.string().required(),
+})
+
+const UpdateCategory = Joi.object().keys({
+  id: Joi.number(),
+  title: Joi.string().required(),
+})
+
+const DeleteCategory = Joi.object().keys({
+  id: Joi.number(),
+})
+
 const schemas = {
   signUp: SignUp,
   signIn: SignIn,
   user: User,
+  category: Category,
+  updateCategory: UpdateCategory,
+  deleteCategory: DeleteCategory,
   id: Id,
 }
 

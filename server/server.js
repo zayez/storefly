@@ -5,6 +5,7 @@ const morgan = require('koa-morgan')
 const passport = require('koa-passport')
 const indexRoutes = require('./routes/index')
 const usersRoutes = require('./routes/users')
+const categoriesRoutes = require('./routes/categories')
 const passportConfig = require('./config/passportConfig')
 
 const { isDev, isProd } = require('./config')
@@ -22,7 +23,10 @@ app
 
 passportConfig(passport)
 
-app.use(indexRoutes.routes()).use(usersRoutes.routes())
+app
+  .use(indexRoutes.routes())
+  .use(usersRoutes.routes())
+  .use(categoriesRoutes.routes())
 
 const server = app.listen(PORT, () => {
   console.log(`Server listening on port: ${PORT}`)
