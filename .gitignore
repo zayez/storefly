@@ -8,3 +8,4 @@ coverage/
 todo.md
 server/data/*
 !/**/.gitkeep
+docs/api/backlog.md
