@@ -24,7 +24,7 @@ async function isEditor(ctx, next) {
   try {
     const user = ctx.state.user
 
-    const isEditor = await userHasRole(user, 'editor')
+    const isEditor = await User.hasRole(user, 'editor')
 
     if (!isEditor) {
       const { code, title, message } = getResponse(ActionStatus.Forbidden)
