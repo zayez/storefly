@@ -78,6 +78,6 @@ test('as a customer', (t) => {
 })
 
 test('teardown', async (t) => {
-  await knex.seed.run()
+  await server.close()
   t.end()
 })

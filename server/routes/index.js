@@ -3,7 +3,7 @@ const compose = require('koa-compose')
 const router = new Router()
 
 const { authenticateLocal } = require('../middlewares/authentication')
-const { userExists } = require('../middlewares/verifySignUp')
+const { userExists } = require('../middlewares/verify')
 const { isValidSignIn, isValidSignUp } = require('../middlewares/validations')
 const { signUp, signIn } = require('../controllers/users')
 const { getResponse } = require('../helpers/routeHelpers')

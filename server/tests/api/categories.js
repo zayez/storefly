@@ -51,9 +51,8 @@ test('[as admin] should be able to create', (t) => {
       .then((res) => {
         const categoryId = res.body.category.id
         agent
-          .put(`/categories`)
+          .put(`/categories/${categoryId}`)
           .send({
-            id: categoryId,
             title: 'Eletronics',
           })
           .set('Authorization', token)
@@ -67,6 +66,25 @@ test('[as admin] should be able to create', (t) => {
           })
       })
   })
+
+  t.test(
+    "should not be able to update a category that don't exists",
+    (assert) => {
+      agent
+        .put(`/categories/200`)
+        .send({
+          title: 'Hardware',
+        })
+        .set('Authorization', token)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(404)
+        .then((innerRes) => {
+          assert.equal(innerRes.body.title, 'Not Found', 'title is a match')
+          assert.end()
+        })
+    },
+  )
 
   t.test('should be able to delete a category', (assert) => {
     agent
@@ -218,6 +236,5 @@ test('[as admin] should be able retrieve', (t) => {
 
 test('teardown', async (t) => {
   await server.close()
-  await knex.destroy()
   t.end()
 })

@@ -20,6 +20,8 @@ const {
   fetchCategories,
 } = require('../controllers/categories')
 
+const { entityExists } = require('../middlewares/verify')
+
 router.post(
   '/categories',
   compose([authenticate, authorizeAdmin, isValidCategory]),
@@ -43,12 +45,17 @@ router.post(
 )
 
 router.put(
-  '/categories',
-  compose([authenticate, authorizeAdmin, isValidUpdateCategory]),
+  '/categories/:id',
+  compose([
+    authenticate,
+    authorizeAdmin,
+    isValidUpdateCategory,
+    entityExists('categories'),
+  ]),
   async (ctx) => {
     try {
       const categoryTitle = ctx.request.body.title
-      const { id } = ctx.request.body
+      const { id } = ctx.params
       const { action, data } = await updateCategory(id, categoryTitle)
       const { code, title, message } = getResponse(action)
 

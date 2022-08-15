@@ -3,7 +3,7 @@ const compose = require('koa-compose')
 const { authenticate } = require('../middlewares/authentication')
 const authorizeAdmin = require('../middlewares/authorization').isAdmin
 const { isValidUser } = require('../middlewares/validations')
-const { userExists } = require('../middlewares/verifySignUp')
+const { userExists } = require('../middlewares/verify')
 const { signUp } = require('../controllers/users')
 const { getResponse } = require('../helpers/routeHelpers')
 

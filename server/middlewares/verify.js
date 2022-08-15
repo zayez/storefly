@@ -1,6 +1,7 @@
 const { getResponse } = require('../helpers/routeHelpers')
 const ActionStatus = require('../types/ActionStatus')
 const { findUserByEmail } = require('../db/queries/users')
+const { findEntity } = require('../db/queries/entities')
 
 async function userExists(ctx, next) {
   try {
@@ -20,6 +21,27 @@ async function userExists(ctx, next) {
   }
 }
 
+function entityExists(entity) {
+  return async function (ctx, next) {
+    try {
+      const { id } = ctx.params
+      const foundEntity = await findEntity(entity, id)
+
+      if (!foundEntity) {
+        const { code, title, message } = getResponse(ActionStatus.NotFound)
+        ctx.status = code
+        ctx.body = { title, message }
+        return
+      }
+
+      await next()
+    } catch (err) {
+      throw err
+    }
+  }
+}
+
 module.exports = {
   userExists,
+  entityExists,
 }
