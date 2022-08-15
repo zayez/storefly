@@ -36,7 +36,7 @@ const isValidFetchCategoriesQuery = async (ctx, next) =>
   await validateQuery({ ctx, next }, fetchCategoriesQuery)
 
 const isValidDeleteCategory = async (ctx, next) =>
-  await validateBody({ ctx, next }, deleteCategory)
+  await validateParams({ ctx, next }, deleteCategory)
 
 const isValidId = async (ctx, next) => await validateQuery({ ctx, next }, id)
 

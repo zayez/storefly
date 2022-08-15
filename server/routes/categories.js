@@ -53,11 +53,11 @@ router.put(
 )
 
 router.delete(
-  '/categories',
+  '/categories/:id',
   compose([authenticate, authorizeAdmin, isValidDeleteCategory]),
   async (ctx) => {
     try {
-      const { id } = ctx.request.body
+      const { id } = ctx.params
       const { action, payload } = await Categories.destroy(id)
       setBody({ ctx, action, payload })
     } catch (err) {

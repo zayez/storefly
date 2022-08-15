@@ -99,10 +99,7 @@ test('[as admin] should be able to create', (t) => {
       .then((res) => {
         const categoryId = res.body.category.id
         agent
-          .delete(`/categories`)
-          .send({
-            id: categoryId,
-          })
+          .delete(`/categories/${categoryId}`)
           .set('Authorization', token)
           .set('Accept', 'application/json')
           .expect('Content-Type', /json/)
