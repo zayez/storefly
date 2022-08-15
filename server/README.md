@@ -1,5 +1,7 @@
 # Storefly server API
 
+![Build Status](https://github.com/zayez/storefly/workflows/Test/badge.svg)
+
 ## Installing
 
 Install the project's dependencies:
