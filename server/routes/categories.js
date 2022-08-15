@@ -12,13 +12,7 @@ const {
   isValidFetchCategoriesQuery,
 } = require('../middlewares/validations')
 const { getResponse } = require('../helpers/routeHelpers')
-const {
-  createCategory,
-  updateCategory,
-  deleteCategory,
-  fetchCategory,
-  fetchCategories,
-} = require('../controllers/categories')
+const Categories = require('../controllers/categories')
 
 const { entityExists } = require('../middlewares/verify')
 
@@ -29,7 +23,7 @@ router.post(
     try {
       const categoryTitle = ctx.request.body.title
       const category = { title: categoryTitle }
-      const { action, data } = await createCategory(category)
+      const { action, data } = await Categories.create(category)
       const { code, title, message } = getResponse(action)
 
       ctx.status = code
@@ -58,7 +52,7 @@ router.put(
       const categoryTitle = ctx.request.body.title
       const category = { title: categoryTitle }
       const { id } = ctx.params
-      const { action, data } = await updateCategory(id, category)
+      const { action, data } = await Categories.update(id, category)
       const { code, title, message } = getResponse(action)
 
       ctx.status = code
@@ -80,7 +74,7 @@ router.delete(
   async (ctx) => {
     try {
       const { id } = ctx.request.body
-      const { action, data } = await deleteCategory(id)
+      const { action, data } = await Categories.destroy(id)
       const { code, title, message } = getResponse(action)
 
       ctx.status = code
@@ -102,7 +96,7 @@ router.get(
   async (ctx) => {
     try {
       const id = ctx.params.id
-      const { action, data } = await fetchCategory(id)
+      const { action, data } = await Categories.getOne(id)
       const { code, title, message } = getResponse(action)
 
       ctx.status = code
@@ -124,7 +118,7 @@ router.get(
   async (ctx) => {
     try {
       const { page } = ctx.request.query
-      const { action, data } = await fetchCategories(page)
+      const { action, data } = await Categories.getAll(page)
       const { code, title, message } = getResponse(action)
 
       ctx.status = code
