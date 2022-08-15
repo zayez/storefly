@@ -7,7 +7,6 @@ const categoriesFix = require('../fixtures/categories.json').categories
 const STATUS = require('../../types/StatusCode')
 
 const { logAdmin, logUser } = require('../infrastructure/login')
-const StatusCode = require('../../types/StatusCode')
 
 test('setup', async (t) => {
   t.end()
