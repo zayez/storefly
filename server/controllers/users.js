@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const ActionStatus = require('../types/ActionStatus')
 const { SECRET, TOKEN_EXPIRES_IN } = require('../config').jwt
-const { createUser } = require('../db/queries/users')
+const { createUser } = require('../models/user')
 
 async function signUp(user, roles) {
   try {

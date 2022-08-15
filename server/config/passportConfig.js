@@ -6,7 +6,7 @@ const {
   findUserById,
   matchPassword,
   findUserByEmail,
-} = require('../db/queries/users')
+} = require('../models/user')
 function passportConfig(passport) {
   // JWT passport
   passport.use(

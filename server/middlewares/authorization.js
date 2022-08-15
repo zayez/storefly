@@ -1,6 +1,6 @@
 const ActionStatus = require('../types/ActionStatus')
 const { getResponse } = require('../helpers/routeHelpers')
-const { userHasRole } = require('../db/queries/users')
+const { userHasRole } = require('../models/user')
 
 async function isAdmin(ctx, next) {
   try {

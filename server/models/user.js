@@ -1,4 +1,4 @@
-const knex = require('../..')
+const knex = require('../db')
 const bcrypt = require('bcrypt')
 const { format, parseISO } = require('date-fns')
 

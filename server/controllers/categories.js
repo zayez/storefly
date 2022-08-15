@@ -5,7 +5,7 @@ const {
   removeCategory,
   getCategory,
   getCategories,
-} = require('../db/queries/categories')
+} = require('../models/category')
 
 const ActionStatus = require('../types/ActionStatus')
 

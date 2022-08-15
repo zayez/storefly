@@ -1,4 +1,4 @@
-const knex = require('../..')
+const knex = require('../db')
 
 async function addCategory(title) {
   const newCategory = { title }

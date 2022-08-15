@@ -1,7 +1,7 @@
 const { getResponse } = require('../helpers/routeHelpers')
 const ActionStatus = require('../types/ActionStatus')
-const { findUserByEmail } = require('../db/queries/users')
-const { findEntity } = require('../db/queries/entities')
+const { findUserByEmail } = require('../models/user')
+const { findEntity } = require('../models/entity')
 
 async function userExists(ctx, next) {
   try {

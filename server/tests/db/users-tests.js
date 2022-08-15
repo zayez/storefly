@@ -3,7 +3,7 @@ const {
   userHasRole,
   findUserByEmail,
   matchPassword,
-} = require('../../db/queries/users')
+} = require('../../models/user')
 let knex
 
 test('setup', (t) => {
