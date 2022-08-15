@@ -31,7 +31,7 @@ router.post(
   },
 )
 
-router.put(
+router.patch(
   '/categories/:id',
   compose([
     authenticate,

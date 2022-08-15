@@ -51,7 +51,7 @@ test('[as admin] should be able to create', (t) => {
       .then((res) => {
         const categoryId = res.body.category.id
         agent
-          .put(`/categories/${categoryId}`)
+          .patch(`/categories/${categoryId}`)
           .send({
             title: 'Eletronics',
           })
@@ -71,7 +71,7 @@ test('[as admin] should be able to create', (t) => {
     "should not be able to update a category that don't exists",
     (assert) => {
       agent
-        .put(`/categories/200`)
+        .patch(`/categories/200`)
         .send({
           title: 'Hardware',
         })
