@@ -191,11 +191,11 @@ OR
 
 Creates a new category and responds with category contents if category was successfully created. Can only be created by users with **admin** role.
 
-|        |             |
-| ------ | ----------- |
-| Title  | Create card |
-| URL    | /categories |
-| Method | POST        |
+|        |                   |
+| ------ | ----------------- |
+| Title  | Create categories |
+| URL    | /categories       |
+| Method | POST              |
 
 ### <a name='CreateCategory-Body'></a> Body
 
