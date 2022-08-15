@@ -15,6 +15,7 @@ module.exports = {
       filename: dbTest,
       timezone: 'UTC',
     },
+    pool: { min: 0, max: 10, idleTimeoutMillis: 500 },
     migrations: {
       directory: path.join(BASE_PATH, 'migrations'),
     },
