@@ -1,26 +1,18 @@
 const bcrypt = require('bcrypt')
+const roles = require('../fixtures/roles.json').roles
+const users = require('../fixtures/users.json').users
+const categories = require('../fixtures/categories.json').categories
 
 exports.seed = async (knex) => {
   await knex('roles').del()
-
-  await knex('roles').insert([
-    { name: 'admin' },
-    { name: 'editor' },
-    { name: 'customer' },
-  ])
-
+  await knex('roles').insert(roles)
   await knex('users').del()
-
   await knex('userRoles').del()
 
-  const userId = await knex('users').insert([
-    {
-      firstName: 'Joe',
-      lastName: 'Doe',
-      email: 'joedoe@google.com',
-      password: await createHashedPassword(),
-    },
-  ])
+  for (const user of users) {
+    user.password = await createHashedPassword(user.password)
+  }
+  const userId = await knex('users').insert(users)
 
   const adminRole = await knex('roles')
     .select('id')
@@ -35,36 +27,15 @@ exports.seed = async (knex) => {
   ])
 
   await knex('categories').del()
-
-  await knex('categories').insert({
-    title: 'Cars',
-    id: 1,
-  })
-
-  await knex('categories').insert({
-    title: 'Eletronics',
-    id: 2,
-  })
-
-  await knex('categories').insert({
-    title: 'Books',
-    id: 3,
-  })
-
-  await knex('categories').insert({
-    title: 'Clothes',
-    id: 4,
-  })
-
-  await knex('categories').insert({
-    title: 'Drinks',
-    id: 5,
-  })
+  await knex('categories').insert(categories[0])
+  await knex('categories').insert(categories[1])
+  await knex('categories').insert(categories[2])
+  await knex('categories').insert(categories[3])
+  await knex('categories').insert(categories[4])
 }
 
-async function createHashedPassword() {
+async function createHashedPassword(password) {
   const salt = await bcrypt.genSalt(10)
-  const password = '1234'
   const passwordHash = await bcrypt.hash(password, salt)
   return passwordHash
 }

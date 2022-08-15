@@ -4,11 +4,11 @@ const {
   findUserByEmail,
   matchPassword,
 } = require('../../models/user')
-let knex
+const knex = require('../../db')
 
-test('setup', (t) => {
-  knex = require('../../db')
-
+test('setup', async (t) => {
+  await knex.migrate.latest()
+  await knex.seed.run()
   t.end()
 })
 
