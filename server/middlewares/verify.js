@@ -1,7 +1,6 @@
 const { getResponse } = require('../helpers/routeHelpers')
 const ActionStatus = require('../types/ActionStatus')
 const User = require('../models/user')
-const { findEntity } = require('../models/entity')
 
 async function userExists(ctx, next) {
   try {
@@ -22,10 +21,11 @@ async function userExists(ctx, next) {
 }
 
 function entityExists(entity) {
+  const Entity = require('../models/entity')(entity)
   return async function (ctx, next) {
     try {
       const { id } = ctx.params
-      const foundEntity = await findEntity(entity, id)
+      const foundEntity = await Entity.findById(id)
 
       if (!foundEntity) {
         const { code, title, message } = getResponse(ActionStatus.NotFound)

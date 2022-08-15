@@ -1,9 +1,7 @@
-const knex = require('../db')
+module.exports = (tableName, selectableFields = '*') => {
+  const queries = require('../helpers/queryHelper')(tableName, selectableFields)
 
-async function findEntity(entity, id) {
-  return await knex(entity).select('*').where('id', id).first()
-}
-
-module.exports = {
-  findEntity,
+  return {
+    ...queries,
+  }
 }
