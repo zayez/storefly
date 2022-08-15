@@ -71,7 +71,7 @@ router.get(
   compose([authenticate, authorizeAdmin, isValidFetchCategoryParams]),
   async (ctx) => {
     try {
-      const id = ctx.params.id
+      const { id } = ctx.params
       const { action, payload } = await Categories.getOne(id)
       setBody({ ctx, action, payload })
     } catch (err) {
