@@ -1,17 +1,10 @@
 const { mapCategory, mapCategories } = require('../helpers/mappings')
-const {
-  addCategory,
-  editCategory,
-  removeCategory,
-  getCategory,
-  getCategories,
-} = require('../models/category')
-
+const Category = require('../models/category')
 const ActionStatus = require('../types/ActionStatus')
 
-async function createCategory(title) {
+async function createCategory(category) {
   try {
-    const createdCategory = await addCategory(title)
+    const createdCategory = await Category.create(category)
     if (createdCategory) {
       return {
         action: ActionStatus.Created,
@@ -29,9 +22,9 @@ async function createCategory(title) {
   }
 }
 
-async function updateCategory(id, title) {
+async function updateCategory(id, category) {
   try {
-    const updatedCategory = await editCategory(id, title)
+    const updatedCategory = await Category.update(id, category)
     if (updatedCategory) {
       return {
         action: ActionStatus.Ok,
@@ -51,7 +44,7 @@ async function updateCategory(id, title) {
 
 async function deleteCategory(id) {
   try {
-    const selectedCategory = await removeCategory(id)
+    const selectedCategory = await Category.destroy(id)
     if (selectedCategory) {
       return {
         action: ActionStatus.Ok,
@@ -71,7 +64,7 @@ async function deleteCategory(id) {
 
 async function fetchCategory(id) {
   try {
-    const selectedCategory = await getCategory(id)
+    const selectedCategory = await Category.findById(id)
     if (selectedCategory) {
       return {
         action: ActionStatus.Ok,
@@ -91,7 +84,7 @@ async function fetchCategory(id) {
 
 async function fetchCategories(page = 1) {
   try {
-    const categories = await getCategories(page)
+    const categories = await Category.findAll(page)
     if (categories) {
       return {
         action: ActionStatus.Ok,

@@ -28,7 +28,8 @@ router.post(
   async (ctx) => {
     try {
       const categoryTitle = ctx.request.body.title
-      const { action, data } = await createCategory(categoryTitle)
+      const category = { title: categoryTitle }
+      const { action, data } = await createCategory(category)
       const { code, title, message } = getResponse(action)
 
       ctx.status = code
@@ -55,8 +56,9 @@ router.put(
   async (ctx) => {
     try {
       const categoryTitle = ctx.request.body.title
+      const category = { title: categoryTitle }
       const { id } = ctx.params
-      const { action, data } = await updateCategory(id, categoryTitle)
+      const { action, data } = await updateCategory(id, category)
       const { code, title, message } = getResponse(action)
 
       ctx.status = code

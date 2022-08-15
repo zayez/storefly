@@ -27,3 +27,7 @@ To start the server, just type:
 ```bash
 npm run start:dev
 ```
+
+## Credits
+
+- [queryBuilder from crud-server (MIT)](https://github.com/robmclarty/cred-server)
