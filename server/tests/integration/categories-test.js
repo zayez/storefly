@@ -4,8 +4,10 @@ const server = require('../../server')
 const agent = request.agent(server)
 const knex = require('../../db')
 const categoriesFix = require('../fixtures/categories.json').categories
+const STATUS = require('../../types/StatusCode')
 
 const { logAdmin, logUser } = require('../infrastructure/login')
+const StatusCode = require('../../types/StatusCode')
 
 test('setup', async (t) => {
   t.end()
@@ -31,7 +33,7 @@ test('[admin w/ clean db] should be able to create', (t) => {
       .set('Authorization', token)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .expect(201)
+      .expect(STATUS.Created)
       .then((res) => {
         assert.equal(res.body.title, 'Created', 'Category created')
         assert.equal(res.body.category.title, 'Books')
@@ -48,7 +50,7 @@ test('[admin w/ clean db] should be able to create', (t) => {
       .set('Authorization', token)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .expect(201)
+      .expect(STATUS.Created)
       .then((res) => {
         const categoryId = res.body.category.id
         agent
@@ -59,7 +61,7 @@ test('[admin w/ clean db] should be able to create', (t) => {
           .set('Authorization', token)
           .set('Accept', 'application/json')
           .expect('Content-Type', /json/)
-          .expect(200)
+          .expect(STATUS.Ok)
           .then((innerRes) => {
             assert.equal(innerRes.body.title, 'Ok', 'Category updated')
             assert.equal(innerRes.body.category.title, 'Eletronics')
@@ -79,7 +81,7 @@ test('[admin w/ clean db] should be able to create', (t) => {
         .set('Authorization', token)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(404)
+        .expect(STATUS.NotFound)
         .then((innerRes) => {
           assert.equal(innerRes.body.title, 'Not Found', 'title is a match')
           assert.end()
@@ -96,7 +98,7 @@ test('[admin w/ clean db] should be able to create', (t) => {
       .set('Authorization', token)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .expect(201)
+      .expect(STATUS.Created)
       .then((res) => {
         const categoryId = res.body.category.id
         agent
@@ -104,7 +106,7 @@ test('[admin w/ clean db] should be able to create', (t) => {
           .set('Authorization', token)
           .set('Accept', 'application/json')
           .expect('Content-Type', /json/)
-          .expect(200)
+          .expect(STATUS.Ok)
           .then((innerRes) => {
             assert.equal(innerRes.body.title, 'Ok', 'Category deleted')
             assert.end()
@@ -123,14 +125,14 @@ test('[admin w/ clean db] should be able to create', (t) => {
         .set('Authorization', token)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(201)
+        .expect(STATUS.Created)
         .then((res) => {
           agent
             .get(`/categories/clothes`)
             .set('Authorization', token)
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
-            .expect(400)
+            .expect(STATUS.BadRequest)
             .then(() => {
               assert.end()
             })
@@ -147,7 +149,7 @@ test('[admin w/ clean db] should be able to create', (t) => {
       .set('Authorization', token)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .expect(201)
+      .expect(STATUS.Created)
       .then((res) => {
         const categoryId = res.body.category.id
         agent
@@ -155,7 +157,7 @@ test('[admin w/ clean db] should be able to create', (t) => {
           .set('Authorization', token)
           .set('Accept', 'application/json')
           .expect('Content-Type', /json/)
-          .expect(200)
+          .expect(STATUS.Ok)
           .then((innerRes) => {
             assert.equal(innerRes.body.title, 'Ok', 'Category retrieved')
             assert.equal(innerRes.body.category.title, 'Cars', 'equal name')
@@ -192,7 +194,7 @@ test('[admin w/ seeded db] should be able retrieve', (t) => {
       .set('Authorization', token)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .expect(409)
+      .expect(STATUS.Conflict)
       .then((res) => {
         assert.equal(res.body.title, 'Conflict', 'Category alreadly exists')
         assert.end()
@@ -205,7 +207,7 @@ test('[admin w/ seeded db] should be able retrieve', (t) => {
       .set('Authorization', token)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .expect(200)
+      .expect(STATUS.Ok)
       .then((res) => {
         assert.equal(res.body.title, 'Ok', 'Category retrieved')
         assert.equal(res.body.category.title, 'Eletronics', 'equal name')
@@ -219,7 +221,7 @@ test('[admin w/ seeded db] should be able retrieve', (t) => {
       .set('Authorization', token)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .expect(200)
+      .expect(STATUS.Ok)
       .then((res) => {
         assert.equal(res.body.title, 'Ok', 'Category retrieved')
         assert.ok(Array.isArray(res.body.categories))
@@ -235,7 +237,7 @@ test('[admin w/ seeded db] should be able retrieve', (t) => {
         .set('Authorization', token)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(400)
+        .expect(STATUS.BadRequest)
         .then((res) => {
           assert.end()
         })

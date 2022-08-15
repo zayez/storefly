@@ -3,6 +3,7 @@ const request = require('supertest')
 const server = require('../../server')
 const agent = request.agent(server)
 const knex = require('../../db')
+const STATUS = require('../../types/StatusCode')
 
 const { logAdmin, logUser } = require('../infrastructure/login')
 
@@ -31,7 +32,7 @@ test('as a user', (t) => {
       })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .expect(201)
+      .expect(STATUS.Created)
       .then((res) => {
         assert.equal(res.body.title, 'Created', 'User was created')
         assert.ok(res.body instanceof Object && res.body.constructor === Object)
@@ -68,7 +69,7 @@ test('as a customer', (t) => {
       })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .expect(200)
+      .expect(STATUS.Ok)
       .then((res) => {
         assert.equal(res.body.title, 'Ok', 'user signed in')
         assert.notEqual(res.body.token, '', 'token is not empty')
