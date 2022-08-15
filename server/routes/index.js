@@ -17,7 +17,7 @@ router.get('/', async (ctx) => {
 router.post('/signup', compose([isValidSignUp, userExists]), async (ctx) => {
   try {
     const { email, password, firstName, lastName } = ctx.request.body
-    const { action, data } = await signUp({
+    const { action, payload } = await signUp({
       email,
       password,
       firstName,
@@ -27,7 +27,7 @@ router.post('/signup', compose([isValidSignUp, userExists]), async (ctx) => {
 
     ctx.status = code
     ctx.body = { title, message }
-    if (data) ctx.body = { ...ctx.body, ...data }
+    if (payload) ctx.body = { ...ctx.body, ...payload }
   } catch (err) {
     ctx.status = 500
     ctx.body = {
@@ -42,11 +42,11 @@ router.post(
   compose([isValidSignIn, authenticateLocal]),
   async (ctx) => {
     const user = ctx.state.user
-    const { action, data } = await signIn(user)
+    const { action, payload } = await signIn(user)
     const { code, title, message } = getResponse(action)
     ctx.status = code
     ctx.body = { title, message }
-    if (data) ctx.body = { ...ctx.body, ...data }
+    if (payload) ctx.body = { ...ctx.body, ...payload }
   },
 )
 

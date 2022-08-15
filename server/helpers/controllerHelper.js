@@ -11,16 +11,17 @@ module.exports = (controllerName) => {
     try {
       const createdModel = await Model.create(model)
       if (createdModel) {
-        const data = {}
-        data[modelName] = mappings[`map${capitalize(modelName)}`](createdModel)
+        const payload = {}
+        payload[modelName] =
+          mappings[`map${capitalize(modelName)}`](createdModel)
         return {
           action: ActionStatus.Created,
-          data,
+          payload,
         }
       } else {
         return {
           action: ActionStatus.BadRequest,
-          data: null,
+          payload: null,
         }
       }
     } catch (err) {
@@ -33,16 +34,17 @@ module.exports = (controllerName) => {
     try {
       const updatedModel = await Model.update(id, model)
       if (updatedModel) {
-        const data = {}
-        data[modelName] = mappings[`map${capitalize(modelName)}`](updatedModel)
+        const payload = {}
+        payload[modelName] =
+          mappings[`map${capitalize(modelName)}`](updatedModel)
         return {
           action: ActionStatus.Ok,
-          data,
+          payload,
         }
       } else {
         return {
           action: ActionStatus.BadRequest,
-          data: null,
+          payload: null,
         }
       }
     } catch (err) {
@@ -57,12 +59,12 @@ module.exports = (controllerName) => {
       if (selectedModel) {
         return {
           action: ActionStatus.Ok,
-          data: selectedModel,
+          payload: selectedModel,
         }
       } else {
         return {
           action: ActionStatus.BadRequest,
-          data: null,
+          payload: null,
         }
       }
     } catch (err) {
@@ -75,17 +77,18 @@ module.exports = (controllerName) => {
     try {
       const selectedModel = await Model.findById(id)
       if (selectedModel) {
-        const data = {}
-        data[modelName] = mappings[`map${capitalize(modelName)}`](selectedModel)
+        const payload = {}
+        payload[modelName] =
+          mappings[`map${capitalize(modelName)}`](selectedModel)
 
         return {
           action: ActionStatus.Ok,
-          data,
+          payload,
         }
       } else {
         return {
           action: ActionStatus.BadRequest,
-          data: null,
+          payload: null,
         }
       }
     } catch (err) {
@@ -98,17 +101,17 @@ module.exports = (controllerName) => {
     try {
       const models = await Model.findAll(page)
       if (models) {
-        const data = {}
-        data[controllerName] =
+        const payload = {}
+        payload[controllerName] =
           mappings[`map${capitalize(controllerName)}`](models)
         return {
           action: ActionStatus.Ok,
-          data,
+          payload,
         }
       } else {
         return {
           action: ActionStatus.BadRequest,
-          data: null,
+          payload: null,
         }
       }
     } catch (err) {

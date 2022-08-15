@@ -16,12 +16,12 @@ router.post(
     try {
       const { username, password } = ctx.request.body
       const roles = ctx.request.body.roles || ['customer']
-      const { action, data } = await signUp({ username, password }, roles)
+      const { action, payload } = await signUp({ username, password }, roles)
 
       const { code, title, message } = getResponse(action)
       ctx.status = code
       ctx.body = { title, message }
-      if (data) ctx.body = { ...ctx.body, ...data }
+      if (payload) ctx.body = { ...ctx.body, ...payload }
     } catch (err) {
       ctx.status = 500
       ctx.body = {

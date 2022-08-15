@@ -23,8 +23,8 @@ router.post(
     try {
       const { title } = ctx.request.body
       const category = { title }
-      const { action, data } = await Categories.create(category)
-      setBody({ ctx, action, data })
+      const { action, payload } = await Categories.create(category)
+      setBody({ ctx, action, payload })
     } catch (err) {
       setBodyError(ctx, err)
     }
@@ -44,8 +44,8 @@ router.put(
       const { title } = ctx.request.body
       const category = { title }
       const { id } = ctx.params
-      const { action, data } = await Categories.update(id, category)
-      setBody({ ctx, action, data })
+      const { action, payload } = await Categories.update(id, category)
+      setBody({ ctx, action, payload })
     } catch (err) {
       setBodyError(ctx, err)
     }
@@ -58,8 +58,8 @@ router.delete(
   async (ctx) => {
     try {
       const { id } = ctx.request.body
-      const { action, data } = await Categories.destroy(id)
-      setBody({ ctx, action, data })
+      const { action, payload } = await Categories.destroy(id)
+      setBody({ ctx, action, payload })
     } catch (err) {
       setBodyError(ctx, err)
     }
@@ -72,8 +72,8 @@ router.get(
   async (ctx) => {
     try {
       const id = ctx.params.id
-      const { action, data } = await Categories.getOne(id)
-      setBody({ ctx, action, data })
+      const { action, payload } = await Categories.getOne(id)
+      setBody({ ctx, action, payload })
     } catch (err) {
       setBodyError(ctx, err)
     }
@@ -86,8 +86,8 @@ router.get(
   async (ctx) => {
     try {
       const { page } = ctx.request.query
-      const { action, data } = await Categories.getAll(page)
-      setBody({ ctx, action, data })
+      const { action, payload } = await Categories.getAll(page)
+      setBody({ ctx, action, payload })
     } catch (err) {
       setBodyError(ctx, err)
     }

@@ -11,7 +11,7 @@ async function signUp(user, roles) {
       const token = signToken(savedUser)
       return {
         action: ActionStatus.Created,
-        data: { token },
+        payload: { token },
       }
     } else {
       return {
@@ -25,7 +25,7 @@ async function signUp(user, roles) {
 
 async function signIn(user) {
   const token = signToken(user)
-  return { action: ActionStatus.Ok, data: { token } }
+  return { action: ActionStatus.Ok, payload: { token } }
 }
 
 function signToken(user) {

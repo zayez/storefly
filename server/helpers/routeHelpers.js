@@ -54,11 +54,11 @@ async function validateParams({ ctx, next }, schema) {
   }
 }
 
-function setBody({ ctx, action, data }) {
+function setBody({ ctx, action, payload }) {
   const { code, title, message } = getResponse(action)
   ctx.status = code
   ctx.body = { title, message }
-  ctx.body = { ...ctx.body, ...data }
+  ctx.body = { ...ctx.body, ...payload }
 }
 
 function setBodyError(ctx, err) {
