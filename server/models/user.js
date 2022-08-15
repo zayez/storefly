@@ -1,6 +1,16 @@
 const knex = require('../db')
 const bcrypt = require('bcrypt')
-const { format, parseISO } = require('date-fns')
+
+const TABLE_NAME = 'users'
+const SELECTABLE_FIELDS = [
+  'id',
+  'firstName',
+  'lastName',
+  'updatedAt',
+  'createdAt',
+]
+
+const queries = require('../helpers/queryHelper')(TABLE_NAME, SELECTABLE_FIELDS)
 
 async function userHasRole(user, role) {
   const userRoles = await knex('roles').whereIn(
@@ -9,16 +19,6 @@ async function userHasRole(user, role) {
   )
 
   return userRoles.some((p) => p.name === role)
-}
-
-async function findUserById(id) {
-  const retUser = await knex('users').select('*').where('id', id).first()
-  return retUser
-}
-
-async function findUserByEmail(email) {
-  const retUser = await knex('users').select('*').where('email', email).first()
-  return retUser
 }
 
 async function matchPassword(email, password) {
@@ -31,7 +31,7 @@ async function matchPassword(email, password) {
   }
 }
 
-async function createUser(user, roles = ['customer']) {
+async function create(user, roles = ['customer']) {
   const salt = await bcrypt.genSalt(10)
   const passwordHash = await bcrypt.hash(user.password, salt)
   const newUser = {
@@ -42,7 +42,7 @@ async function createUser(user, roles = ['customer']) {
   }
 
   const userId = await knex('users').insert(newUser)
-  const createdUser = await findUserById(userId)
+  const createdUser = await queries.findById(userId)
 
   const selectedRoles = await knex('roles').select('id').whereIn('name', roles)
 
@@ -53,24 +53,9 @@ async function createUser(user, roles = ['customer']) {
   return createdUser
 }
 
-async function clearUsers(createdAfter) {
-  const time = format(parseISO(createdAfter), 'yyyy-MM-dd HH:mm:ss')
-
-  const users = await knex('users')
-    .select('id')
-    .where('createdAt', '>=', `${time}`)
-
-  const usersId = users.map((u) => u.id)
-
-  await knex('userRoles').whereIn('userId', usersId).del()
-  await knex('users').whereIn('id', usersId).del()
-}
-
 module.exports = {
   userHasRole,
-  findUserById,
-  findUserByEmail,
   matchPassword,
-  createUser,
-  clearUsers,
+  ...queries,
+  create,
 }

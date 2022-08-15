@@ -2,11 +2,7 @@ const JwtStrategy = require('passport-jwt').Strategy
 const LocalStrategy = require('passport-local').Strategy
 const ExtractJwt = require('passport-jwt').ExtractJwt
 const { SECRET } = require('../config').jwt
-const {
-  findUserById,
-  matchPassword,
-  findUserByEmail,
-} = require('../models/user')
+const User = require('../models/user')
 function passportConfig(passport) {
   // JWT passport
   passport.use(
@@ -17,7 +13,7 @@ function passportConfig(passport) {
       },
       async (payload, done) => {
         try {
-          const user = await findUserById(payload.sub)
+          const user = await User.findById(payload.sub)
           if (!user) {
             return done(null, false)
           }
@@ -37,12 +33,12 @@ function passportConfig(passport) {
       },
       async (email, password, done) => {
         try {
-          const user = await findUserByEmail(email)
+          const user = await User.findOne({ email })
           if (!user) {
             return done(null, false)
           }
 
-          const isPasswordMatch = await matchPassword(email, password)
+          const isPasswordMatch = await User.matchPassword(email, password)
 
           if (!isPasswordMatch) {
             return done(null, false)

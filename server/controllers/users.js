@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken')
 const ActionStatus = require('../types/ActionStatus')
 const { SECRET, TOKEN_EXPIRES_IN } = require('../config').jwt
-const { createUser } = require('../models/user')
+const User = require('../models/user')
 
 async function signUp(user, roles) {
   try {
-    const savedUser = await createUser(user, roles)
+    const savedUser = await User.create(user, roles)
 
     if (savedUser) {
       const token = signToken(savedUser)

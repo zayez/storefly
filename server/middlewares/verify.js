@@ -1,12 +1,12 @@
 const { getResponse } = require('../helpers/routeHelpers')
 const ActionStatus = require('../types/ActionStatus')
-const { findUserByEmail } = require('../models/user')
+const User = require('../models/user')
 const { findEntity } = require('../models/entity')
 
 async function userExists(ctx, next) {
   try {
     const { email } = ctx.request.body
-    const foundUser = await findUserByEmail(email)
+    const foundUser = await User.findOne({ email })
 
     if (foundUser) {
       const { code, title, message } = getResponse(ActionStatus.Conflict)
