@@ -22,6 +22,23 @@ test('[header] title', (t) => {
     assert.end()
   })
 
+  t.test('should be able to create an item', (assert) => {
+    agent
+      .post(`/items`)
+      .send({
+        title: 'title',
+      })
+      .set('Authorization', token)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(STATUS.Created)
+      .then((res) => {
+        assert.equal(res.body.title, 'Created', 'Item created')
+        assert.equal(res.body.item.title, 'title')
+        assert.end()
+      })
+  })
+
   t.test('teardown', async (assert) => {
     await knex.seed.run()
     assert.end()
