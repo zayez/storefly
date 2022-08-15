@@ -3,6 +3,7 @@ const request = require('supertest')
 const server = require('../../server')
 const agent = request.agent(server)
 const knex = require('../../db')
+const categoriesFix = require('../fixtures/categories.json').categories
 
 const { logAdmin, logUser } = require('../infrastructure/login')
 
@@ -10,7 +11,7 @@ test('setup', async (t) => {
   t.end()
 })
 
-test('[as admin] should be able to create', (t) => {
+test('[admin w/ clean db] should be able to create', (t) => {
   let token
 
   t.test('setup', async (assert) => {
@@ -171,7 +172,7 @@ test('[as admin] should be able to create', (t) => {
   t.end()
 })
 
-test('[as admin] should be able retrieve', (t) => {
+test('[admin w/ seeded db] should be able retrieve', (t) => {
   let token
 
   t.test('setup', async (assert) => {
@@ -180,6 +181,22 @@ test('[as admin] should be able retrieve', (t) => {
 
     token = await logAdmin()
     assert.end()
+  })
+
+  t.test('should NOT be able to create a category that exists', (assert) => {
+    agent
+      .post(`/categories`)
+      .send({
+        title: categoriesFix[0].title,
+      })
+      .set('Authorization', token)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(409)
+      .then((res) => {
+        assert.equal(res.body.title, 'Conflict', 'Category alreadly exists')
+        assert.end()
+      })
   })
 
   t.test('should be able to retrieve a category', (assert) => {

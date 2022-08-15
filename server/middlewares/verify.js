@@ -41,7 +41,30 @@ function entityExists(entity) {
   }
 }
 
+function disallowDuplicate(entity, attr) {
+  const Entity = require('../models/entity')(entity)
+  return async function (ctx, next) {
+    try {
+      const payload = {}
+      payload[attr] = ctx.request.body[attr]
+      const duplicated = await Entity.findOne(payload)
+
+      if (duplicated) {
+        const { code, title, message } = getResponse(ActionStatus.Conflict)
+        ctx.status = code
+        ctx.body = { title, message }
+        return
+      }
+
+      await next()
+    } catch (err) {
+      throw err
+    }
+  }
+}
+
 module.exports = {
   userExists,
   entityExists,
+  disallowDuplicate,
 }

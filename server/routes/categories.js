@@ -14,11 +14,16 @@ const {
 const { setBody, setBodyError } = require('../helpers/routeHelpers')
 const Categories = require('../controllers/categories')
 
-const { entityExists } = require('../middlewares/verify')
+const { entityExists, disallowDuplicate } = require('../middlewares/verify')
 
 router.post(
   '/categories',
-  compose([authenticate, authorizeAdmin, isValidCategory]),
+  compose([
+    authenticate,
+    authorizeAdmin,
+    isValidCategory,
+    disallowDuplicate('categories', 'title'),
+  ]),
   async (ctx) => {
     try {
       const { title } = ctx.request.body
