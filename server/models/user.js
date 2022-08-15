@@ -12,7 +12,7 @@ const SELECTABLE_FIELDS = [
 
 const queries = require('../helpers/queryHelper')(TABLE_NAME, SELECTABLE_FIELDS)
 
-async function userHasRole(user, role) {
+async function hasRole(user, role) {
   const userRoles = await knex('roles').whereIn(
     'id',
     knex('userRoles').select('roleId').where('userId', user.id),
@@ -54,7 +54,7 @@ async function create(user, roles = ['customer']) {
 }
 
 module.exports = {
-  userHasRole,
+  hasRole,
   matchPassword,
   ...queries,
   create,

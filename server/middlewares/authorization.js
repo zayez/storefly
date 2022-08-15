@@ -1,12 +1,12 @@
 const ActionStatus = require('../types/ActionStatus')
 const { getResponse } = require('../helpers/routeHelpers')
-const { userHasRole } = require('../models/user')
+const User = require('../models/user')
 
 async function isAdmin(ctx, next) {
   try {
     const user = ctx.state.user
 
-    const isAdmin = await userHasRole(user, 'admin')
+    const isAdmin = await User.hasRole(user, 'admin')
 
     if (!isAdmin) {
       const { code, title, message } = getResponse(ActionStatus.Forbidden)
