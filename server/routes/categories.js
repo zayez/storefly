@@ -11,7 +11,7 @@ const {
   isValidFetchCategoryParams,
   isValidFetchCategoriesQuery,
 } = require('../middlewares/validations')
-const { getResponse } = require('../helpers/routeHelpers')
+const { setBody, setBodyError } = require('../helpers/routeHelpers')
 const Categories = require('../controllers/categories')
 
 const { entityExists } = require('../middlewares/verify')
@@ -21,20 +21,12 @@ router.post(
   compose([authenticate, authorizeAdmin, isValidCategory]),
   async (ctx) => {
     try {
-      const categoryTitle = ctx.request.body.title
-      const category = { title: categoryTitle }
+      const { title } = ctx.request.body
+      const category = { title }
       const { action, data } = await Categories.create(category)
-      const { code, title, message } = getResponse(action)
-
-      ctx.status = code
-      ctx.body = { title, message }
-      if (data) ctx.body = { ...ctx.body, ...data }
+      setBody({ ctx, action, data })
     } catch (err) {
-      ctx.status = 500
-      ctx.body = {
-        title: 'Server error',
-        message: err,
-      }
+      setBodyError(ctx, err)
     }
   },
 )
@@ -49,21 +41,13 @@ router.put(
   ]),
   async (ctx) => {
     try {
-      const categoryTitle = ctx.request.body.title
-      const category = { title: categoryTitle }
+      const { title } = ctx.request.body
+      const category = { title }
       const { id } = ctx.params
       const { action, data } = await Categories.update(id, category)
-      const { code, title, message } = getResponse(action)
-
-      ctx.status = code
-      ctx.body = { title, message }
-      if (data) ctx.body = { ...ctx.body, ...data }
+      setBody({ ctx, action, data })
     } catch (err) {
-      ctx.status = 500
-      ctx.body = {
-        title: 'Server error',
-        message: err,
-      }
+      setBodyError(ctx, err)
     }
   },
 )
@@ -75,17 +59,9 @@ router.delete(
     try {
       const { id } = ctx.request.body
       const { action, data } = await Categories.destroy(id)
-      const { code, title, message } = getResponse(action)
-
-      ctx.status = code
-      ctx.body = { title, message }
-      if (data) ctx.body = { ...ctx.body, ...data }
+      setBody({ ctx, action, data })
     } catch (err) {
-      ctx.status = 500
-      ctx.body = {
-        title: 'Server error',
-        message: err,
-      }
+      setBodyError(ctx, err)
     }
   },
 )
@@ -97,17 +73,9 @@ router.get(
     try {
       const id = ctx.params.id
       const { action, data } = await Categories.getOne(id)
-      const { code, title, message } = getResponse(action)
-
-      ctx.status = code
-      ctx.body = { title, message }
-      if (data) ctx.body = { ...ctx.body, ...data }
+      setBody({ ctx, action, data })
     } catch (err) {
-      ctx.status = 500
-      ctx.body = {
-        title: 'Server error',
-        message: err,
-      }
+      setBodyError(ctx, err)
     }
   },
 )
@@ -119,17 +87,9 @@ router.get(
     try {
       const { page } = ctx.request.query
       const { action, data } = await Categories.getAll(page)
-      const { code, title, message } = getResponse(action)
-
-      ctx.status = code
-      ctx.body = { title, message }
-      if (data) ctx.body = { ...ctx.body, ...data }
+      setBody({ ctx, action, data })
     } catch (err) {
-      ctx.status = 500
-      ctx.body = {
-        title: 'Server error',
-        message: err,
-      }
+      setBodyError(ctx, err)
     }
   },
 )

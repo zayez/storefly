@@ -54,6 +54,26 @@ async function validateParams({ ctx, next }, schema) {
   }
 }
 
+function setBody({ ctx, action, data }) {
+  const { code, title, message } = getResponse(action)
+  ctx.status = code
+  ctx.body = { title, message }
+  ctx.body = { ...ctx.body, ...data }
+}
+
+function setBodyError(ctx, err) {
+  const { code, title, message } = getResponse(ActionStatus.Error)
+  ctx.status = code
+  ctx.body = {
+    title: title,
+    message: message,
+    error: {
+      name: err.name,
+      message: err.message,
+    },
+  }
+}
+
 function getResponse(action) {
   let code, title, message
   switch (action) {
@@ -90,6 +110,11 @@ function getResponse(action) {
       title = 'Unprocessable'
       message = 'The request was unable to process the contained entity'
       break
+    case ActionStatus.Error:
+      code = 500
+      title = 'Error'
+      message = 'Internal server error'
+      break
     case ActionStatus.SignUpError_CreateUserFailed:
       code = 500
       title = 'SignUp - Create user failed'
@@ -119,5 +144,7 @@ module.exports = {
   validateBody,
   validateQuery,
   validateParams,
+  setBody,
+  setBodyError,
   getResponse,
 }

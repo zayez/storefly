@@ -57,7 +57,7 @@ module.exports = (controllerName) => {
       if (selectedModel) {
         return {
           action: ActionStatus.Ok,
-          data: null,
+          data: selectedModel,
         }
       } else {
         return {
