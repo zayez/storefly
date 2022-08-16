@@ -84,19 +84,18 @@ router.delete(
   },
 )
 
-router.get(
-  '/products/:id',
-  compose([authorizeAdmin, isValidGet]),
-  async (ctx) => {
-    try {
-      const { id } = ctx.params
-      const { action, payload } = await Products.getOne(id)
-      setBody({ ctx, action, payload })
-    } catch (err) {
-      setBodyError(ctx, err)
-    }
-  },
-)
+router.get('/products/:id', compose([isValidGet]), async (ctx) => {
+  try {
+    const { id } = ctx.params
+    const isUserEditor = await isEditor(ctx.state.user)
+    const get = isUserEditor ? Products.getOne : Products.getOneActive
+    const { action, payload } = await get(id)
+
+    setBody({ ctx, action, payload })
+  } catch (err) {
+    setBodyError(ctx, err)
+  }
+})
 
 router.get('/products', compose([isValidGetAll]), async (ctx) => {
   try {

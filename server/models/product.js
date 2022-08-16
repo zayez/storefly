@@ -23,9 +23,15 @@ const findAllActive = async (pagination) => {
   return products
 }
 
+const findOneActive = async (id) => {
+  const statusId = (await ProductStatus.findOne({ name: PROD_ACTIVE })).id
+  return await queries.findOne({ id, statusId })
+}
+
 module.exports = {
   tableName: TABLE_NAME,
   fields: SELECTABLE_FIELDS,
   ...queries,
   findAllActive,
+  findOneActive,
 }

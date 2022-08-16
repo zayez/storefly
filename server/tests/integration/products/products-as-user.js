@@ -70,6 +70,31 @@ test('[seeded db] As a user I should:', (t) => {
       })
   })
 
+  t.test('be able to retrieve an active product', (assert) => {
+    agent
+      .get(`/products/${products[1].id}`)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(STATUS.Ok)
+      .then((res) => {
+        assert.equal(res.body.title, 'Ok', 'correctly retrieved')
+        assert.equal(res.body.product.title, products[1].title)
+        assert.end()
+      })
+  })
+
+  t.test('NOT be able to retrieve a draft product', (assert) => {
+    agent
+      .get(`/products/${products[0].id}`)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(STATUS.NotFound)
+      .then((res) => {
+        assert.equal(res.body.title, 'Not Found', 'correctly retrieved')
+        assert.end()
+      })
+  })
+
   t.test('teardown', async (assert) => {
     await knex.seed.run()
     assert.end()
