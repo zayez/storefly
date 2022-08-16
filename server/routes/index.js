@@ -4,7 +4,10 @@ const router = new Router()
 
 const { authenticateLocal } = require('../middlewares/authentication')
 const { userExists } = require('../middlewares/verify')
-const { isValidSignIn, isValidSignUp } = require('../middlewares/validations')
+const {
+  isValidSignIn,
+  isValidSignUp,
+} = require('../middlewares/validations/user')
 const { signUp, signIn } = require('../controllers/users')
 const { getResponse } = require('../helpers/routeHelpers')
 

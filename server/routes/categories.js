@@ -5,12 +5,12 @@ const router = new Router()
 const { authenticate } = require('../middlewares/authentication')
 const authorizeAdmin = require('../middlewares/authorization').isAdmin
 const {
-  isValidCategory,
-  isValidUpdateCategory,
-  isValidDeleteCategory,
-  isValidFetchCategoryParams,
-  isValidFetchCategoriesQuery,
-} = require('../middlewares/validations')
+  isCreateValid,
+  isUpdateValid,
+  isDestroyValid,
+  isGetValid,
+  isGetAllValid,
+} = require('../middlewares/validations/category')
 const { setBody, setBodyError } = require('../helpers/routeHelpers')
 const Categories = require('../controllers/categories')
 
@@ -21,7 +21,7 @@ router.post(
   compose([
     authenticate,
     authorizeAdmin,
-    isValidCategory,
+    isCreateValid,
     disallowDuplicate('categories', 'title'),
   ]),
   async (ctx) => {
@@ -41,7 +41,7 @@ router.patch(
   compose([
     authenticate,
     authorizeAdmin,
-    isValidUpdateCategory,
+    isUpdateValid,
     entityExists('categories'),
   ]),
   async (ctx) => {
@@ -59,7 +59,7 @@ router.patch(
 
 router.delete(
   '/categories/:id',
-  compose([authenticate, authorizeAdmin, isValidDeleteCategory]),
+  compose([authenticate, authorizeAdmin, isDestroyValid]),
   async (ctx) => {
     try {
       const { id } = ctx.params
@@ -73,7 +73,7 @@ router.delete(
 
 router.get(
   '/categories/:id',
-  compose([authenticate, authorizeAdmin, isValidFetchCategoryParams]),
+  compose([authenticate, authorizeAdmin, isGetValid]),
   async (ctx) => {
     try {
       const { id } = ctx.params
@@ -87,7 +87,7 @@ router.get(
 
 router.get(
   '/categories',
-  compose([authenticate, authorizeAdmin, isValidFetchCategoriesQuery]),
+  compose([authenticate, authorizeAdmin, isGetAllValid]),
   async (ctx) => {
     try {
       const { page } = ctx.request.query
