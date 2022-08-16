@@ -1,24 +1,24 @@
 {
   "categories": [
     {
-      "title": "Cars",
-      "id": 1
+      "id": 1,
+      "title": "Cars"
     },
     {
-      "title": "Eletronics",
-      "id": 2
+      "id": 2,
+      "title": "Eletronics"
     },
     {
-      "title": "Books",
-      "id": 3
+      "id": 3,
+      "title": "Books"
     },
     {
-      "title": "Clothes",
-      "id": 4
+      "id": 4,
+      "title": "Clothes"
     },
     {
-      "title": "Drinks",
-      "id": 5
+      "id": 5,
+      "title": "Drinks"
     }
   ]
 }

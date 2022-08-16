@@ -1,0 +1,12 @@
+{
+  "productStatuses": [
+    {
+      "id": 1,
+      "name": "draft"
+    },
+    {
+      "id": 2,
+      "name": "active"
+    }
+  ]
+}

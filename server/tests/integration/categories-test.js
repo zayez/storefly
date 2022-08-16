@@ -5,7 +5,6 @@ const agent = request.agent(server)
 const knex = require('../../db')
 const categoriesFix = require('../fixtures/categories.json').categories
 const STATUS = require('../../types/StatusCode')
-
 const { logAdmin, logUser } = require('../infrastructure/login')
 
 test('setup', async (t) => {

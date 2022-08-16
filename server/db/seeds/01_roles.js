@@ -1,13 +1,9 @@
+const roles = require('./data/roles.json').roles
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
 exports.seed = async function (knex) {
-  // Deletes ALL existing entries
   await knex('roles').del()
-  await knex('roles').insert([
-    { name: 'admin' },
-    { name: 'editor' },
-    { name: 'customer' },
-  ])
+  await knex('roles').insert(roles)
 }

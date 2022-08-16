@@ -29,7 +29,6 @@ const Category = Joi.object().keys({
 })
 
 const UpdateCategory = Joi.object().keys({
-  id: Joi.number(),
   title: Joi.string().required(),
 })
 
