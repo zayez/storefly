@@ -120,35 +120,11 @@ module.exports = (controllerName) => {
     }
   }
 
-  const getAllActive = async (pagination) => {
-    try {
-      const models = await Model.findAllActive(pagination)
-      if (models) {
-        const payload = {}
-        payload[controllerName] =
-          mappings[`map${capitalize(controllerName)}`](models)
-        return {
-          action: ActionStatus.Ok,
-          payload,
-        }
-      } else {
-        return {
-          action: ActionStatus.BadRequest,
-          payload: null,
-        }
-      }
-    } catch (err) {
-      console.log(err)
-      throw err
-    }
-  }
-
   return {
     create,
     update,
     destroy,
     getOne,
     getAll,
-    getAllActive,
   }
 }
