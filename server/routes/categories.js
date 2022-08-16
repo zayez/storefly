@@ -91,7 +91,7 @@ router.get(
   async (ctx) => {
     try {
       const { page } = ctx.request.query
-      const { action, payload } = await Categories.getAll(page)
+      const { action, payload } = await Categories.getAll({ page })
       setBody({ ctx, action, payload })
     } catch (err) {
       setBodyError(ctx, err)

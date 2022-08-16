@@ -97,9 +97,9 @@ module.exports = (controllerName) => {
     }
   }
 
-  const getAll = async (page) => {
+  const getAll = async (pagination) => {
     try {
-      const models = await Model.findAll(page)
+      const models = await Model.findAll(pagination)
       if (models) {
         const payload = {}
         payload[controllerName] =

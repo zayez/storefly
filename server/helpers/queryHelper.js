@@ -9,20 +9,21 @@ MIT license
 */
 
 const knex = require('../db')
+const { ITEMS_PER_PAGE } = require('../config').app
 
 module.exports = (tableName, selectableFields = '*') => {
-  const find = async (filters, page) => {
+  const find = async (filters, { page = 1, perPage = ITEMS_PER_PAGE }) => {
     const items = await knex
       .select(selectableFields)
       .from(tableName)
       .where(filters)
-      .paginate({ perPage: 25, currentPage: page })
+      .paginate({ perPage: perPage, currentPage: page })
 
     return items.data
   }
 
-  const findAll = async (page) => {
-    return await find({}, page)
+  const findAll = async (pagination) => {
+    return await find({}, pagination)
   }
   const findOne = async (filters) => {
     return await knex.first(selectableFields).from(tableName).where(filters)
