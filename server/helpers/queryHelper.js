@@ -47,7 +47,9 @@ module.exports = (tableName, selectableFields = '*') => {
   }
 
   const destroyAll = async (filters) => {
-    return await knex(tableName).del().where(filters)
+    return filters
+      ? await knex(tableName).del().where(filters)
+      : await knex(tableName).del()
   }
 
   return {
@@ -58,5 +60,6 @@ module.exports = (tableName, selectableFields = '*') => {
     create,
     update,
     destroy,
+    destroyAll,
   }
 }
