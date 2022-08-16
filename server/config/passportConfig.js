@@ -1,5 +1,6 @@
 const JwtStrategy = require('passport-jwt').Strategy
 const LocalStrategy = require('passport-local').Strategy
+const AnonymousStrategy = require('passport-anonymous').Strategy
 const ExtractJwt = require('passport-jwt').ExtractJwt
 const { SECRET } = require('../config').jwt
 const User = require('../models/user')
@@ -51,6 +52,9 @@ function passportConfig(passport) {
       },
     ),
   )
+
+  // Anonymous passport
+  passport.use(new AnonymousStrategy())
 }
 
 module.exports = passportConfig

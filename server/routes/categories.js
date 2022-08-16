@@ -2,8 +2,7 @@ const Router = require('koa-router')
 const compose = require('koa-compose')
 const router = new Router()
 
-const { authenticate } = require('../middlewares/authentication')
-const authorizeAdmin = require('../middlewares/authorization').isAdmin
+const { authorizeAdmin } = require('../middlewares/authorization')
 const {
   isCreateValid,
   isUpdateValid,
@@ -19,7 +18,6 @@ const { entityExists, disallowDuplicate } = require('../middlewares/verify')
 router.post(
   '/categories',
   compose([
-    authenticate,
     authorizeAdmin,
     isCreateValid,
     disallowDuplicate('categories', 'title'),
@@ -38,12 +36,7 @@ router.post(
 
 router.patch(
   '/categories/:id',
-  compose([
-    authenticate,
-    authorizeAdmin,
-    isUpdateValid,
-    entityExists('categories'),
-  ]),
+  compose([authorizeAdmin, isUpdateValid, entityExists('categories')]),
   async (ctx) => {
     try {
       const { title } = ctx.request.body
@@ -59,7 +52,7 @@ router.patch(
 
 router.delete(
   '/categories/:id',
-  compose([authenticate, authorizeAdmin, isDestroyValid]),
+  compose([authorizeAdmin, isDestroyValid]),
   async (ctx) => {
     try {
       const { id } = ctx.params
@@ -73,7 +66,7 @@ router.delete(
 
 router.get(
   '/categories/:id',
-  compose([authenticate, authorizeAdmin, isGetValid]),
+  compose([authorizeAdmin, isGetValid]),
   async (ctx) => {
     try {
       const { id } = ctx.params
@@ -87,7 +80,7 @@ router.get(
 
 router.get(
   '/categories',
-  compose([authenticate, authorizeAdmin, isGetAllValid]),
+  compose([authorizeAdmin, isGetAllValid]),
   async (ctx) => {
     try {
       const { page } = ctx.request.query

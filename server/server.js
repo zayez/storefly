@@ -8,6 +8,7 @@ const usersRoutes = require('./routes/users')
 const categoriesRoutes = require('./routes/categories')
 const productsRoutes = require('./routes/products')
 const passportConfig = require('./config/passportConfig')
+const { authenticate } = require('./middlewares/authentication')
 
 const { isDev, isProd } = require('./config')
 const { PORT } = require('./config').app
@@ -25,6 +26,7 @@ app
 passportConfig(passport)
 
 app
+  .use(authenticate)
   .use(indexRoutes.routes())
   .use(usersRoutes.routes())
   .use(categoriesRoutes.routes())

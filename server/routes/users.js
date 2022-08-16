@@ -1,7 +1,6 @@
 const Router = require('koa-router')
 const compose = require('koa-compose')
-const { authenticate } = require('../middlewares/authentication')
-const authorizeAdmin = require('../middlewares/authorization').isAdmin
+const { authorizeAdmin } = require('../middlewares/authorization')
 const { isValidUser } = require('../middlewares/validations/user')
 const { userExists } = require('../middlewares/verify')
 const { signUp } = require('../controllers/users')
@@ -11,7 +10,7 @@ const router = new Router()
 
 router.post(
   '/users',
-  compose([authenticate, authorizeAdmin, isValidUser, userExists]),
+  compose([authorizeAdmin, isValidUser, userExists]),
   async (ctx) => {
     try {
       const { username, password } = ctx.request.body

@@ -2,8 +2,12 @@ const Router = require('koa-router')
 const compose = require('koa-compose')
 const router = new Router()
 
-const { authenticate } = require('../middlewares/authentication')
-const authorizeAdmin = require('../middlewares/authorization').isAdmin
+const {
+  authorizeAdmin,
+  authorizeEditor,
+} = require('../middlewares/authorization')
+
+const { isAdmin, isEditor } = require('../middlewares/verify')
 const {
   isCreateValid,
   isUpdateValid,
@@ -20,7 +24,6 @@ const { entityExists, disallowDuplicate } = require('../middlewares/verify')
 router.post(
   '/products',
   compose([
-    authenticate,
     authorizeAdmin,
     isCreateValid,
     disallowDuplicate('products', 'title'),
@@ -46,12 +49,7 @@ router.post(
 
 router.patch(
   '/products/:id',
-  compose([
-    authenticate,
-    authorizeAdmin,
-    isUpdateValid,
-    entityExists('products'),
-  ]),
+  compose([authorizeAdmin, isUpdateValid, entityExists('products')]),
   async (ctx) => {
     try {
       const product = ({
@@ -74,7 +72,7 @@ router.patch(
 
 router.delete(
   '/products/:id',
-  compose([authenticate, authorizeAdmin, isDestroyValid]),
+  compose([authorizeAdmin, isDestroyValid]),
   async (ctx) => {
     try {
       const { id } = ctx.params
@@ -88,7 +86,7 @@ router.delete(
 
 router.get(
   '/products/:id',
-  compose([authenticate, authorizeAdmin, isValidGet]),
+  compose([authorizeAdmin, isValidGet]),
   async (ctx) => {
     try {
       const { id } = ctx.params
@@ -100,18 +98,16 @@ router.get(
   },
 )
 
-router.get(
-  '/products',
-  compose([authenticate, authorizeAdmin, isValidGetAll]),
-  async (ctx) => {
-    try {
-      const { page } = ctx.request.query
-      const { action, payload } = await Products.getAll({ page })
-      setBody({ ctx, action, payload })
-    } catch (err) {
-      setBodyError(ctx, err)
-    }
-  },
-)
+router.get('/products', compose([isValidGetAll]), async (ctx) => {
+  try {
+    const { page } = ctx.request.query
+    const isUserEditor = await isEditor(ctx.state.user)
+    const get = isUserEditor ? Products.getAll : Products.getAllActive
+    const { action, payload } = await get({ page })
+    setBody({ ctx, action, payload })
+  } catch (err) {
+    setBodyError(ctx, err)
+  }
+})
 
 module.exports = router

@@ -237,6 +237,35 @@ test('[admin w/ seeded db] should be able retrieve', (t) => {
   })
 })
 
+test('[user w/ seeded db] should be able retrieve', (t) => {
+  t.test('setup', async (assert) => {
+    await knex.migrate.latest()
+    await knex.seed.run({ directory: 'tests/seeds' })
+
+    assert.end()
+  })
+
+  t.test('should be able to retrieve only active products', (assert) => {
+    agent
+      .get(`/products`)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(STATUS.Ok)
+      .then((res) => {
+        assert.equal(res.body.title, 'Ok', 'Products retrieved')
+        assert.ok(Array.isArray(res.body.products))
+        const prodsDraft = res.body.products.filter((p) => p.statusId == 1)
+        assert.equal(prodsDraft.length, 0, 'should only have active')
+        assert.end()
+      })
+  })
+
+  t.test('teardown', async (assert) => {
+    await knex.seed.run()
+    assert.end()
+  })
+})
+
 test('teardown', async (t) => {
   await server.close()
   t.end()

@@ -1,14 +1,12 @@
 const ActionStatus = require('../types/ActionStatus')
 const { getResponse } = require('../helpers/routeHelpers')
-const User = require('../models/user')
+const { isAdmin, isEditor } = require('./verify')
 
-async function isAdmin(ctx, next) {
+async function authorizeAdmin(ctx, next) {
   try {
     const user = ctx.state.user
 
-    const isAdmin = await User.hasRole(user, 'admin')
-
-    if (isAdmin) {
+    if (await isAdmin(user)) {
       await next()
     } else {
       const { code, title, message } = getResponse(ActionStatus.Forbidden)
@@ -21,14 +19,11 @@ async function isAdmin(ctx, next) {
   }
 }
 
-async function isEditor(ctx, next) {
+async function authorizeEditor(ctx, next) {
   try {
     const user = ctx.state.user
 
-    const isEditor = await User.hasRole(user, 'editor')
-    const isAdmin = await User.hasRole(user, 'admin')
-
-    if (isEditor || isAdmin) {
+    if ((await isEditor(user)) || (await isAdmin(user))) {
       await next()
     } else {
       const { code, title, message } = getResponse(ActionStatus.Forbidden)
@@ -42,6 +37,6 @@ async function isEditor(ctx, next) {
 }
 
 module.exports = {
-  isAdmin,
-  isEditor,
+  authorizeAdmin,
+  authorizeEditor,
 }

@@ -3,11 +3,16 @@ const passport = require('passport')
 const authenticateLocal = passport.authenticate('local', {
   session: false,
 })
-const authenticate = passport.authenticate('jwt', {
+const authenticateJwt = passport.authenticate('jwt', {
+  session: false,
+})
+
+const authenticate = passport.authenticate(['jwt', 'anonymous'], {
   session: false,
 })
 
 module.exports = {
-  authenticate,
   authenticateLocal,
+  authenticateJwt,
+  authenticate,
 }

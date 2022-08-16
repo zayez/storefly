@@ -2,6 +2,18 @@ const { getResponse } = require('../helpers/routeHelpers')
 const ActionStatus = require('../types/ActionStatus')
 const User = require('../models/user')
 
+const isAdmin = async (user) => {
+  if (!user) return false
+
+  return await User.hasRole(user, 'admin')
+}
+const isEditor = async (user) => {
+  if (!user) return false
+  return (
+    (await User.hasRole(user, 'editor')) || (await User.hasRole(user, 'admin'))
+  )
+}
+
 async function userExists(ctx, next) {
   try {
     const { email } = ctx.request.body
@@ -64,6 +76,8 @@ function disallowDuplicate(entity, attr) {
 }
 
 module.exports = {
+  isAdmin,
+  isEditor,
   userExists,
   entityExists,
   disallowDuplicate,
