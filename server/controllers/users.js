@@ -13,10 +13,9 @@ async function signUp(user, roles) {
         action: ActionStatus.Created,
         payload: { token },
       }
-    } else {
-      return {
-        action: ActionStatus.SignUpError_CreateUserFailed,
-      }
+    }
+    return {
+      action: ActionStatus.SignUpError_CreateUserFailed,
     }
   } catch (err) {
     throw err
