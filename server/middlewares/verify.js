@@ -1,4 +1,4 @@
-const { getResponse } = require('../helpers/routeHelpers')
+const { setBody, setBodyError } = require('../helpers/routeHelpers')
 const ActionStatus = require('../types/ActionStatus')
 const User = require('../models/user')
 
@@ -20,15 +20,12 @@ async function userExists(ctx, next) {
     const foundUser = await User.findOne({ email })
 
     if (foundUser) {
-      const { code, title, message } = getResponse(ActionStatus.Conflict)
-      ctx.status = code
-      ctx.body = { title, message }
-      return
+      setBody({ ctx, action: ActionStatus.Conflict })
     }
 
     await next()
   } catch (err) {
-    throw err
+    setBodyError(ctx, err)
   }
 }
 
@@ -40,15 +37,13 @@ function entityExists(entity) {
       const foundEntity = await Entity.findById(id)
 
       if (!foundEntity) {
-        const { code, title, message } = getResponse(ActionStatus.NotFound)
-        ctx.status = code
-        ctx.body = { title, message }
+        setBody({ ctx, action: ActionStatus.NotFound })
         return
       }
 
       await next()
     } catch (err) {
-      throw err
+      setBodyError(ctx, err)
     }
   }
 }
@@ -62,15 +57,13 @@ function disallowDuplicate(entity, attr) {
       const duplicated = await Entity.findOne(payload)
 
       if (duplicated) {
-        const { code, title, message } = getResponse(ActionStatus.Conflict)
-        ctx.status = code
-        ctx.body = { title, message }
+        setBody({ ctx, action: ActionStatus.Conflict })
         return
       }
 
       await next()
     } catch (err) {
-      throw err
+      setBodyError(ctx, err)
     }
   }
 }

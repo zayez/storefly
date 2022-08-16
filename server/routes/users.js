@@ -4,7 +4,7 @@ const { authorizeAdmin } = require('../middlewares/authorization')
 const { isValidUser } = require('../middlewares/validations/user')
 const { userExists } = require('../middlewares/verify')
 const { signUp } = require('../controllers/users')
-const { getResponse } = require('../helpers/routeHelpers')
+const { setBody, setBodyError } = require('../helpers/routeHelpers')
 
 const router = new Router()
 
@@ -17,16 +17,9 @@ router.post(
       const roles = ctx.request.body.roles || ['customer']
       const { action, payload } = await signUp({ username, password }, roles)
 
-      const { code, title, message } = getResponse(action)
-      ctx.status = code
-      ctx.body = { title, message }
-      if (payload) ctx.body = { ...ctx.body, ...payload }
+      setBody({ ctx, action, payload })
     } catch (err) {
-      ctx.status = 500
-      ctx.body = {
-        title: 'Server error',
-        message: err,
-      }
+      setBodyError(ctx, err)
     }
   },
 )

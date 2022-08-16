@@ -9,7 +9,7 @@ const {
   isValidSignUp,
 } = require('../middlewares/validations/user')
 const { signUp, signIn } = require('../controllers/users')
-const { getResponse } = require('../helpers/routeHelpers')
+const { setBody, setBodyError } = require('../helpers/routeHelpers')
 
 router.get('/', async (ctx) => {
   ctx.body = {
@@ -26,17 +26,10 @@ router.post('/signup', compose([isValidSignUp, userExists]), async (ctx) => {
       firstName,
       lastName,
     })
-    const { code, title, message } = getResponse(action)
 
-    ctx.status = code
-    ctx.body = { title, message }
-    if (payload) ctx.body = { ...ctx.body, ...payload }
+    setBody({ ctx, action, payload })
   } catch (err) {
-    ctx.status = 500
-    ctx.body = {
-      title: 'Server error',
-      message: err,
-    }
+    setBodyError(ctx, err)
   }
 })
 
@@ -44,12 +37,13 @@ router.post(
   '/signin',
   compose([isValidSignIn, authenticateLocal]),
   async (ctx) => {
-    const user = ctx.state.user
-    const { action, payload } = await signIn(user)
-    const { code, title, message } = getResponse(action)
-    ctx.status = code
-    ctx.body = { title, message }
-    if (payload) ctx.body = { ...ctx.body, ...payload }
+    try {
+      const user = ctx.state.user
+      const { action, payload } = await signIn(user)
+      setBody({ ctx, action, payload })
+    } catch (err) {
+      setBodyError(ctx, err)
+    }
   },
 )
 
