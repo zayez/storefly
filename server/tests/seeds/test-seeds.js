@@ -1,8 +1,10 @@
-const roles = require('../fixtures/roles.json').roles
-const users = require('../fixtures/users.json').users
+const roles = require('../../db/seeds/data/roles.json').roles
+const users = require('../../db/seeds/data/users.json').users
 const categories = require('../fixtures/categories.json').categories
+
+const products = require('../fixtures/products.json').products
 const productStatuses =
-  require('../fixtures/productStatuses.json').productStatuses
+  require('../../db/seeds/data/productStatuses.json').productStatuses
 
 const User = require('../../models/user')
 const Category = require('../../models/category')
@@ -22,10 +24,13 @@ exports.seed = async (knex) => {
   for (const category of categories) {
     await Category.create(category)
   }
-
   await knex('productStatus').del()
   await knex('productStatus').insert(productStatuses[0])
   await knex('productStatus').insert(productStatuses[1])
 
   await Product.destroyAll()
+
+  for (const product of products) {
+    await Product.create(product)
+  }
 }
