@@ -18,14 +18,12 @@ module.exports = (controllerName) => {
           action: ActionStatus.Created,
           payload,
         }
-      } else {
-        return {
-          action: ActionStatus.BadRequest,
-          payload: null,
-        }
+      }
+      return {
+        action: ActionStatus.BadRequest,
+        payload: null,
       }
     } catch (err) {
-      console.log(err)
       throw err
     }
   }
@@ -41,14 +39,12 @@ module.exports = (controllerName) => {
           action: ActionStatus.Ok,
           payload,
         }
-      } else {
-        return {
-          action: ActionStatus.BadRequest,
-          payload: null,
-        }
+      }
+      return {
+        action: ActionStatus.BadRequest,
+        payload: null,
       }
     } catch (err) {
-      console.log(err)
       throw err
     }
   }
@@ -61,14 +57,12 @@ module.exports = (controllerName) => {
           action: ActionStatus.Ok,
           payload: selectedModel,
         }
-      } else {
-        return {
-          action: ActionStatus.BadRequest,
-          payload: null,
-        }
+      }
+      return {
+        action: ActionStatus.BadRequest,
+        payload: null,
       }
     } catch (err) {
-      console.log(err)
       throw err
     }
   }
@@ -85,14 +79,12 @@ module.exports = (controllerName) => {
           action: ActionStatus.Ok,
           payload,
         }
-      } else {
-        return {
-          action: ActionStatus.BadRequest,
-          payload: null,
-        }
+      }
+      return {
+        action: ActionStatus.NotFound,
+        payload: null,
       }
     } catch (err) {
-      console.log(err)
       throw err
     }
   }
@@ -108,14 +100,12 @@ module.exports = (controllerName) => {
           action: ActionStatus.Ok,
           payload,
         }
-      } else {
-        return {
-          action: ActionStatus.BadRequest,
-          payload: null,
-        }
+      }
+      return {
+        action: ActionStatus.NotFound,
+        payload: null,
       }
     } catch (err) {
-      console.log(err)
       throw err
     }
   }
