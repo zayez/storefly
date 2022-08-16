@@ -13,7 +13,7 @@ test('setup', async (t) => {
   t.end()
 })
 
-test('as a user', (t) => {
+test('As a user I should:', (t) => {
   let token
 
   t.test('setup', async (assert) => {
@@ -21,7 +21,7 @@ test('as a user', (t) => {
     assert.end()
   })
 
-  t.test('should be able to sign up', (assert) => {
+  t.test('be able to sign up', (assert) => {
     agent
       .post(`/signup`)
       .send({
@@ -41,7 +41,7 @@ test('as a user', (t) => {
   })
 })
 
-test('as an admin', (t) => {
+test('As an admin I should:', (t) => {
   let token
 
   t.test('setup', async (assert) => {
@@ -52,7 +52,7 @@ test('as an admin', (t) => {
   t.end()
 })
 
-test('as a customer', (t) => {
+test('As a customer I should:', (t) => {
   let token
 
   t.test('setup', async (assert) => {
@@ -60,7 +60,7 @@ test('as a customer', (t) => {
     assert.end()
   })
 
-  t.test('should be able to sign in', (assert) => {
+  t.test('be able to sign in', (assert) => {
     agent
       .post(`/signin`)
       .send({

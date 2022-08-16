@@ -5,13 +5,13 @@ const agent = request.agent(server)
 const knex = require('../../db')
 const categoriesFix = require('../fixtures/categories.json').categories
 const STATUS = require('../../types/StatusCode')
-const { logAdmin, logUser } = require('../infrastructure/login')
+const { logAdmin } = require('../infrastructure/login')
 
 test('setup', async (t) => {
   t.end()
 })
 
-test('[admin w/ clean db] should be able to create', (t) => {
+test('[clean db] As admin I should:', (t) => {
   let token
 
   t.test('setup', async (assert) => {
@@ -22,7 +22,7 @@ test('[admin w/ clean db] should be able to create', (t) => {
     assert.end()
   })
 
-  t.test('should be able to create a category', (assert) => {
+  t.test('be able to create a category', (assert) => {
     agent
       .post(`/categories`)
       .send({
@@ -39,7 +39,7 @@ test('[admin w/ clean db] should be able to create', (t) => {
       })
   })
 
-  t.test('should be able to update a category', (assert) => {
+  t.test('be able to update a category', (assert) => {
     agent
       .post(`/categories`)
       .send({
@@ -68,26 +68,23 @@ test('[admin w/ clean db] should be able to create', (t) => {
       })
   })
 
-  t.test(
-    "should not be able to update a category that don't exists",
-    (assert) => {
-      agent
-        .patch(`/categories/200`)
-        .send({
-          title: 'Hardware',
-        })
-        .set('Authorization', token)
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(STATUS.NotFound)
-        .then((innerRes) => {
-          assert.equal(innerRes.body.title, 'Not Found', 'title is a match')
-          assert.end()
-        })
-    },
-  )
+  t.test("NOT be able to update a category that don't exists", (assert) => {
+    agent
+      .patch(`/categories/200`)
+      .send({
+        title: 'Hardware',
+      })
+      .set('Authorization', token)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(STATUS.NotFound)
+      .then((innerRes) => {
+        assert.equal(innerRes.body.title, 'Not Found', 'title is a match')
+        assert.end()
+      })
+  })
 
-  t.test('should be able to delete a category', (assert) => {
+  t.test('be able to delete a category', (assert) => {
     agent
       .post(`/categories`)
       .send({
@@ -112,33 +109,30 @@ test('[admin w/ clean db] should be able to create', (t) => {
       })
   })
 
-  t.test(
-    'should not be able to retrieve category with id as string',
-    (assert) => {
-      agent
-        .post(`/categories`)
-        .send({
-          title: 'Clothes',
-        })
-        .set('Authorization', token)
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(STATUS.Created)
-        .then((res) => {
-          agent
-            .get(`/categories/clothes`)
-            .set('Authorization', token)
-            .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
-            .expect(STATUS.BadRequest)
-            .then(() => {
-              assert.end()
-            })
-        })
-    },
-  )
+  t.test('NOT be able to retrieve category with id as string', (assert) => {
+    agent
+      .post(`/categories`)
+      .send({
+        title: 'Clothes',
+      })
+      .set('Authorization', token)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(STATUS.Created)
+      .then((res) => {
+        agent
+          .get(`/categories/clothes`)
+          .set('Authorization', token)
+          .set('Accept', 'application/json')
+          .expect('Content-Type', /json/)
+          .expect(STATUS.BadRequest)
+          .then(() => {
+            assert.end()
+          })
+      })
+  })
 
-  t.test('should be able to retrieve a category', (assert) => {
+  t.test('be able to retrieve a category', (assert) => {
     agent
       .post(`/categories`)
       .send({
@@ -172,7 +166,7 @@ test('[admin w/ clean db] should be able to create', (t) => {
   t.end()
 })
 
-test('[admin w/ seeded db] should be able retrieve', (t) => {
+test('[seeded db] As admin I should', (t) => {
   let token
 
   t.test('setup', async (assert) => {
@@ -183,7 +177,7 @@ test('[admin w/ seeded db] should be able retrieve', (t) => {
     assert.end()
   })
 
-  t.test('should NOT be able to create a category that exists', (assert) => {
+  t.test('NOT be able to create a category that exists', (assert) => {
     agent
       .post(`/categories`)
       .send({
@@ -199,7 +193,7 @@ test('[admin w/ seeded db] should be able retrieve', (t) => {
       })
   })
 
-  t.test('should be able to retrieve a category', (assert) => {
+  t.test('be able to retrieve a category', (assert) => {
     agent
       .get(`/categories/2`)
       .set('Authorization', token)
@@ -213,7 +207,7 @@ test('[admin w/ seeded db] should be able retrieve', (t) => {
       })
   })
 
-  t.test('should be able to retrieve all categories', (assert) => {
+  t.test('be able to retrieve all categories', (assert) => {
     agent
       .get(`/categories`)
       .set('Authorization', token)
@@ -228,7 +222,7 @@ test('[admin w/ seeded db] should be able retrieve', (t) => {
   })
 
   t.test(
-    'should not be able to retrieve categories with page query as string',
+    'NOT be able to retrieve categories with page query as string',
     (assert) => {
       agent
         .get(`/categories?page=one`)

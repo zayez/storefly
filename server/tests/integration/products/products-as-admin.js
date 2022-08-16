@@ -1,17 +1,17 @@
 const test = require('tape')
 const request = require('supertest')
-const server = require('../../server')
+const server = require('../../../server')
 const agent = request.agent(server)
-const knex = require('../../db')
-const STATUS = require('../../types/StatusCode')
-const { logAdmin, logUser } = require('../infrastructure/login')
-const products = require('../fixtures/products.json').products
+const knex = require('../../../db')
+const STATUS = require('../../../types/StatusCode')
+const { logAdmin } = require('../../infrastructure/login')
+const products = require('../../fixtures/products.json').products
 
 test('setup', async (t) => {
   t.end()
 })
 
-test('[admin w/ clean db] should be able to create', (t) => {
+test('[clean db] As admin I should:', (t) => {
   let token
 
   t.test('setup', async (assert) => {
@@ -21,7 +21,7 @@ test('[admin w/ clean db] should be able to create', (t) => {
     assert.end()
   })
 
-  t.test('should be able to create a product', (assert) => {
+  t.test('be able to create a product', (assert) => {
     const p0 = products[0]
     const newProduct = {
       title: p0.title,
@@ -45,7 +45,7 @@ test('[admin w/ clean db] should be able to create', (t) => {
       })
   })
 
-  t.test('should be able to update a category', (assert) => {
+  t.test('be able to update a category', (assert) => {
     const p1 = products[1]
     const newProduct = {
       title: p1.title,
@@ -81,26 +81,23 @@ test('[admin w/ clean db] should be able to create', (t) => {
       })
   })
 
-  t.test(
-    "should not be able to update a product that don't exists",
-    (assert) => {
-      agent
-        .patch(`/products/2350`)
-        .send({
-          title: 'Hardware',
-        })
-        .set('Authorization', token)
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(STATUS.NotFound)
-        .then((innerRes) => {
-          assert.equal(innerRes.body.title, 'Not Found', 'title is a match')
-          assert.end()
-        })
-    },
-  )
+  t.test("NOT be able to update a product that don't exists", (assert) => {
+    agent
+      .patch(`/products/2350`)
+      .send({
+        title: 'Hardware',
+      })
+      .set('Authorization', token)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(STATUS.NotFound)
+      .then((innerRes) => {
+        assert.equal(innerRes.body.title, 'Not Found', 'title is a match')
+        assert.end()
+      })
+  })
 
-  t.test('should be able to delete a category', (assert) => {
+  t.test('be able to delete a category', (assert) => {
     const p2 = products[2]
     const newProduct = {
       title: p2.title,
@@ -132,7 +129,7 @@ test('[admin w/ clean db] should be able to create', (t) => {
       })
   })
 
-  t.test('should be able to retrieve a product', (assert) => {
+  t.test('be able to retrieve a product', (assert) => {
     const p3 = products[3]
     const newProduct = {
       title: p3.title,
@@ -178,7 +175,7 @@ test('[admin w/ clean db] should be able to create', (t) => {
   t.end()
 })
 
-test('[admin w/ seeded db] should be able retrieve', (t) => {
+test('[seeded db] As admin I should:', (t) => {
   let token
 
   t.test('setup', async (assert) => {
@@ -189,7 +186,7 @@ test('[admin w/ seeded db] should be able retrieve', (t) => {
     assert.end()
   })
 
-  t.test('should NOT be able to create a product that exists', (assert) => {
+  t.test('NOT be able to create a product that exists', (assert) => {
     const p0 = products[0]
     const newProduct = {
       title: p0.title,
@@ -212,7 +209,7 @@ test('[admin w/ seeded db] should be able retrieve', (t) => {
       })
   })
 
-  t.test('should be able to retrieve all products', (assert) => {
+  t.test('be able to retrieve all products', (assert) => {
     agent
       .get(`/products`)
       .set('Authorization', token)
@@ -227,35 +224,6 @@ test('[admin w/ seeded db] should be able retrieve', (t) => {
           products.length,
           'array w/ right length',
         )
-        assert.end()
-      })
-  })
-
-  t.test('teardown', async (assert) => {
-    await knex.seed.run()
-    assert.end()
-  })
-})
-
-test('[user w/ seeded db] should be able retrieve', (t) => {
-  t.test('setup', async (assert) => {
-    await knex.migrate.latest()
-    await knex.seed.run({ directory: 'tests/seeds' })
-
-    assert.end()
-  })
-
-  t.test('should be able to retrieve only active products', (assert) => {
-    agent
-      .get(`/products`)
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect(STATUS.Ok)
-      .then((res) => {
-        assert.equal(res.body.title, 'Ok', 'Products retrieved')
-        assert.ok(Array.isArray(res.body.products))
-        const prodsDraft = res.body.products.filter((p) => p.statusId == 1)
-        assert.equal(prodsDraft.length, 0, 'should only have active')
         assert.end()
       })
   })
