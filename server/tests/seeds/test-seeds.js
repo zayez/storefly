@@ -1,14 +1,16 @@
 const roles = require('../../db/seeds/data/roles.json').roles
-const users = require('../../db/seeds/data/users.json').users
-const categories = require('../fixtures/categories.json').categories
-
-const products = require('../fixtures/products.json').products
 const productStatuses =
   require('../../db/seeds/data/productStatuses.json').productStatuses
-
+const admins = require('../fixtures/users.json').admins
+const editors = require('../fixtures/users.json').editors
+const customers = require('../fixtures/users.json').customers
+const categories = require('../fixtures/categories.json').categories
+const products = require('../fixtures/products.json').products
 const User = require('../../models/user')
 const Category = require('../../models/category')
 const Product = require('../../models/product')
+
+const users = [...admins, ...editors, ...customers]
 
 exports.seed = async (knex) => {
   await knex('roles').del()

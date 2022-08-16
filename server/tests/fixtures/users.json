@@ -1,11 +1,29 @@
 {
-  "users": [
+  "admins": [
     {
       "firstName": "Joe",
       "lastName": "Doe",
       "email": "joedoe@google.com",
       "password": "1234",
       "roles": ["admin"]
+    }
+  ],
+  "editors": [
+    {
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "email": "janedoe@google.com",
+      "password": "4321",
+      "roles": ["editor"]
+    }
+  ],
+  "customers": [
+    {
+      "firstName": "James",
+      "lastName": "Cook",
+      "email": "jamescook@google.com",
+      "password": "abcd",
+      "roles": ["customer"]
     }
   ]
 }

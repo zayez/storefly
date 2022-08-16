@@ -1,12 +1,13 @@
 const request = require('supertest')
 const server = require('../../server')
 const agent = request.agent(server)
-const users = require('../fixtures/users.json').users
+const admin = require('../fixtures/users.json').admins[0]
+const customer = require('../fixtures/users.json').customers[0]
 
 async function logAdmin() {
   const res = await agent
     .post('/signin')
-    .send({ email: users[0].email, password: users[0].password })
+    .send({ email: admin.email, password: admin.password })
 
   const newToken = res.body.token
   return newToken
@@ -15,7 +16,7 @@ async function logAdmin() {
 async function logUser() {
   const res = await agent
     .post('/signin')
-    .send({ username: 'cli1', password: 'cli1' })
+    .send({ email: customer.email, password: customer.password })
 
   const newToken = res.body.token
   return newToken
