@@ -8,13 +8,14 @@ async function isAdmin(ctx, next) {
 
     const isAdmin = await User.hasRole(user, 'admin')
 
-    if (!isAdmin) {
+    if (isAdmin) {
+      await next()
+    } else {
       const { code, title, message } = getResponse(ActionStatus.Forbidden)
       ctx.status = code
       ctx.body = { title, message }
       return
     }
-    await next()
   } catch (err) {
     throw err
   }
@@ -25,14 +26,16 @@ async function isEditor(ctx, next) {
     const user = ctx.state.user
 
     const isEditor = await User.hasRole(user, 'editor')
+    const isAdmin = await User.hasRole(user, 'admin')
 
-    if (!isEditor) {
+    if (isEditor || isAdmin) {
+      await next()
+    } else {
       const { code, title, message } = getResponse(ActionStatus.Forbidden)
       ctx.status = code
       ctx.body = { title, message }
       return
     }
-    await next()
   } catch (err) {
     throw err
   }
