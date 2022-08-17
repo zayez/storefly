@@ -3,11 +3,13 @@ const {
   validateQuery,
   validateParams,
 } = require('../../../helpers/routeHelpers')
-
 const schema = require('./productSchemas')
 
 const isCreateValid = async (ctx, next) =>
   await validateBody({ ctx, next }, schema.create)
+
+const isCreateCollectionValid = async (ctx, next) =>
+  await validateBody({ ctx, next }, schema.createCollection)
 
 const isUpdateValid = async (ctx, next) =>
   await validateBody({ ctx, next }, schema.update)
@@ -23,6 +25,7 @@ const isValidGetAll = async (ctx, next) =>
 
 module.exports = {
   isCreateValid,
+  isCreateCollectionValid,
   isUpdateValid,
   isDestroyValid,
   isValidGet,

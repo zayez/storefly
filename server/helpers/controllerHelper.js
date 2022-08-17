@@ -12,8 +12,10 @@ module.exports = (controllerName) => {
       const createdModel = await Model.create(model)
       if (createdModel) {
         const payload = {}
-        payload[modelName] =
-          mappings[`map${capitalize(modelName)}`](createdModel)
+        payload[modelName] = mappings[`map${capitalize(modelName)}`](
+          createdModel,
+          { extra: ['id'] },
+        )
         return {
           action: ActionStatus.Created,
           payload,
@@ -33,8 +35,10 @@ module.exports = (controllerName) => {
       const updatedModel = await Model.update(id, model)
       if (updatedModel) {
         const payload = {}
-        payload[modelName] =
-          mappings[`map${capitalize(modelName)}`](updatedModel)
+        payload[modelName] = mappings[`map${capitalize(modelName)}`](
+          updatedModel,
+          { extra: ['id'] },
+        )
         return {
           action: ActionStatus.Ok,
           payload,
@@ -72,8 +76,10 @@ module.exports = (controllerName) => {
       const selectedModel = await Model.findById(id)
       if (selectedModel) {
         const payload = {}
-        payload[modelName] =
-          mappings[`map${capitalize(modelName)}`](selectedModel)
+        payload[modelName] = mappings[`map${capitalize(modelName)}`](
+          selectedModel,
+          { extra: ['id'] },
+        )
 
         return {
           action: ActionStatus.Ok,
@@ -94,8 +100,10 @@ module.exports = (controllerName) => {
       const models = await Model.findAll(pagination)
       if (models) {
         const payload = {}
-        payload[controllerName] =
-          mappings[`map${capitalize(controllerName)}`](models)
+        payload[controllerName] = mappings[`map${capitalize(controllerName)}`](
+          models,
+          { extra: ['id'] },
+        )
         return {
           action: ActionStatus.Ok,
           payload,

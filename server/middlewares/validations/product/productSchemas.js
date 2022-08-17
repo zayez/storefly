@@ -1,4 +1,6 @@
 const Joi = require('joi')
+const { COLLECTIONS_MIN_SIZE, COLLECTIONS_MAX_SIZE } =
+  require('../../../config').app
 
 const create = Joi.object().keys({
   title: Joi.string().trim().required(),
@@ -8,6 +10,15 @@ const create = Joi.object().keys({
   image: Joi.string().trim(),
   statusId: Joi.number().integer(),
   categoryId: Joi.number().integer(),
+})
+
+const createCollection = Joi.object().keys({
+  products: Joi.array()
+    .min(COLLECTIONS_MIN_SIZE)
+    .max(COLLECTIONS_MAX_SIZE)
+    .items(create)
+    .required()
+    .unique('title'),
 })
 
 const update = Joi.object().keys({
@@ -34,6 +45,7 @@ const getAll = Joi.object().keys({
 
 const schemas = {
   create,
+  createCollection,
   update,
   destroy,
   get,

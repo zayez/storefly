@@ -27,7 +27,41 @@ test('[clean db] As admin I should:', (t) => {
     createProduct({ product, assert, token })
   })
 
-  t.test('be able to update a category', (assert) => {
+  t.test('be able to create a collection of products', (assert) => {
+    const newProducts = [{ ...products[0] }]
+    delete newProducts[0].id
+    newProducts[0].title = 'Ferrari F50'
+    createProducts({ products: newProducts, assert, token })
+  })
+
+  t.test(
+    'NOT be able to submit a create collection of products with duplicated titles',
+    (assert) => {
+      const newProducts = [{ ...products[0] }, { ...products[1] }]
+      delete newProducts[0].id
+      delete newProducts[1].id
+      newProducts[0].title = 'Ferrari F1'
+      newProducts[1].title = 'Ferrari F1'
+      createProductsWithDuplicate({ products: newProducts, assert, token })
+    },
+  )
+
+  t.test(
+    'NOT be able to create a collection of products with a product title already existing',
+    (assert) => {
+      const newProducts = [{ ...products[0] }, { ...products[1] }]
+      delete newProducts[0].id
+      delete newProducts[1].id
+      newProducts[1].title = 'Porsche Carrera 911'
+      createProductsWithExistingProduct({
+        products: newProducts,
+        assert,
+        token,
+      })
+    },
+  )
+
+  t.test('be able to update a product', (assert) => {
     const productCreate = { ...products[1] }
     delete productCreate.id
     const productUpdate = {
@@ -109,6 +143,53 @@ const createProduct = ({ product, assert, token }) => {
     .then((res) => {
       assert.equal(res.body.title, 'Created', 'Item created')
       assert.equal(res.body.product.title, product.title)
+      assert.ok(Number.isInteger(res.body.product.id))
+      assert.end()
+    })
+}
+
+const createProducts = ({ products, assert, token }) => {
+  agent
+    .post(`/products/collections`)
+    .send({ products })
+    .set('Authorization', token)
+    .set('Accept', 'application/json')
+    .expect('Content-Type', /json/)
+    .expect(STATUS.Created)
+    .then((res) => {
+      const lastProduct = res.body.lastProduct
+      assert.equal(res.body.title, 'Created', 'Items created')
+      assert.ok(
+        lastProduct instanceof Object && lastProduct.constructor === Object,
+      )
+      // assert.ok(Array.isArray(res.body.products))
+      assert.end()
+    })
+}
+
+const createProductsWithDuplicate = ({ products, assert, token }) => {
+  agent
+    .post(`/products/collections`)
+    .send({ products })
+    .set('Authorization', token)
+    .set('Accept', 'application/json')
+    .expect('Content-Type', /json/)
+    .expect(STATUS.BadRequest)
+    .then((res) => {
+      assert.end()
+    })
+}
+
+const createProductsWithExistingProduct = ({ products, assert, token }) => {
+  agent
+    .post(`/products/collections`)
+    .send({ products })
+    .set('Authorization', token)
+    .set('Accept', 'application/json')
+    .expect('Content-Type', /json/)
+    .expect(STATUS.Conflict)
+    .then((res) => {
+      assert.equal(res.body.title, 'Conflict')
       assert.end()
     })
 }

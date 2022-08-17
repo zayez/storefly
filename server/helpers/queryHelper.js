@@ -53,6 +53,17 @@ module.exports = (tableName, selectableFields = '*') => {
       : await knex(tableName).del()
   }
 
+  /**
+   * Check if table already includes a row field with any of the values
+   * @param {string} field Name of the column
+   * @param {array} values List of values
+   * @returns Returns true if includes any the values
+   */
+  const includesAny = async (field, values) => {
+    const items = await knex(tableName).select('id').whereIn(field, values)
+    return items.length > 0
+  }
+
   return {
     find,
     findAll,
@@ -62,5 +73,6 @@ module.exports = (tableName, selectableFields = '*') => {
     update,
     destroy,
     destroyAll,
+    includesAny,
   }
 }

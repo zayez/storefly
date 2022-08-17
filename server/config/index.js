@@ -10,7 +10,12 @@ require('dotenv').config({
   path: fs.existsSync(envPath) ? envPath : defaultEnvPath,
 })
 
-const { APP_PORT, APP_ITEMS_PER_PAGE } = process.env
+const {
+  APP_PORT,
+  APP_ITEMS_PER_PAGE,
+  APP_COLLECTIONS_MIN_SIZE,
+  APP_COLLECTIONS_MAX_SIZE,
+} = process.env
 const { DB_HOST, DB_USER, DB_PASS, DB_PORT, DB_NAME } = process.env
 const { JWT_SECRET, JWT_EXPIRES_IN } = process.env
 
@@ -20,6 +25,8 @@ const config = {
   app: {
     PORT: APP_PORT || 3333,
     ITEMS_PER_PAGE: APP_ITEMS_PER_PAGE || 25,
+    COLLECTIONS_MIN_SIZE: Number(APP_COLLECTIONS_MIN_SIZE) || 1,
+    COLLECTIONS_MAX_SIZE: Number(APP_COLLECTIONS_MAX_SIZE) || 50,
   },
 
   db: {

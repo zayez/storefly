@@ -74,6 +74,30 @@ function disallowDuplicate(entity, attr) {
     }
   }
 }
+/**
+ * Check if any item in the collection already exists.
+ * In the case there is one, it will set the status code to conflict.
+ * @param {string} entity Name of the collection
+ * @param {string} attr Name of the attribute
+ */
+function disallowDuplicates(entity, attr) {
+  const Entity = require('../models/entity')(entity)
+  return async function (ctx, next) {
+    try {
+      const payload = ctx.request.body[entity]
+      const values = payload.map((p) => p[attr])
+
+      if (await Entity.includesAny(attr, values)) {
+        setBody({ ctx, action: ActionStatus.Conflict })
+        return
+      }
+
+      await next()
+    } catch (err) {
+      setBodyError(ctx, err)
+    }
+  }
+}
 
 module.exports = {
   isAuthorized,
@@ -82,4 +106,5 @@ module.exports = {
   userExists,
   entityExists,
   disallowDuplicate,
+  disallowDuplicates,
 }

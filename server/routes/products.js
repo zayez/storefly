@@ -2,14 +2,19 @@ const Router = require('koa-router')
 const compose = require('koa-compose')
 const router = new Router()
 
-const { authorizeRoles } = require('../middlewares/authorization')
+const {
+  authorizeRoles,
+  authorizeAdmin,
+} = require('../middlewares/authorization')
 const { isAuthorized } = require('../middlewares/verify')
+const { mapProduct } = require('../helpers/mappings')
 
 const authorizeManagers = authorizeRoles(['admin', 'editor'])
 const isManager = isAuthorized(['admin', 'editor'])
 
 const {
   isCreateValid,
+  isCreateCollectionValid,
   isUpdateValid,
   isDestroyValid,
   isValidGet,
@@ -19,7 +24,11 @@ const {
 const { setBody, setBodyError } = require('../helpers/routeHelpers')
 const Products = require('../controllers/products')
 
-const { entityExists, disallowDuplicate } = require('../middlewares/verify')
+const {
+  entityExists,
+  disallowDuplicate,
+  disallowDuplicates,
+} = require('../middlewares/verify')
 
 router.post(
   '/products',
@@ -40,6 +49,24 @@ router.post(
         categoryId,
       } = ctx.request.body)
       const { action, payload } = await Products.create(product)
+      setBody({ ctx, action, payload })
+    } catch (err) {
+      setBodyError(ctx, err)
+    }
+  },
+)
+
+router.post(
+  '/products/collections',
+  compose([
+    authorizeAdmin,
+    isCreateCollectionValid,
+    disallowDuplicates('products', 'title'),
+  ]),
+  async (ctx) => {
+    try {
+      const products = ctx.request.body.products.map(mapProduct)
+      const { action, payload } = await Products.createCollection(products)
       setBody({ ctx, action, payload })
     } catch (err) {
       setBodyError(ctx, err)
