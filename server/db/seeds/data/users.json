@@ -6,6 +6,13 @@
       "email": "joedoe@google.com",
       "password": "1234",
       "roles": ["admin"]
+    },
+    {
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "email": "janedoe@google.com",
+      "password": "4321",
+      "roles": ["editor"]
     }
   ]
 }

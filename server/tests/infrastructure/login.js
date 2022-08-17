@@ -2,12 +2,22 @@ const request = require('supertest')
 const server = require('../../server')
 const agent = request.agent(server)
 const admin = require('../fixtures/users.json').admins[0]
+const editor = require('../fixtures/users.json').editors[0]
 const customer = require('../fixtures/users.json').customers[0]
 
 async function logAdmin() {
   const res = await agent
     .post('/signin')
     .send({ email: admin.email, password: admin.password })
+
+  const newToken = res.body.token
+  return newToken
+}
+
+async function logEditor() {
+  const res = await agent
+    .post('/signin')
+    .send({ email: editor.email, password: editor.password })
 
   const newToken = res.body.token
   return newToken
@@ -24,5 +34,6 @@ async function logUser() {
 
 module.exports = {
   logAdmin,
+  logEditor,
   logUser,
 }

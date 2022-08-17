@@ -2,12 +2,9 @@ const Router = require('koa-router')
 const compose = require('koa-compose')
 const router = new Router()
 
-const {
-  authorizeAdmin,
-  authorizeEditor,
-} = require('../middlewares/authorization')
+const { authorizeEditor } = require('../middlewares/authorization')
 
-const { isAdmin, isEditor } = require('../middlewares/verify')
+const { isEditor } = require('../middlewares/verify')
 const {
   isCreateValid,
   isUpdateValid,
@@ -24,7 +21,7 @@ const { entityExists, disallowDuplicate } = require('../middlewares/verify')
 router.post(
   '/products',
   compose([
-    authorizeAdmin,
+    authorizeEditor,
     isCreateValid,
     disallowDuplicate('products', 'title'),
   ]),
@@ -49,7 +46,7 @@ router.post(
 
 router.patch(
   '/products/:id',
-  compose([authorizeAdmin, isUpdateValid, entityExists('products')]),
+  compose([authorizeEditor, isUpdateValid, entityExists('products')]),
   async (ctx) => {
     try {
       const product = ({
@@ -72,7 +69,7 @@ router.patch(
 
 router.delete(
   '/products/:id',
-  compose([authorizeAdmin, isDestroyValid]),
+  compose([authorizeEditor, isDestroyValid]),
   async (ctx) => {
     try {
       const { id } = ctx.params
