@@ -19,7 +19,7 @@ test('userRoles tests', (t) => {
       .select('id')
       .where('email', admin.email)
       .first()
-    assert.ok(await User.hasRole(user, 'admin'), 'user has admin role')
+    assert.ok(await User.hasRole(user, ['admin']), 'user has admin role')
   })
   t.end()
 })

@@ -12,13 +12,16 @@ const SELECTABLE_FIELDS = [
 
 const queries = require('../helpers/queryHelper')(TABLE_NAME, SELECTABLE_FIELDS)
 
-async function hasRole(user, role) {
-  const userRoles = await knex('roles').whereIn(
+const getUserRoles = async (id) => {
+  return await knex('roles').whereIn(
     'id',
-    knex('userRoles').select('roleId').where('userId', user.id),
+    knex('userRoles').select('roleId').where('userId', id),
   )
+}
 
-  return userRoles.some((p) => p.name === role)
+async function hasRole(user, roles = []) {
+  const userRoles = await getUserRoles(user.id)
+  return userRoles.some((r) => roles.includes(r.name))
 }
 
 async function matchPassword(email, password) {
