@@ -1,11 +1,10 @@
 const test = require('tape')
 const request = require('supertest')
-const server = require('../../../server')
+const server = require('../../server')
 const agent = request.agent(server)
-const knex = require('../../../db')
-const STATUS = require('../../../types/StatusCode')
-const { logAdmin, logUser } = require('../../infrastructure/login')
-const products = require('../../fixtures/products.json').products
+const knex = require('../../db')
+const STATUS = require('../../types/StatusCode')
+const products = require('../fixtures/products.json').products
 
 test('setup', async (t) => {
   t.end()
@@ -20,18 +19,12 @@ test('[clean db] As a user I should:', (t) => {
   })
 
   t.test('NOT be able to create a product', (assert) => {
-    const p0 = products[0]
-    const newProduct = {
-      title: p0.title,
-      description: p0.description,
-      price: p0.price,
-      inventory: p0.inventory,
-      statusId: p0.statusId,
-      categoryId: p0.categoryId,
-    }
+    const product = { ...products[0] }
+    delete product.id
+
     agent
       .post(`/products`)
-      .send(newProduct)
+      .send(product)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(STATUS.Forbidden)
