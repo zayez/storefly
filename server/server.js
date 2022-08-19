@@ -1,5 +1,7 @@
 const fs = require('fs')
 const Koa = require('koa')
+const serve = require('koa-static')
+const mount = require('koa-mount')
 const bodyParser = require('koa-bodyparser')
 const morgan = require('koa-morgan')
 const passport = require('koa-passport')
@@ -10,8 +12,9 @@ const productsRoutes = require('./routes/products')
 const passportConfig = require('./config/passportConfig')
 const { authenticate } = require('./middlewares/authentication')
 
-const { isDev, isProd } = require('./config')
+const { isProd } = require('./config')
 const { PORT } = require('./config').app
+const uploads = isProd ? serve('public/uploads') : serve('tests/data/uploads')
 
 const accessLogStream = fs.createWriteStream(__dirname + '/access.log', {
   flags: 'a',
@@ -20,6 +23,7 @@ const accessLogStream = fs.createWriteStream(__dirname + '/access.log', {
 const app = new Koa()
 app
   .use(morgan('combined', { stream: accessLogStream }))
+  .use(mount('/public', uploads))
   .use(bodyParser())
   .use(passport.initialize())
 

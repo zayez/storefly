@@ -23,6 +23,7 @@ const mapProduct = (product = {}, { extra = [] } = {}) => {
   const mProduct = {}
   mProduct.title = product.title
   mProduct.description = product.description
+  mProduct.image = product.image
   mProduct.price = product.price
   mProduct.inventory = product.inventory
   mProduct.statusId = product.statusId

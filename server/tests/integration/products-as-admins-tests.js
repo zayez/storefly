@@ -1,3 +1,5 @@
+const path = require('path')
+const { promises: fs } = require('fs')
 const test = require('tape')
 const request = require('supertest')
 const server = require('../../server')
@@ -6,6 +8,8 @@ const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
 const { logAdmin } = require('../infrastructure/login')
 const products = require('../fixtures/products.json').products
+const images = require('../fixtures/images.json').images
+const { createProductWithImage } = require('./helpers/productsHelper')
 
 test('setup', async (t) => {
   t.end()
@@ -25,6 +29,26 @@ test('[clean db] As admin I should:', (t) => {
     const product = { ...products[0] }
     delete product.id
     createProduct({ product, assert, token })
+  })
+
+  t.test('be able to create a product with image', async (assert) => {
+    const product = { ...products[0] }
+    product.title = 'Porsche 911 3.0'
+    delete product.id
+    const res = await createProductWithImage({
+      product,
+      image: images[0],
+      token,
+    })
+
+    assert.equal(res.body.title, 'Created', 'Item created')
+    assert.ok(res.body.product.image.endsWith(path.basename(images[0].path)))
+    assert.ok(Number.isInteger(res.body.product.id))
+    const img = `./${res.body.product.image}`
+    const fileExists = await fs.stat(img)
+    assert.ok(fileExists, 'file was created')
+
+    assert.end()
   })
 
   t.test('be able to create a collection of products', (assert) => {
@@ -129,6 +153,11 @@ test('[seeded db] As admin I should:', (t) => {
 
 test('teardown', async (t) => {
   await server.close()
+  const dir = 'tests/data/uploads'
+  const files = await fs.readdir(dir)
+  for (const f of files) {
+    await fs.unlink(path.join(dir, f))
+  }
   t.end()
 })
 

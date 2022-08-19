@@ -1,6 +1,7 @@
 const Router = require('koa-router')
 const compose = require('koa-compose')
 const router = new Router()
+const upload = require('../helpers/uploadHelper')
 
 const {
   authorizeRoles,
@@ -14,6 +15,7 @@ const isManager = isAuthorized(['admin', 'editor'])
 
 const {
   isCreateValid,
+  isUploadValid,
   isCreateCollectionValid,
   isUpdateValid,
   isDestroyValid,
@@ -34,6 +36,8 @@ router.post(
   '/products',
   compose([
     authorizeManagers,
+    upload.single('image'),
+    isUpdateValid,
     isCreateValid,
     disallowDuplicate('products', 'title'),
   ]),
@@ -44,10 +48,12 @@ router.post(
         description,
         price,
         inventory,
-        image,
         statusId,
         categoryId,
       } = ctx.request.body)
+      if (ctx.request.file) {
+        product.image = ctx.request.file.path
+      }
       const { action, payload } = await Products.create(product)
       setBody({ ctx, action, payload })
     } catch (err) {

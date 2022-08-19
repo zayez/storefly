@@ -54,6 +54,24 @@ async function validateParams({ ctx, next }, schema) {
   }
 }
 
+async function validateFile({ ctx, next }, schema) {
+  try {
+    const result = schema.validate(ctx.request.file, {
+      abortEarly: false,
+    })
+    if (result.error) {
+      ctx.response.status = 400
+      ctx.response.body = result.error
+      return
+    }
+
+    ctx.request.body = result.value
+    return await next()
+  } catch (err) {
+    ctx.throw(400, err.message)
+  }
+}
+
 function setBody({ ctx, action, payload }) {
   const { code, title, message } = getResponse(action)
   ctx.status = code
@@ -144,6 +162,7 @@ module.exports = {
   validateBody,
   validateQuery,
   validateParams,
+  validateFile,
   setBody,
   setBodyError,
   getResponse,
