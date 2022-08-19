@@ -17,6 +17,7 @@ const {
   updateProductInexistent,
   createAndDeleteProduct,
   createAndGetProduct,
+  getProduct,
   getAllProducts,
 } = require('./helpers/productsHelper')
 
@@ -203,6 +204,13 @@ test('[seeded db] As admin I should:', (t) => {
       status: STATUS.Conflict,
     })
     assert.equal(res.body.title, 'Conflict', 'Product alreadly exists')
+    assert.end()
+  })
+
+  t.test('be able to retrieve a draft product', async (assert) => {
+    const product = products[0]
+    const res = await getProduct(product.id, { token, status: STATUS.Ok })
+    assert.equal(res.body.title, 'Ok', 'correctly retrieved')
     assert.end()
   })
 
