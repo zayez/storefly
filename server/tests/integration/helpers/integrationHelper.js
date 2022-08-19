@@ -10,6 +10,12 @@ const agent = request.agent(server)
  * @property {STATUS} status The expected status response
  */
 
+/**
+ *
+ * @param {string} token token
+ * @param {Object[]} headers headers to set
+ * @returns {Object[]} headers
+ */
 const setHeaders = (token, headers) => {
   const newHeaders = headers ? headers : {}
   if (!headers) newHeaders['Accept'] = 'application/json'
@@ -17,8 +23,13 @@ const setHeaders = (token, headers) => {
   return newHeaders
 }
 
-const checkStatus = async (res, status) => {
-  if (res.status !== status) {
+/**
+ * Debug response body in case response status does not match with expected status
+ * @param {Response} res response
+ * @param {STATUS} expectedStatus expected status
+ */
+const debugStatus = async (res, expectedStatus) => {
+  if (res.status !== expectedStatus) {
     console.log(JSON.stringify(res.body, null, 2))
   }
 }
@@ -38,7 +49,7 @@ module.exports = (baseUrl = '', endpoint) => {
       .send(entity)
       .set(headers)
       .expect('Content-Type', /json/)
-      .expect((res) => checkStatus(res, status))
+      .expect((res) => debugStatus(res, status))
       .expect(status)
       .then((res) => res)
   }
@@ -56,7 +67,7 @@ module.exports = (baseUrl = '', endpoint) => {
       .send(entities)
       .set(headers)
       .expect('Content-Type', /json/)
-      .expect((res) => checkStatus(res, status))
+      .expect((res) => debugStatus(res, status))
       .expect(status)
       .then((res) => res)
   }
@@ -76,7 +87,7 @@ module.exports = (baseUrl = '', endpoint) => {
       .set(headers)
       .set('Authorization', token)
       .expect('Content-Type', /json/)
-      .expect((res) => checkStatus(res, status))
+      .expect((res) => debugStatus(res, status))
       .expect(status)
       .then((res) => res)
   }
@@ -93,7 +104,7 @@ module.exports = (baseUrl = '', endpoint) => {
       .delete(`${url}/${id}`)
       .set(headers)
       .expect('Content-Type', /json/)
-      .expect((res) => checkStatus(res, status))
+      .expect((res) => debugStatus(res, status))
       .expect(status)
       .then((res) => res)
   }
@@ -110,7 +121,7 @@ module.exports = (baseUrl = '', endpoint) => {
       .get(`${url}/${id}`)
       .set(headers)
       .expect('Content-Type', /json/)
-      .expect((res) => checkStatus(res, status))
+      .expect((res) => debugStatus(res, status))
       .expect(status)
       .then((res) => res)
   }
@@ -127,7 +138,7 @@ module.exports = (baseUrl = '', endpoint) => {
       .get(`${url}${query}`)
       .set(headers)
       .expect('Content-Type', /json/)
-      .expect((res) => checkStatus(res, status))
+      .expect((res) => debugStatus(res, status))
       .expect(status)
       .then((res) => res)
   }
