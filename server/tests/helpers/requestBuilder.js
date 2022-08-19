@@ -2,6 +2,7 @@ const request = require('supertest')
 const server = require('../../server')
 const STATUS = require('../../types/StatusCode')
 const agent = request.agent(server)
+
 const { setHeaders, debugStatus } = require('../helpers/requestHelpers')
 
 /**
@@ -12,13 +13,15 @@ const { setHeaders, debugStatus } = require('../helpers/requestHelpers')
 
 /**
  * @typedef {object} RequestBuilder options
- * @property {function} create POST request
- * @property {function} createAll POST to /collections request
- * @property {function} update PATCH request
- * @property {function} destroy DELETE request
- * @property {function} getOne GET with :id request
- * @property {function} get GET with query request
- * @property {function} getAll GET request
+ * @property {Server} server server
+ * @property {request.SuperAgentTest} agent supertest agent
+ * @property {(entity:object, opts:RequestOptions)=>Response} create POST request
+ * @property {(entities:Object[], opts:RequestOptions)=>Response} createAll POST request
+ * @property {(id:integer, entity:Object, opts:RequestOptions) => Response} update PATCH request
+ * @property {(id:integer, opts:RequestOptions) => Response} destroy DELETE request
+ * @property {(id:integer, opts:RequestOptions) => Response} getOne GET with :id request
+ * @property {(query:string, opts:RequestOptions) => Response} get GET with query request
+ * @property {(opts:RequestOptions) => Response} getAll GET request
  */
 
 /**
