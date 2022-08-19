@@ -3,7 +3,15 @@ const requests = require('../helpers/requestBuilder')('products')
 const agent = requests.agent
 const { debugStatus } = require('../helpers/requestHelpers')
 
-const createUpload = async ({ product, image, token, status }) => {
+/**
+ *
+ * Submits a POST with the product and upload image.
+ * @param {Product} product the product
+ * @param {string} image image path
+ * @param {RequestOptions} opts options
+ * @returns {Response} response
+ */
+const createUpload = async (product, image, { token, status }) => {
   const imagepath = path.join(__dirname, `../${image.path}`)
 
   return await agent

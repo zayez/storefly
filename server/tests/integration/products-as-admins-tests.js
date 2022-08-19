@@ -46,9 +46,7 @@ test('[clean db] As admin I should:', (t) => {
     const product = { ...products[0] }
     product.title = 'Porsche 911'
     delete product.id
-    const res = await createUpload({
-      product,
-      image: images[0],
+    const res = await createUpload(product, images[0], {
       token,
       status: STATUS.Created,
     })

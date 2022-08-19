@@ -15,7 +15,7 @@ const { setHeaders, debugStatus } = require('../helpers/requestHelpers')
  * @typedef {object} RequestBuilder options
  * @property {Server} server server
  * @property {request.SuperAgentTest} agent supertest agent
- * @property {(entity:object, opts:RequestOptions)=>Response} create POST request
+ * @property {(entity:Entity, opts:RequestOptions)=>Response} create POST request
  * @property {(entities:Object[], opts:RequestOptions)=>Response} createAll POST request
  * @property {(id:integer, entity:Object, opts:RequestOptions) => Response} update PATCH request
  * @property {(id:integer, opts:RequestOptions) => Response} destroy DELETE request
@@ -34,7 +34,7 @@ module.exports = (endpoint, baseUrl = '') => {
   const url = `${baseUrl}/${endpoint}`
   /**
    * Submits a POST with the entity.
-   * @param {object} entity entity object to create
+   * @param {Entity} entity entity object to create
    * @param {RequestOptions} opts options
    * @returns {Response} response
    */
