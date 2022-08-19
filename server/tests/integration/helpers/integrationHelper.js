@@ -31,7 +31,6 @@ module.exports = (baseUrl = '', endpoint) => {
       .post(`${url}`)
       .send(entity)
       .set(headers)
-      // .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect((res) => checkStatus(res, status))
       .expect(status)
@@ -45,7 +44,6 @@ module.exports = (baseUrl = '', endpoint) => {
       .send(entity)
       .set(headers)
       .set('Authorization', token)
-      // .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect((res) => checkStatus(res, status))
       .expect(status)
@@ -57,7 +55,6 @@ module.exports = (baseUrl = '', endpoint) => {
     return await agent
       .delete(`${url}/${id}`)
       .set(headers)
-      // .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect((res) => checkStatus(res, status))
       .expect(status)
@@ -80,7 +77,6 @@ module.exports = (baseUrl = '', endpoint) => {
     return await agent
       .get(`${url}/${id}`)
       .set(headers)
-      // .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect((res) => checkStatus(res, status))
       .expect(status)
@@ -92,7 +88,6 @@ module.exports = (baseUrl = '', endpoint) => {
     return await agent
       .get(`${url}${query}`)
       .set(headers)
-      // .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect((res) => checkStatus(res, status))
       .expect(status)
