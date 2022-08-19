@@ -1,6 +1,7 @@
 const path = require('path')
 const integration = require('./integrationHelper')('', 'products')
 const agent = integration.agent
+const { debugStatus } = require('./requestHelpers')
 
 const createUpload = async ({ product, image, token, status }) => {
   const imagepath = path.join(__dirname, `../../${image.path}`)
@@ -17,11 +18,7 @@ const createUpload = async ({ product, image, token, status }) => {
     .set('Authorization', token)
     .set('Accept', 'multipart/form-data')
     .expect('Content-Type', /json/)
-    .expect((res) => {
-      if (res.status !== status) {
-        console.log(JSON.stringify(res.body, null, 2))
-      }
-    })
+    .expect((res) => debugStatus(res, status))
     .expect(status)
     .then((res) => res)
 }
