@@ -1,10 +1,10 @@
 const path = require('path')
-const integration = require('./integrationHelper')('', 'products')
-const agent = integration.agent
-const { debugStatus } = require('./requestHelpers')
+const requests = require('../helpers/requestBuilder')('', 'products')
+const agent = requests.agent
+const { debugStatus } = require('../helpers/requestHelpers')
 
 const createUpload = async ({ product, image, token, status }) => {
-  const imagepath = path.join(__dirname, `../../${image.path}`)
+  const imagepath = path.join(__dirname, `../${image.path}`)
 
   return await agent
     .post(`/products`)
@@ -24,6 +24,6 @@ const createUpload = async ({ product, image, token, status }) => {
 }
 
 module.exports = {
-  ...integration,
+  ...requests,
   createUpload,
 }

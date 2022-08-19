@@ -11,7 +11,7 @@ const {
   destroy,
   getOne,
   getAll,
-} = require('./helpers/productsHelper')
+} = require('../requests/products')
 
 test('setup', async (t) => {
   t.end()

@@ -3,8 +3,15 @@ const knex = require('../../db')
 const categories = require('../fixtures/categories.json').categories
 const STATUS = require('../../types/StatusCode')
 const { logAdmin } = require('../infrastructure/login')
-const { server, create, update, destroy, getOne, get, getAll } =
-  require('./helpers/integrationHelper')('', 'categories')
+const {
+  server,
+  create,
+  update,
+  destroy,
+  getOne,
+  get,
+  getAll,
+} = require('../requests/categories')
 
 test('setup', async (t) => {
   t.end()

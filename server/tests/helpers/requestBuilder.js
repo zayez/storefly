@@ -1,8 +1,8 @@
 const request = require('supertest')
-const server = require('../../../server')
-const STATUS = require('../../../types/StatusCode')
+const server = require('../../server')
+const STATUS = require('../../types/StatusCode')
 const agent = request.agent(server)
-const { setHeaders, debugStatus } = require('./requestHelpers')
+const { setHeaders, debugStatus } = require('../helpers/requestHelpers')
 
 /**
  * @typedef {object} RequestOptions options

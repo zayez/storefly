@@ -3,7 +3,7 @@ const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
 const products = require('../fixtures/products.json').products
 
-const { server, create, getOne, getAll } = require('./helpers/productsHelper')
+const { server, create, getOne, getAll } = require('../requests/products')
 
 test('setup', async (t) => {
   t.end()
