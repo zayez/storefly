@@ -4,6 +4,12 @@ const server = require('../../../server')
 const STATUS = require('../../../types/StatusCode')
 const agent = request.agent(server)
 
+/**
+ * @typedef {object} RequestOptions options
+ * @property {string=} token The authentication token
+ * @property {STATUS} status The expected status response
+ */
+
 const setHeaders = (token, headers) => {
   const newHeaders = headers ? headers : {}
   if (!headers) newHeaders['Accept'] = 'application/json'
@@ -21,9 +27,9 @@ module.exports = (baseUrl = '', endpoint) => {
   const url = `${baseUrl}/${endpoint}`
   /**
    * Submits a POST with the entity.
-   * @param {object} entity Entity object to create.
-   * @param {object} params token and status.
-   * @returns
+   * @param {object} entity entity object to create
+   * @param {RequestOptions} opts options
+   * @returns {Response} response
    */
   const create = async (entity, { token, status }) => {
     const headers = setHeaders(token)
@@ -37,6 +43,31 @@ module.exports = (baseUrl = '', endpoint) => {
       .then((res) => res)
   }
 
+  /**
+   * Submits a POST to collections with the entities.
+   * @param {object} entities entities to create
+   * @param {RequestOptions} opts options
+   * @returns {Response} response
+   */
+  const createAll = async (entities, { token, status }) => {
+    const headers = setHeaders(token)
+    return await agent
+      .post(`${url}/collections`)
+      .send(entities)
+      .set(headers)
+      .expect('Content-Type', /json/)
+      .expect((res) => checkStatus(res, status))
+      .expect(status)
+      .then((res) => res)
+  }
+
+  /**
+   * Submits a PATCH with entity
+   * @param {integer} id entity id to update
+   * @param {object} entity entity values to update
+   * @param {RequestOptions} opts options
+   * @returns {Response} response
+   */
   const update = async (id, entity, { token, status }) => {
     const headers = setHeaders(token)
     return await agent
@@ -50,6 +81,12 @@ module.exports = (baseUrl = '', endpoint) => {
       .then((res) => res)
   }
 
+  /**
+   * Submits a DELETE to entity with id
+   * @param {integer} id entity id
+   * @param {RequestOptions} opts options
+   * @returns {Response} response
+   */
   const destroy = async (id, { token, status }) => {
     const headers = setHeaders(token)
     return await agent
@@ -62,15 +99,10 @@ module.exports = (baseUrl = '', endpoint) => {
   }
 
   /**
-   * @typedef {object} RequestOptions
-   * @property {string=} token The authentication token
-   * @property {STATUS} status The expected statuc code response
-   */
-  /**
-   *
-   * @param {integer} id
-   * @param {RequestOptions} options
-   * @returns
+   * Submits a GET to entity with id
+   * @param {integer} id entity id
+   * @param {RequestOptions} opts options
+   * @returns {Response} response
    */
   const getOne = async (id, { token, status }) => {
     const headers = setHeaders(token)
@@ -83,6 +115,12 @@ module.exports = (baseUrl = '', endpoint) => {
       .then((res) => res)
   }
 
+  /**
+   * Submits a GET with a query parameter
+   * @param {string} query query
+   * @param {RequestOptions} opts options
+   * @returns {Response} response
+   */
   const get = async (query = '', { token, status }) => {
     const headers = setHeaders(token)
     return await agent
@@ -93,14 +131,21 @@ module.exports = (baseUrl = '', endpoint) => {
       .expect(status)
       .then((res) => res)
   }
-  const getAll = async (requestOptions) => {
-    return await get('', requestOptions)
+
+  /**
+   * Submits a GET with no query
+   * @param {RequestOptions} opts options
+   * @returns {Response} response
+   */
+  const getAll = async (opts) => {
+    return await get('', opts)
   }
 
   return {
     agent,
     server,
     create,
+    createAll,
     update,
     destroy,
     getOne,

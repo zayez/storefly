@@ -1,24 +1,21 @@
 const path = require('path')
 const { promises: fs } = require('fs')
 const test = require('tape')
-const server = require('../../server')
 const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
 const { logAdmin } = require('../infrastructure/login')
 const products = require('../fixtures/products.json').products
 const images = require('../fixtures/images.json').images
+
 const {
-  createProduct,
-  createProducts,
-  createProductWithImage,
-  createProductsWithDuplicate,
-  createProductsWithExistingProduct,
-  createAndUpdateProduct,
-  updateProductInexistent,
-  createAndDeleteProduct,
-  createAndGetProduct,
-  getProduct,
-  getAllProducts,
+  server,
+  create,
+  update,
+  destroy,
+  createAll,
+  createUpload,
+  getOne,
+  getAll,
 } = require('./helpers/productsHelper')
 
 test('setup', async (t) => {
@@ -38,7 +35,7 @@ test('[clean db] As admin I should:', (t) => {
   t.test('be able to create a product', async (assert) => {
     const product = { ...products[0] }
     delete product.id
-    const res = await createProduct({ product, token, status: STATUS.Created })
+    const res = await create(product, { token, status: STATUS.Created })
     assert.equal(res.body.title, 'Created', 'Item created')
     assert.equal(res.body.product.title, product.title)
     assert.ok(Number.isInteger(res.body.product.id))
@@ -47,9 +44,9 @@ test('[clean db] As admin I should:', (t) => {
 
   t.test('be able to create a product with image', async (assert) => {
     const product = { ...products[0] }
-    product.title = 'Porsche 911 3.0'
+    product.title = 'Porsche 911'
     delete product.id
-    const res = await createProductWithImage({
+    const res = await createUpload({
       product,
       image: images[0],
       token,
@@ -70,11 +67,14 @@ test('[clean db] As admin I should:', (t) => {
     const newProducts = [{ ...products[0] }]
     delete newProducts[0].id
     newProducts[0].title = 'Ferrari F50'
-    const res = await createProducts({
-      products: newProducts,
-      token,
-      status: STATUS.Created,
-    })
+    const res = await createAll(
+      { products: newProducts },
+      {
+        token,
+        status: STATUS.Created,
+      },
+    )
+
     const lastProduct = res.body.lastProduct
     assert.equal(res.body.title, 'Created', 'Items created')
     assert.ok(
@@ -92,11 +92,13 @@ test('[clean db] As admin I should:', (t) => {
       delete newProducts[1].id
       newProducts[0].title = 'Ferrari F1'
       newProducts[1].title = 'Ferrari F1'
-      const res = await createProductsWithDuplicate({
-        products: newProducts,
-        token,
-        status: STATUS.BadRequest,
-      })
+      const res = await createAll(
+        { products: newProducts },
+        {
+          token,
+          status: STATUS.BadRequest,
+        },
+      )
       assert.end()
     },
   )
@@ -107,13 +109,16 @@ test('[clean db] As admin I should:', (t) => {
       const newProducts = [{ ...products[0] }, { ...products[1] }]
       delete newProducts[0].id
       delete newProducts[1].id
-      newProducts[1].title = 'Porsche Carrera 911'
-      const res = await createProductsWithExistingProduct({
-        products: newProducts,
-        assert,
-        token,
-        status: STATUS.Conflict,
-      })
+      newProducts[1].title = 'Porsche 911'
+      const res = await createAll(
+        {
+          products: newProducts,
+        },
+        {
+          token,
+          status: STATUS.Conflict,
+        },
+      )
       assert.equal(res.body.title, 'Conflict')
       assert.end()
     },
@@ -125,12 +130,17 @@ test('[clean db] As admin I should:', (t) => {
     const productUpdate = {
       title: 'FORD Focus Premium',
     }
-    const res = await createAndUpdateProduct({
-      productCreate,
-      productUpdate,
+
+    const resCreate = await create(productCreate, {
+      token,
+      status: STATUS.Created,
+    })
+    resProd = resCreate.body.product
+    const res = await update(resProd.id, productUpdate, {
       token,
       status: STATUS.Ok,
     })
+
     assert.equal(res.body.title, 'Ok', 'Product updated')
     assert.equal(res.body.product.title, productUpdate.title)
     assert.end()
@@ -142,8 +152,7 @@ test('[clean db] As admin I should:', (t) => {
       const product = {
         title: 'Hardware',
       }
-      const res = await updateProductInexistent({
-        product,
+      const res = await update(564, product, {
         token,
         status: STATUS.NotFound,
       })
@@ -156,8 +165,9 @@ test('[clean db] As admin I should:', (t) => {
     const product = { ...products[2] }
     delete product.id
 
-    const res = await createAndDeleteProduct({
-      product,
+    const resCreate = await create(product, { token, status: STATUS.Created })
+    const resProd = resCreate.body.product
+    const res = await destroy(resProd.id, {
       token,
       status: STATUS.Ok,
     })
@@ -169,7 +179,9 @@ test('[clean db] As admin I should:', (t) => {
     const product = { ...products[3] }
     delete product.id
 
-    const res = await createAndGetProduct({ product, token, status: STATUS.Ok })
+    const resCreate = await create(product, { token, status: STATUS.Created })
+    const resProd = resCreate.body.product
+    const res = await getOne(resProd.id, { token, status: STATUS.Ok })
     assert.equal(res.body.title, 'Ok', 'Product retrieved')
     assert.equal(res.body.product.title, product.title, 'equal name')
     assert.end()
@@ -198,8 +210,7 @@ test('[seeded db] As admin I should:', (t) => {
     const product = { ...products[0] }
     delete product.id
 
-    const res = await createProduct({
-      product,
+    const res = await create(product, {
       token,
       status: STATUS.Conflict,
     })
@@ -209,13 +220,13 @@ test('[seeded db] As admin I should:', (t) => {
 
   t.test('be able to retrieve a draft product', async (assert) => {
     const product = products[0]
-    const res = await getProduct(product.id, { token, status: STATUS.Ok })
+    const res = await getOne(product.id, { token, status: STATUS.Ok })
     assert.equal(res.body.title, 'Ok', 'correctly retrieved')
     assert.end()
   })
 
   t.test('be able to retrieve all products', async (assert) => {
-    const res = await getAllProducts({ token, status: STATUS.Ok })
+    const res = await getAll({ token, status: STATUS.Ok })
     const resProds = res.body.products
     assert.equal(res.body.title, 'Ok', 'Products retrieved')
     assert.ok(Array.isArray(resProds))

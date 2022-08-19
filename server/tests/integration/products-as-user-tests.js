@@ -1,16 +1,11 @@
 const test = require('tape')
-const request = require('supertest')
-const server = require('../../server')
-const agent = request.agent(server)
 const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
 const products = require('../fixtures/products.json').products
 
-const {
-  createProduct,
-  getProduct,
-  getAllProducts,
-} = require('./helpers/productsHelper')
+const { server, create, getOne, getAll } = require('./helpers/productsHelper')
+
+// create, update, destroy, getOne, get, getAll
 
 test('setup', async (t) => {
   t.end()
@@ -28,7 +23,7 @@ test('[clean db] As a user I should:', (t) => {
     const product = { ...products[0] }
     delete product.id
 
-    const res = await createProduct({ product, status: STATUS.Forbidden })
+    const res = await await create(product, { status: STATUS.Forbidden })
     assert.equal(res.body.title, 'Forbidden', 'not created')
     assert.end()
   })
@@ -48,7 +43,7 @@ test('[seeded db] As a user I should:', (t) => {
   })
 
   t.test('be able to retrieve only active products', async (assert) => {
-    const res = await getAllProducts({ status: STATUS.Ok })
+    const res = await getAll({ status: STATUS.Ok })
 
     assert.equal(res.body.title, 'Ok', 'correctly retrieved')
     assert.ok(Array.isArray(res.body.products))
@@ -59,7 +54,7 @@ test('[seeded db] As a user I should:', (t) => {
 
   t.test('be able to retrieve an active product', async (assert) => {
     const product = products[1]
-    const res = await getProduct(product.id, { status: STATUS.Ok })
+    const res = await getOne(product.id, { status: STATUS.Ok })
     assert.equal(res.body.title, 'Ok', 'correctly retrieved')
     assert.equal(res.body.product.title, products[1].title)
     assert.end()
@@ -67,7 +62,7 @@ test('[seeded db] As a user I should:', (t) => {
 
   t.test('NOT be able to retrieve a draft product', async (assert) => {
     const product = products[0]
-    const res = await getProduct(product.id, { status: STATUS.NotFound })
+    const res = await getOne(product.id, { status: STATUS.NotFound })
     assert.equal(res.body.title, 'Not Found', 'correctly retrieved')
     assert.end()
   })
