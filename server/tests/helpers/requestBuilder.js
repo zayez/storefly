@@ -10,7 +10,24 @@ const { setHeaders, debugStatus } = require('../helpers/requestHelpers')
  * @property {STATUS} status The expected status response
  */
 
-module.exports = (baseUrl = '', endpoint) => {
+/**
+ * @typedef {object} RequestBuilder options
+ * @property {function} create POST request
+ * @property {function} createAll POST to /collections request
+ * @property {function} update PATCH request
+ * @property {function} destroy DELETE request
+ * @property {function} getOne GET with :id request
+ * @property {function} get GET with query request
+ * @property {function} getAll GET request
+ */
+
+/**
+ *
+ * @param {string} endpoint endpoint
+ * @param {string} baseUrl base url
+ * @returns {RequestBuilder} request builder
+ */
+module.exports = (endpoint, baseUrl = '') => {
   const url = `${baseUrl}/${endpoint}`
   /**
    * Submits a POST with the entity.

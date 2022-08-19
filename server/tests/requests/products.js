@@ -1,5 +1,5 @@
 const path = require('path')
-const requests = require('../helpers/requestBuilder')('', 'products')
+const requests = require('../helpers/requestBuilder')('products')
 const agent = requests.agent
 const { debugStatus } = require('../helpers/requestHelpers')
 
