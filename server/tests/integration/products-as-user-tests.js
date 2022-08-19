@@ -5,8 +5,6 @@ const products = require('../fixtures/products.json').products
 
 const { server, create, getOne, getAll } = require('./helpers/productsHelper')
 
-// create, update, destroy, getOne, get, getAll
-
 test('setup', async (t) => {
   t.end()
 })
