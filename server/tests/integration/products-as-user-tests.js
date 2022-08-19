@@ -6,6 +6,12 @@ const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
 const products = require('../fixtures/products.json').products
 
+const {
+  createProduct,
+  getProduct,
+  getAllProducts,
+} = require('./helpers/productsHelper')
+
 test('setup', async (t) => {
   t.end()
 })
@@ -18,20 +24,13 @@ test('[clean db] As a user I should:', (t) => {
     assert.end()
   })
 
-  t.test('NOT be able to create a product', (assert) => {
+  t.test('NOT be able to create a product', async (assert) => {
     const product = { ...products[0] }
     delete product.id
 
-    agent
-      .post(`/products`)
-      .send(product)
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect(STATUS.Forbidden)
-      .then((res) => {
-        assert.equal(res.body.title, 'Forbidden', 'not created')
-        assert.end()
-      })
+    const res = await createProduct({ product, status: STATUS.Forbidden })
+    assert.equal(res.body.title, 'Forbidden', 'not created')
+    assert.end()
   })
 
   t.test('teardown', async (assert) => {
@@ -48,44 +47,29 @@ test('[seeded db] As a user I should:', (t) => {
     assert.end()
   })
 
-  t.test('be able to retrieve only active products', (assert) => {
-    agent
-      .get(`/products`)
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect(STATUS.Ok)
-      .then((res) => {
-        assert.equal(res.body.title, 'Ok', 'correctly retrieved')
-        assert.ok(Array.isArray(res.body.products))
-        const prodsDraft = res.body.products.filter((p) => p.statusId == 1)
-        assert.equal(prodsDraft.length, 0, 'only active products')
-        assert.end()
-      })
+  t.test('be able to retrieve only active products', async (assert) => {
+    const res = await getAllProducts({ status: STATUS.Ok })
+
+    assert.equal(res.body.title, 'Ok', 'correctly retrieved')
+    assert.ok(Array.isArray(res.body.products))
+    const prodsDraft = res.body.products.filter((p) => p.statusId == 1)
+    assert.equal(prodsDraft.length, 0, 'only active products')
+    assert.end()
   })
 
-  t.test('be able to retrieve an active product', (assert) => {
-    agent
-      .get(`/products/${products[1].id}`)
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect(STATUS.Ok)
-      .then((res) => {
-        assert.equal(res.body.title, 'Ok', 'correctly retrieved')
-        assert.equal(res.body.product.title, products[1].title)
-        assert.end()
-      })
+  t.test('be able to retrieve an active product', async (assert) => {
+    const product = products[1]
+    const res = await getProduct(product.id, { status: STATUS.Ok })
+    assert.equal(res.body.title, 'Ok', 'correctly retrieved')
+    assert.equal(res.body.product.title, products[1].title)
+    assert.end()
   })
 
-  t.test('NOT be able to retrieve a draft product', (assert) => {
-    agent
-      .get(`/products/${products[0].id}`)
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect(STATUS.NotFound)
-      .then((res) => {
-        assert.equal(res.body.title, 'Not Found', 'correctly retrieved')
-        assert.end()
-      })
+  t.test('NOT be able to retrieve a draft product', async (assert) => {
+    const product = products[0]
+    const res = await getProduct(product.id, { status: STATUS.NotFound })
+    assert.equal(res.body.title, 'Not Found', 'correctly retrieved')
+    assert.end()
   })
 
   t.test('teardown', async (assert) => {

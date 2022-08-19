@@ -4,29 +4,36 @@ const server = require('../../../server')
 const STATUS = require('../../../types/StatusCode')
 const agent = request.agent(server)
 
-const createProduct = async ({ product, token }) => {
+const setHeaders = (token) => {
+  const headers = {}
+  if (token) headers['Authorization'] = token
+  return headers
+}
+
+const createProduct = async ({ product, token, status }) => {
+  const headers = setHeaders(token)
   return await agent
     .post(`/products`)
     .send(product)
-    .set('Authorization', token)
+    .set(headers)
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
-    .expect(STATUS.Created)
+    .expect(status)
     .then((res) => res)
 }
 
-const createProducts = async ({ products, token }) => {
+const createProducts = async ({ products, token, status }) => {
   return await agent
     .post(`/products/collections`)
     .send({ products })
     .set('Authorization', token)
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
-    .expect(STATUS.Created)
+    .expect(status)
     .then((res) => res)
 }
 
-const createProductWithImage = async ({ product, image, token }) => {
+const createProductWithImage = async ({ product, image, token, status }) => {
   const imagepath = path.join(__dirname, `../../${image.path}`)
 
   return await agent
@@ -42,15 +49,15 @@ const createProductWithImage = async ({ product, image, token }) => {
     .set('Accept', 'multipart/form-data')
     .expect('Content-Type', /json/)
     .expect((res) => {
-      if (res.status !== STATUS.Created) {
+      if (res.status !== status) {
         console.log(JSON.stringify(res.body, null, 2))
       }
     })
-    .expect(STATUS.Created)
+    .expect(status)
     .then((res) => res)
 }
 
-const createProductsWithDuplicate = async ({ products, token }) => {
+const createProductsWithDuplicate = async ({ products, token, status }) => {
   return await agent
     .post(`/products/collections`)
     .send({ products })
@@ -61,14 +68,18 @@ const createProductsWithDuplicate = async ({ products, token }) => {
     .then((res) => res)
 }
 
-const createProductsWithExistingProduct = async ({ products, token }) => {
+const createProductsWithExistingProduct = async ({
+  products,
+  token,
+  status,
+}) => {
   return await agent
     .post(`/products/collections`)
     .send({ products })
     .set('Authorization', token)
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
-    .expect(STATUS.Conflict)
+    .expect(status)
     .then((res) => res)
 }
 
@@ -76,6 +87,7 @@ const createAndUpdateProduct = async ({
   productCreate,
   productUpdate,
   token,
+  status,
 }) => {
   return await agent
     .post(`/products`)
@@ -92,23 +104,23 @@ const createAndUpdateProduct = async ({
         .set('Authorization', token)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(STATUS.Ok)
+        .expect(status)
         .then((innerRes) => innerRes)
     })
 }
 
-const updateProductInexistent = async ({ product, token }) => {
+const updateProductInexistent = async ({ product, token, status }) => {
   return await agent
     .patch(`/products/2350`)
     .send(product)
     .set('Authorization', token)
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
-    .expect(STATUS.NotFound)
+    .expect(status)
     .then((res) => res)
 }
 
-const createAndDeleteProduct = async ({ product, token }) => {
+const createAndDeleteProduct = async ({ product, token, status }) => {
   return await agent
     .post(`/products`)
     .send(product)
@@ -123,12 +135,12 @@ const createAndDeleteProduct = async ({ product, token }) => {
         .set('Authorization', token)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(STATUS.Ok)
+        .expect(status)
         .then((innerRes) => innerRes)
     })
 }
 
-const createAndGetProduct = async ({ product, token }) => {
+const createAndGetProduct = async ({ product, token, status }) => {
   return await agent
     .post(`/products`)
     .send(product)
@@ -143,29 +155,30 @@ const createAndGetProduct = async ({ product, token }) => {
         .set('Authorization', token)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(STATUS.Ok)
+        .expect(status)
         .then((innerRes) => innerRes)
     })
 }
 
-const createProductExistent = async ({ product, token }) => {
+const getProduct = async (id, { token, status }) => {
+  const headers = setHeaders(token)
   return await agent
-    .post(`/products`)
-    .send(product)
-    .set('Authorization', token)
+    .get(`/products/${id}`)
+    .set(headers)
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
-    .expect(STATUS.Conflict)
+    .expect(status)
     .then((res) => res)
 }
 
-const getAllProducts = async ({ token }) => {
+const getAllProducts = async ({ token, status }) => {
+  const headers = setHeaders(token)
   return await agent
     .get(`/products`)
-    .set('Authorization', token)
+    .set(headers)
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
-    .expect(STATUS.Ok)
+    .expect(status)
     .then((res) => res)
 }
 
@@ -179,6 +192,6 @@ module.exports = {
   updateProductInexistent,
   createAndDeleteProduct,
   createAndGetProduct,
-  createProductExistent,
+  getProduct,
   getAllProducts,
 }
