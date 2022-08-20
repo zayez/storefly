@@ -12,7 +12,7 @@ const { setHeaders, debugStatus } = require('../helpers/requestHelpers')
  */
 
 /**
- * @typedef {object} RequestBuilder options
+ * @typedef {object} RequestBuilder requestBuilder
  * @property {Server} server server
  * @property {request.SuperAgentTest} agent supertest agent
  * @property {(entity:Entity, opts:RequestOptions)=>Response} create POST request
