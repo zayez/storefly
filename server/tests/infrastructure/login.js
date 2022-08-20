@@ -32,8 +32,18 @@ async function logUser() {
   return newToken
 }
 
+async function login(email, password) {
+  const res = await agent
+    .post('/signin')
+    .send({ email: email, password: password })
+
+  const newToken = res.body.token
+  return newToken
+}
+
 module.exports = {
   logAdmin,
   logEditor,
   logUser,
+  login,
 }
