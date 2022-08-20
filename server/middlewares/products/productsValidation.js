@@ -3,7 +3,7 @@ const {
   validateQuery,
   validateParams,
   validateFile,
-} = require('../../helpers/routeHelpers')
+} = require('../validations')
 const schema = require('./productsSchemas')
 
 const isCreateValid = async (ctx, next) => {

@@ -14,7 +14,7 @@ const authorizeManagers = authorizeRoles(['admin', 'editor'])
 const isManager = isAuthorized(['admin', 'editor'])
 
 const { mapProduct } = require('../../helpers/mappings')
-const { setBody, setBodyError } = require('../../helpers/routeHelpers')
+const { setBody, setBodyError } = require('../../helpers/middlewareHelpers')
 const Products = require('../../controllers/products')
 
 const {

@@ -1,7 +1,7 @@
 const compose = require('koa-compose')
 const { authorizeAdmin } = require('../authorization')
 const { entityExists, disallowDuplicate } = require('../verify')
-const { setBody, setBodyError } = require('../../helpers/routeHelpers')
+const { setBody, setBodyError } = require('../../helpers/middlewareHelpers')
 const Categories = require('../../controllers/categories')
 const {
   isCreateValid,

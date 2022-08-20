@@ -1,4 +1,4 @@
-const { validateBody } = require('../../helpers/routeHelpers')
+const { validateBody } = require('../validations')
 const { signUp, signIn, user } = require('./usersSchemas').schemas
 
 const isValidSignUp = async (ctx, next) =>

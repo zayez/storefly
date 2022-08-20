@@ -1,6 +1,6 @@
 const ActionStatus = require('../types/ActionStatus')
 const { isAdmin, isEditor } = require('./verify')
-const { setBody, setBodyError } = require('../helpers/routeHelpers')
+const { setBody, setBodyError } = require('../helpers/middlewareHelpers')
 const User = require('../models/user')
 
 function authorizeRoles(roles = []) {

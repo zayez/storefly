@@ -1,4 +1,4 @@
-const { setBody, setBodyError } = require('../helpers/routeHelpers')
+const { setBody, setBodyError } = require('../helpers/middlewareHelpers')
 const ActionStatus = require('../types/ActionStatus')
 const User = require('../models/user')
 

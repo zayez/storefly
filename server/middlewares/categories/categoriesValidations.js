@@ -2,7 +2,7 @@ const {
   validateBody,
   validateQuery,
   validateParams,
-} = require('../../helpers/routeHelpers')
+} = require('../validations')
 const { create, update, destroy, get, getAll } =
   require('./categoriesSchemas').schemas
 
