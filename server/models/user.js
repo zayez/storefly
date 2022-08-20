@@ -10,7 +10,7 @@ const SELECTABLE_FIELDS = [
   'createdAt',
 ]
 
-const queries = require('../helpers/queryHelper')(TABLE_NAME, SELECTABLE_FIELDS)
+const queries = require('../lib/queryBuilder')(TABLE_NAME, SELECTABLE_FIELDS)
 
 const getUserRoles = async (id) => {
   return await knex('roles').whereIn(

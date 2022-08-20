@@ -14,8 +14,8 @@ const SELECTABLE_FIELDS = [
 
 const { PROD_ACTIVE } = require('../types/ProductStatus')
 
-const queries = require('../helpers/queryHelper')(TABLE_NAME, SELECTABLE_FIELDS)
-const ProductStatus = require('../helpers/queryHelper')('productStatus')
+const queries = require('../lib/queryBuilder')(TABLE_NAME, SELECTABLE_FIELDS)
+const ProductStatus = require('../lib/queryBuilder')('productStatus')
 
 const findAllActive = async (pagination) => {
   const activeStatus = await ProductStatus.findOne({ name: PROD_ACTIVE })
