@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const { COLLECTIONS_MIN_SIZE, COLLECTIONS_MAX_SIZE, IMAGE_MAX_SIZE_MB } =
-  require('../../../config').app
+  require('../../config').app
 
 const IMAGE_MAX_SIZE = 1024 * (1024 * IMAGE_MAX_SIZE_MB)
 

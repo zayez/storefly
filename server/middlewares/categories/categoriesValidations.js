@@ -2,9 +2,9 @@ const {
   validateBody,
   validateQuery,
   validateParams,
-} = require('../../../helpers/routeHelpers')
+} = require('../../helpers/routeHelpers')
 const { create, update, destroy, get, getAll } =
-  require('./categorySchemas').schemas
+  require('./categoriesSchemas').schemas
 
 const isCreateValid = async (ctx, next) =>
   await validateBody({ ctx, next }, create)

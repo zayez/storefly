@@ -1,6 +1,6 @@
 const Joi = require('joi')
 
-const Roles = require('../../../types/Roles')
+const Roles = require('../../types/Roles')
 
 const SignUp = Joi.object().keys({
   email: Joi.string().required(),

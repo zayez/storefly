@@ -3,8 +3,8 @@ const {
   validateQuery,
   validateParams,
   validateFile,
-} = require('../../../helpers/routeHelpers')
-const schema = require('./productSchemas')
+} = require('../../helpers/routeHelpers')
+const schema = require('./productsSchemas')
 
 const isCreateValid = async (ctx, next) => {
   await validateBody({ ctx, next }, schema.create)

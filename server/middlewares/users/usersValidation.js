@@ -1,5 +1,5 @@
-const { validateBody } = require('../../../helpers/routeHelpers')
-const { signUp, signIn, user } = require('./userSchemas').schemas
+const { validateBody } = require('../../helpers/routeHelpers')
+const { signUp, signIn, user } = require('./usersSchemas').schemas
 
 const isValidSignUp = async (ctx, next) =>
   await validateBody({ ctx, next }, signUp)
