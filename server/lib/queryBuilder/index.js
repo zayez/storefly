@@ -67,7 +67,7 @@ module.exports = (tableName, selectableFields = '*') => {
 
   /**
    * Inserts entity.
-   * @param {Entity} entity entity to create
+   * @param {(Entity|Entity[])} entity entity(ies) to create
    * @returns {Entity=} created entity
    */
   const create = async (entity) => {
