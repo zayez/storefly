@@ -11,6 +11,18 @@ const {
   isValidUser,
 } = require('./usersValidation')
 
+const signIn = async (ctx) => {
+  try {
+    const user = ctx.state.user
+    const { action, payload } = await Users.signIn(user)
+    setBody({ ctx, action, payload })
+  } catch (err) {
+    setBodyError(ctx, err)
+  }
+}
+
+const pipelineSignIn = compose([isValidSignIn, authenticateLocal, signIn])
+
 const signUp = async (ctx) => {
   try {
     const { email, password, firstName, lastName } = ctx.request.body
@@ -48,20 +60,8 @@ const pipelineCreate = compose([
   create,
 ])
 
-const signIn = async (ctx) => {
-  try {
-    const user = ctx.state.user
-    const { action, payload } = await Users.signIn(user)
-    setBody({ ctx, action, payload })
-  } catch (err) {
-    setBodyError(ctx, err)
-  }
-}
-
-const pipelineSignIn = compose([isValidSignIn, authenticateLocal, signIn])
-
 module.exports = {
-  signUp: pipelineSignUp,
   signIn: pipelineSignIn,
+  signUp: pipelineSignUp,
   create: pipelineCreate,
 }
