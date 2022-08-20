@@ -65,7 +65,7 @@ async function validateFile({ ctx, next }, schema) {
       return
     }
 
-    ctx.request.body = result.value
+    ctx.request.file = result.value
     return await next()
   } catch (err) {
     ctx.throw(400, err.message)
