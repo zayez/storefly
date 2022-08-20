@@ -1,5 +1,7 @@
 # Storefly
 
+![Build Status](https://github.com/zayez/storefly/workflows/Test/badge.svg)
+
 ## Requirements
 
 - Nix [installed](https://nixos.org/download.html)
