@@ -43,7 +43,7 @@ const create = async (ctx) => {
 const pipelineCreate = compose([
   authorizeManagers,
   upload.single('image'),
-  isUpdateValid,
+  isUploadValid,
   isCreateValid,
   disallowDuplicate('products', 'title'),
   create,
