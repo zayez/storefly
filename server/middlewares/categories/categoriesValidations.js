@@ -3,8 +3,7 @@ const {
   validateQuery,
   validateParams,
 } = require('../validations')
-const { create, update, destroy, get, getAll } =
-  require('./categoriesSchemas').schemas
+const { create, update, destroy, get, getAll } = require('./categoriesSchemas')
 
 const isCreateValid = async (ctx, next) =>
   await validateBody({ ctx, next }, create)

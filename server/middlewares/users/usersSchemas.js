@@ -20,12 +20,8 @@ const User = Joi.object().keys({
   roles: Joi.array().items(Joi.string().valid(...Roles)),
 })
 
-const schemas = {
+module.exports = {
   signUp: SignUp,
   signIn: SignIn,
   user: User,
-}
-
-module.exports = {
-  schemas,
 }

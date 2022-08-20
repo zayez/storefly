@@ -4,30 +4,36 @@ const {
   validateParams,
   validateFile,
 } = require('../validations')
-const schema = require('./productsSchemas')
 
-const isCreateValid = async (ctx, next) => {
-  await validateBody({ ctx, next }, schema.create)
-}
+const {
+  create,
+  uploadImage,
+  createCollection,
+  update,
+  destroy,
+  get,
+  getAll,
+} = require('./productsSchemas')
 
-const isUploadValid = async (ctx, next) => {
-  await validateFile({ ctx, next }, schema.uploadImage)
-}
+const isCreateValid = async (ctx, next) =>
+  await validateBody({ ctx, next }, create)
+
+const isUploadValid = async (ctx, next) =>
+  await validateFile({ ctx, next }, uploadImage)
 
 const isCreateCollectionValid = async (ctx, next) =>
-  await validateBody({ ctx, next }, schema.createCollection)
+  await validateBody({ ctx, next }, createCollection)
 
 const isUpdateValid = async (ctx, next) =>
-  await validateBody({ ctx, next }, schema.update)
+  await validateBody({ ctx, next }, update)
 
 const isDestroyValid = async (ctx, next) =>
-  await validateParams({ ctx, next }, schema.destroy)
+  await validateParams({ ctx, next }, destroy)
 
-const isValidGet = async (ctx, next) =>
-  await validateParams({ ctx, next }, schema.get)
+const isValidGet = async (ctx, next) => await validateParams({ ctx, next }, get)
 
 const isValidGetAll = async (ctx, next) =>
-  await validateQuery({ ctx, next }, schema.getAll)
+  await validateQuery({ ctx, next }, getAll)
 
 module.exports = {
   isCreateValid,

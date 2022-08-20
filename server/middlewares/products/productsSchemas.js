@@ -58,7 +58,7 @@ const getAll = Joi.object().keys({
   page: Joi.number(),
 })
 
-const schemas = {
+module.exports = {
   create,
   createCollection,
   update,
@@ -67,5 +67,3 @@ const schemas = {
   getAll,
   uploadImage,
 }
-
-module.exports = schemas

@@ -1,5 +1,5 @@
 const { validateBody } = require('../validations')
-const { signUp, signIn, user } = require('./usersSchemas').schemas
+const { signUp, signIn, user } = require('./usersSchemas')
 
 const isValidSignUp = async (ctx, next) =>
   await validateBody({ ctx, next }, signUp)

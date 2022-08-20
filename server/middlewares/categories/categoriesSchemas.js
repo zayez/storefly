@@ -20,14 +20,10 @@ const getAll = Joi.object().keys({
   page: Joi.number(),
 })
 
-const schemas = {
+module.exports = {
   create,
   update,
   destroy,
   get,
   getAll,
-}
-
-module.exports = {
-  schemas,
 }
