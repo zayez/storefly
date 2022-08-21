@@ -1,8 +1,10 @@
 const Router = require('koa-router')
 const router = new Router()
 
-const { ROOT } = require('../api/endpointUrls')
+const { GET_ROOT } = require('../api/endpointUrls')
 
-router.get(ROOT, async (ctx) => (ctx.body.message = 'hella!'))
+const { getRoot } = require('../middlewares/application')
+
+router.get(GET_ROOT, getRoot)
 
 module.exports = router

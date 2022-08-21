@@ -21,7 +21,7 @@ const POST_USER = `${USERS}`
 const POST_SIGN_IN = `${BASE_URL}/signin`
 const POST_SIGN_UP = `${BASE_URL}/signup`
 
-const ROOT = `${BASE_URL}/`
+const GET_ROOT = `${BASE_URL}/`
 
 /**
  * Enum for API endpoints.
@@ -64,7 +64,7 @@ const EndpointUrls = {
   /** @member {string} */
   POST_SIGN_UP,
   /** @member {string} */
-  ROOT,
+  GET_ROOT,
 }
 
 module.exports = EndpointUrls
