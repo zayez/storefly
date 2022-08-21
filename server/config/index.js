@@ -40,7 +40,7 @@ const config = {
   },
 
   jwt: {
-    SECRET: JWT_SECRET || 'secret-key',
+    SECRET: JWT_SECRET || 'storefly-secret',
     TOKEN_EXPIRES_IN: JWT_EXPIRES_IN || '10min',
   },
 }
