@@ -1,8 +1,12 @@
+const path = require('path')
+const controllerName = path.parse(__filename).name
+const controller = require('../helpers/controllerHelper')(controllerName)
+
 const ActionStatus = require('../types/ActionStatus')
 const User = require('../models/user')
 const { signToken } = require('../helpers/jwtHelpers')
 
-async function signUp(user, roles) {
+const create = async (user, roles) => {
   try {
     const savedUser = await User.create(user, roles)
 
@@ -21,9 +25,7 @@ async function signUp(user, roles) {
   }
 }
 
-async function signIn(user) {
-  const token = signToken(user.id)
-  return { action: ActionStatus.Ok, payload: { token } }
+module.exports = {
+  ...controller,
+  create,
 }
-
-module.exports = { signUp, signIn }

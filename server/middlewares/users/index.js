@@ -2,22 +2,9 @@ const compose = require('koa-compose')
 const { authorizeAdmin } = require('../authorization')
 const { entityExists, disallowDuplicate, userExists } = require('../verify')
 
-const { authenticateLocal } = require('../authentication')
-const {
-  isValidSignIn,
-  isValidSignUp,
-  isValidUser,
-} = require('./usersValidation')
+const { isValidUser } = require('./usersValidation')
 
 const UsersMiddleware = require('./usersMiddleware')
-
-const signIn = compose([
-  isValidSignIn,
-  authenticateLocal,
-  UsersMiddleware.signIn,
-])
-
-const signUp = compose([isValidSignUp, userExists, UsersMiddleware.signUp])
 
 const create = compose([
   authorizeAdmin,
@@ -27,7 +14,5 @@ const create = compose([
 ])
 
 module.exports = {
-  signIn,
-  signUp,
   create,
 }
