@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const TABLE_NAME = 'users'
 const SELECTABLE_FIELDS = [
   'id',
+  'email',
   'firstName',
   'lastName',
   'updatedAt',

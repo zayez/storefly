@@ -10,17 +10,15 @@ const User = require('../../models/user')
 const Category = require('../../models/category')
 const Product = require('../../models/product')
 
-const users = [...admins, ...editors, ...customers]
-
 exports.seed = async (knex) => {
   await knex('roles').del()
   await knex('roles').insert(roles)
   await knex('users').del()
   await knex('userRoles').del()
 
-  for (const user of users) {
-    await User.create(user, user.roles)
-  }
+  for (const admin of admins) await User.create(admin, ['admin'])
+  for (const editor of editors) await User.create(editor, ['editor'])
+  for (const customer of customers) await User.create(customer, ['customer'])
 
   await knex('categories').del()
   for (const category of categories) {

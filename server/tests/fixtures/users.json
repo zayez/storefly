@@ -1,29 +1,50 @@
 {
   "admins": [
     {
+      "id": 1,
       "firstName": "Joe",
       "lastName": "Doe",
       "email": "joedoe@google.com",
-      "password": "1234",
-      "roles": ["admin"]
+      "password": "1234"
     }
   ],
   "editors": [
     {
+      "id": 2,
       "firstName": "Jane",
       "lastName": "Doe",
       "email": "janedoe@google.com",
-      "password": "4321",
-      "roles": ["editor"]
+      "password": "4321"
     }
   ],
   "customers": [
     {
-      "firstName": "James",
-      "lastName": "Cook",
-      "email": "jamescook@google.com",
-      "password": "abcd",
-      "roles": ["customer"]
+      "id": 3,
+      "firstName": "Isaac",
+      "lastName": "Shorter",
+      "email": "isaacshorter@google.com",
+      "password": "isaac2001"
+    },
+    {
+      "id": 4,
+      "firstName": "Boris",
+      "lastName": "Kovacs",
+      "email": "bkovacs@google.com",
+      "password": "kovacs1234"
+    },
+    {
+      "id": 5,
+      "firstName": "Jenny",
+      "lastName": "Valentina",
+      "email": "jennyv@google.com",
+      "password": "jennyjenny"
+    },
+    {
+      "id": 6,
+      "firstName": "Charles",
+      "lastName": "Kirk",
+      "email": "chkirk@google.com",
+      "password": "kirkabcd"
     }
   ]
 }

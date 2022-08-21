@@ -38,6 +38,19 @@ const mapProduct = (product = {}, { extra = [] } = {}) => {
   return mProduct
 }
 
+const mapUser = (user = {}, { extra = [] } = {}) => {
+  const mUser = {}
+  mUser.firstName = user.firstName
+  mUser.lastName = user.lastName
+  mUser.email = user.email
+
+  extra.forEach((attr) => {
+    if (user[attr]) mUser[attr] = user[attr]
+  })
+
+  return mUser
+}
+
 const mapProducts = (products = [], { extra = [] } = {}) => {
   const mProducts = []
   products.forEach((prod) => {
@@ -51,4 +64,5 @@ module.exports = {
   mapCategories,
   mapProduct,
   mapProducts,
+  mapUser,
 }

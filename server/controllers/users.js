@@ -4,21 +4,20 @@ const controller = require('../helpers/controllerHelper')(controllerName)
 
 const ActionStatus = require('../types/ActionStatus')
 const User = require('../models/user')
-const { signToken } = require('../helpers/jwtHelpers')
+const { mapUser } = require('../helpers/mappings')
 
 const create = async (user, roles) => {
   try {
     const savedUser = await User.create(user, roles)
 
     if (savedUser) {
-      const token = signToken(savedUser)
       return {
         action: ActionStatus.Created,
-        payload: { token },
+        payload: { user: mapUser(savedUser, { extra: ['id'] }) },
       }
     }
     return {
-      action: ActionStatus.SignUpError_CreateUserFailed,
+      action: ActionStatus.CreateError,
     }
   } catch (err) {
     throw err

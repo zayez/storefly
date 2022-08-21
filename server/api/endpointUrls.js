@@ -17,6 +17,7 @@ const GET_CATEGORIES = `${CATEGORIES}`
 
 const USERS = `${BASE_URL}/users`
 const POST_USER = `${USERS}`
+const PATCH_USER = `${USERS}/:id`
 
 const POST_SIGN_IN = `${BASE_URL}/signin`
 const POST_SIGN_UP = `${BASE_URL}/signup`
@@ -59,6 +60,9 @@ const EndpointUrls = {
   GET_CATEGORIES,
   /** @member {string} */
   POST_USER,
+  /** @member {string} */
+  PATCH_USER,
+
   /** @member {string} */
   POST_SIGN_IN,
   /** @member {string} */

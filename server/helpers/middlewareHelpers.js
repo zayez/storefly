@@ -61,20 +61,10 @@ function getResponse(action) {
       title = 'Error'
       message = 'Internal server error'
       break
-    case ActionStatus.SignUpError_CreateUserFailed:
-      code = 500
-      title = 'SignUp - Create user failed'
-      message = 'The server was unable to create the user'
-      break
-    case ActionStatus.SignUpError_CleanupUserFailed:
-      code = 500
-      title = 'SignUp - Remove imcomplete signUp failed'
-      message = 'The server was unable to properly remove incomplete signUp'
-      break
-    case ActionStatus.SignUpError_CleanupUserSucceded:
-      code = 500
-      title = 'SignUp - Remove imcomplete signUp succeded'
-      message = 'The server was unable to complete the signUp'
+    case ActionStatus.CreateError:
+      code = 400
+      title = 'Create - failed to create'
+      message = 'The server was unable to insert the data.'
       break
     default:
       code = 404
