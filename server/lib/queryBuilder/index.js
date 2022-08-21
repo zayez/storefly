@@ -28,7 +28,7 @@ module.exports = (tableName, selectableFields = '*') => {
    * @param {PaginationOptions} opts options
    * @returns {Entity[]} entities
    */
-  const find = async (filters, { page = 1, perPage = ITEMS_PER_PAGE }) => {
+  const find = async (filters, { page = 1, perPage = ITEMS_PER_PAGE } = {}) => {
     const items = await knex
       .select(selectableFields)
       .from(tableName)
@@ -43,7 +43,7 @@ module.exports = (tableName, selectableFields = '*') => {
    * @param {PaginationOptions} paginationOpts pagination options
    * @returns {Entity[]} Entities
    */
-  const findAll = async (pagination) => {
+  const findAll = async (pagination = {}) => {
     return await find({}, pagination)
   }
 

@@ -1,9 +1,8 @@
 const ActionStatus = require('../types/ActionStatus')
-const { isAdmin, isEditor } = require('./verify')
 const { setBody, setBodyError } = require('../helpers/middlewareHelpers')
 const User = require('../models/user')
 
-function authorizeRoles(roles = []) {
+const authorizeRoles = (roles = []) => {
   return async (ctx, next) => {
     try {
       const user = ctx.state.user
@@ -22,44 +21,13 @@ function authorizeRoles(roles = []) {
   }
 }
 
-async function authorizeAdmin(ctx, next) {
-  try {
-    const user = ctx.state.user
-    if (!user) {
-      setBody({ ctx, action: ActionStatus.Forbidden })
-      return
-    }
-
-    if (await isAdmin(user)) {
-      await next()
-    } else {
-      setBody({ ctx, action: ActionStatus.Forbidden })
-    }
-  } catch (err) {
-    setBodyError(ctx, err)
-  }
-}
-
-async function authorizeEditor(ctx, next) {
-  try {
-    const user = ctx.state.user
-    if (!user) {
-      setBody({ ctx, action: ActionStatus.Forbidden })
-      return
-    }
-
-    if (await isEditor(user)) {
-      await next()
-    } else {
-      setBody({ ctx, action: ActionStatus.Forbidden })
-    }
-  } catch (err) {
-    setBodyError(ctx, err)
-  }
-}
+const authorizeAdmin = authorizeRoles(['admin'])
+const authorizeEditor = authorizeRoles(['editor'])
+const authorizeCustomer = authorizeRoles(['customer'])
 
 module.exports = {
+  authorizeRoles,
   authorizeAdmin,
   authorizeEditor,
-  authorizeRoles,
+  authorizeCustomer,
 }
