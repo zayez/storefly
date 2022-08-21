@@ -1,8 +1,6 @@
 const compose = require('koa-compose')
 const { authorizeAdmin } = require('../authorization')
 const { entityExists, disallowDuplicate, userExists } = require('../verify')
-const { setBody, setBodyError } = require('../../helpers/middlewareHelpers')
-const Users = require('../../controllers/users')
 
 const { authenticateLocal } = require('../authentication')
 const {
@@ -11,57 +9,25 @@ const {
   isValidUser,
 } = require('./usersValidation')
 
-const signIn = async (ctx) => {
-  try {
-    const user = ctx.state.user
-    const { action, payload } = await Users.signIn(user)
-    setBody({ ctx, action, payload })
-  } catch (err) {
-    setBodyError(ctx, err)
-  }
-}
+const UsersMiddleware = require('./usersMiddleware')
 
-const pipelineSignIn = compose([isValidSignIn, authenticateLocal, signIn])
+const signIn = compose([
+  isValidSignIn,
+  authenticateLocal,
+  UsersMiddleware.signIn,
+])
 
-const signUp = async (ctx) => {
-  try {
-    const { email, password, firstName, lastName } = ctx.request.body
-    const { action, payload } = await Users.signUp({
-      email,
-      password,
-      firstName,
-      lastName,
-    })
+const signUp = compose([isValidSignUp, userExists, UsersMiddleware.signUp])
 
-    setBody({ ctx, action, payload })
-  } catch (err) {
-    setBodyError(ctx, err)
-  }
-}
-
-const pipelineSignUp = compose([isValidSignUp, userExists, signUp])
-
-const create = async (ctx) => {
-  try {
-    const { username, password } = ctx.request.body
-    const roles = ctx.request.body.roles || ['customer']
-    const { action, payload } = await signUp({ username, password }, roles)
-
-    setBody({ ctx, action, payload })
-  } catch (err) {
-    setBodyError(ctx, err)
-  }
-}
-
-const pipelineCreate = compose([
+const create = compose([
   authorizeAdmin,
   isValidUser,
   userExists,
-  create,
+  UsersMiddleware.create,
 ])
 
 module.exports = {
-  signIn: pipelineSignIn,
-  signUp: pipelineSignUp,
-  create: pipelineCreate,
+  signIn,
+  signUp,
+  create,
 }

@@ -10,20 +10,13 @@ const {
   GET_PRODUCTS,
 } = require('../api/endpointUrls')
 
-const {
-  create,
-  createCollection,
-  update,
-  destroy,
-  get,
-  getAll,
-} = require('../middlewares/products')
+const ProductsPipeline = require('../middlewares/products')
 
-router.post(POST_PRODUCT, create)
-router.post(POST_PRODUCT_COLLECTION, createCollection)
-router.patch(PATCH_PRODUCT, update)
-router.delete(DELETE_PRODUCT, destroy)
-router.get(GET_PRODUCT, get)
-router.get(GET_PRODUCTS, getAll)
+router.post(POST_PRODUCT, ProductsPipeline.create)
+router.post(POST_PRODUCT_COLLECTION, ProductsPipeline.createCollection)
+router.patch(PATCH_PRODUCT, ProductsPipeline.update)
+router.delete(DELETE_PRODUCT, ProductsPipeline.destroy)
+router.get(GET_PRODUCT, ProductsPipeline.get)
+router.get(GET_PRODUCTS, ProductsPipeline.getAll)
 
 module.exports = router

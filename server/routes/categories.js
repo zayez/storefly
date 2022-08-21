@@ -9,18 +9,12 @@ const {
   GET_CATEGORIES,
 } = require('../api/endpointUrls')
 
-const {
-  create,
-  update,
-  destroy,
-  get,
-  getAll,
-} = require('../middlewares/categories')
+const CategoriesPipeline = require('../middlewares/categories')
 
-router.post(POST_CATEGORY, create)
-router.patch(PATCH_CATEGORY, update)
-router.delete(DELETE_CATEGORY, destroy)
-router.get(GET_CATEGORY, get)
-router.get(GET_CATEGORIES, getAll)
+router.post(POST_CATEGORY, CategoriesPipeline.create)
+router.patch(PATCH_CATEGORY, CategoriesPipeline.update)
+router.delete(DELETE_CATEGORY, CategoriesPipeline.destroy)
+router.get(GET_CATEGORY, CategoriesPipeline.get)
+router.get(GET_CATEGORIES, CategoriesPipeline.getAll)
 
 module.exports = router

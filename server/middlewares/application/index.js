@@ -1,18 +1,8 @@
 const compose = require('koa-compose')
-const { setBody, setBodyError } = require('../../helpers/middlewareHelpers')
-const Application = require('../../controllers/application')
+const ApplicationMiddleware = require('./applicationMiddleware')
 
-const getRoot = async (ctx) => {
-  try {
-    const { action, payload } = await Application.getRoot()
-    setBody({ ctx, action, payload })
-  } catch (err) {
-    setBodyError(ctx, err)
-  }
-}
-
-const pipelineGetRoot = compose([getRoot])
+const getRoot = compose([ApplicationMiddleware.getRoot])
 
 module.exports = {
-  getRoot: pipelineGetRoot,
+  getRoot,
 }
