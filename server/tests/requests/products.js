@@ -1,5 +1,6 @@
 const path = require('path')
-const requests = require('../helpers/requestBuilder')('products')
+const { PRODUCTS, POST_PRODUCT } = require('../../api/endpointUrls')
+const requests = require('../helpers/requestBuilder')(PRODUCTS)
 const agent = requests.agent
 const { debugStatus } = require('../helpers/requestHelpers')
 
@@ -15,7 +16,7 @@ const createUpload = async (product, image, { token, status }) => {
   const imagepath = path.join(__dirname, `../${image.path}`)
 
   return await agent
-    .post(`/products`)
+    .post(POST_PRODUCT)
     .field('title', product.title)
     .field('statusId', product.statusId)
     .field('categoryId', product.categoryId)

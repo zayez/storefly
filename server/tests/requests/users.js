@@ -1,11 +1,12 @@
 const { setHeaders, debugStatus } = require('../helpers/requestHelpers')
-const requests = require('../helpers/requestBuilder')('users')
+const { USERS, POST_SIGN_IN, POST_SIGN_UP } = require('../../api/endpointUrls')
+const requests = require('../helpers/requestBuilder')(USERS)
 const agent = requests.agent
 
 const signIn = async (email, password, { status }) => {
   const headers = setHeaders()
   return await agent
-    .post(`/signin`)
+    .post(POST_SIGN_IN)
     .send({ email: email, password: password })
     .set(headers)
     .expect('Content-Type', /json/)
@@ -17,7 +18,7 @@ const signIn = async (email, password, { status }) => {
 const signUp = async (user, { status }) => {
   const headers = setHeaders()
   return await agent
-    .post(`/signup`)
+    .post(POST_SIGN_UP)
     .send(user)
     .set(headers)
     .expect('Content-Type', /json/)

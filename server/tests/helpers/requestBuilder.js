@@ -27,11 +27,10 @@ const { setHeaders, debugStatus } = require('../helpers/requestHelpers')
 /**
  *
  * @param {string} endpoint endpoint
- * @param {string} baseUrl base url
  * @returns {RequestBuilder} request builder
  */
-module.exports = (endpoint, baseUrl = '') => {
-  const url = `${baseUrl}/${endpoint}`
+module.exports = (endpoint) => {
+  const url = `${endpoint}`
   /**
    * Submits a POST with the entity.
    * @param {Entity} entity entity object to create
