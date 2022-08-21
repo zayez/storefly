@@ -1,7 +1,6 @@
-const jwt = require('jsonwebtoken')
 const ActionStatus = require('../types/ActionStatus')
-const { SECRET, TOKEN_EXPIRES_IN } = require('../config').jwt
 const User = require('../models/user')
+const { signToken } = require('../helpers/jwtHelpers')
 
 async function signUp(user, roles) {
   try {
@@ -23,21 +22,8 @@ async function signUp(user, roles) {
 }
 
 async function signIn(user) {
-  const token = signToken(user)
+  const token = signToken(user.id)
   return { action: ActionStatus.Ok, payload: { token } }
-}
-
-function signToken(user) {
-  return jwt.sign(
-    {
-      iss: 'storefly',
-      sub: user.id,
-    },
-    SECRET,
-    {
-      expiresIn: TOKEN_EXPIRES_IN,
-    },
-  )
 }
 
 module.exports = { signUp, signIn }
