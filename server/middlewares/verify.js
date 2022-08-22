@@ -2,25 +2,6 @@ const { setBody, setBodyError } = require('../helpers/middlewareHelpers')
 const ActionStatus = require('../types/ActionStatus')
 const User = require('../models/user')
 
-const isAuthorized = (roles) => {
-  return async (user) => {
-    if (!user) return false
-
-    return await User.hasRole(user, roles)
-  }
-}
-
-const isAdmin = async (user) => {
-  if (!user) return false
-
-  return await User.hasRole(user, ['admin'])
-}
-
-const isEditor = async (user) => {
-  if (!user) return false
-  return await User.hasRole(user, ['editor'])
-}
-
 async function userExists(ctx, next) {
   try {
     const { email } = ctx.request.body
@@ -100,9 +81,6 @@ function disallowDuplicates(entity, attr) {
 }
 
 module.exports = {
-  isAuthorized,
-  isAdmin,
-  isEditor,
   userExists,
   entityExists,
   disallowDuplicate,

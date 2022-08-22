@@ -57,9 +57,29 @@ async function create(user, roles = ['customer']) {
   return createdUser
 }
 
+const findOne = async (filters) => {
+  const user = await knex(TABLE_NAME).first(SELECTABLE_FIELDS).where(filters)
+  if (!user) return null
+
+  const roles = await getUserRoles(user.id)
+  user.roles = roles.map((r) => r.name)
+  return user
+}
+
+const findById = async (id) => {
+  const user = await knex(TABLE_NAME).first(SELECTABLE_FIELDS).where({ id })
+  if (!user) return null
+
+  const roles = await getUserRoles(user.id)
+  user.roles = roles.map((r) => r.name)
+  return user
+}
+
 module.exports = {
   hasRole,
   matchPassword,
   ...queries,
   create,
+  findOne,
+  findById,
 }

@@ -2,8 +2,7 @@ const { setBody, setBodyError } = require('../../helpers/middlewareHelpers')
 const ProductsController = require('../../controllers/products')
 const { mapProduct } = require('../../helpers/mappings')
 
-const { isAuthorized } = require('../verify')
-const isManager = isAuthorized(['admin', 'editor'])
+const { isManager } = require('../../helpers/userHelpers')
 
 const create = async (ctx) => {
   try {
@@ -32,6 +31,7 @@ const createCollection = async (ctx) => {
 
 const update = async (ctx) => {
   try {
+    // TODO: Fix this ugly shit
     const product = ({
       title,
       description,
@@ -62,8 +62,7 @@ const destroy = async (ctx) => {
 const get = async (ctx) => {
   try {
     const { id } = ctx.params
-    const isUserManager = await isManager(ctx.state.user)
-    const get = isUserManager
+    const get = isManager(ctx.state.user)
       ? ProductsController.getOne
       : ProductsController.getOneActive
     const { action, payload } = await get(id)
@@ -77,8 +76,7 @@ const get = async (ctx) => {
 const getAll = async (ctx) => {
   try {
     const { page } = ctx.request.query
-    const isUserManager = await isManager(ctx.state.user)
-    const get = isUserManager
+    const get = isManager(ctx.state.user)
       ? ProductsController.getAll
       : ProductsController.getAllActive
     const { action, payload } = await get({ page })
