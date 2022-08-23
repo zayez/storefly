@@ -25,7 +25,6 @@ const signUp = async (ctx) => {
   try {
     const user = mapper.mapUser(ctx.request.body)
     const { action, payload } = await ApplicationController.signUp(user)
-
     setBody({ ctx, action, payload })
   } catch (err) {
     setBodyError(ctx, err)
