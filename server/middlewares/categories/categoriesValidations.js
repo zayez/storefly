@@ -1,28 +1,17 @@
-const {
-  validateBody,
-  validateQuery,
-  validateParams,
-} = require('../validations')
-const { create, update, destroy, get, getAll } = require('./categoriesSchemas')
+const { validateBody, validateQuery } = require('../validations')
+const { Create, Update, GetAll } = require('./categoriesSchemas')
 
-const isCreateValid = async (ctx, next) =>
-  await validateBody({ ctx, next }, create)
+const isValidCreate = async (ctx, next) =>
+  await validateBody({ ctx, next }, Create)
 
-const isUpdateValid = async (ctx, next) =>
-  await validateBody({ ctx, next }, update)
+const isValidUpdate = async (ctx, next) =>
+  await validateBody({ ctx, next }, Update)
 
-const isDestroyValid = async (ctx, next) =>
-  await validateParams({ ctx, next }, destroy)
-
-const isGetValid = async (ctx, next) => await validateParams({ ctx, next }, get)
-
-const isGetAllValid = async (ctx, next) =>
-  await validateQuery({ ctx, next }, getAll)
+const isValidGetAll = async (ctx, next) =>
+  await validateQuery({ ctx, next }, GetAll)
 
 module.exports = {
-  isCreateValid,
-  isUpdateValid,
-  isDestroyValid,
-  isGetValid,
-  isGetAllValid,
+  isValidCreate,
+  isValidUpdate,
+  isValidGetAll,
 }

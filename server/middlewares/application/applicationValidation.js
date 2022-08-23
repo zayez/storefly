@@ -1,11 +1,11 @@
 const { validateBody, validateParams } = require('../validations')
-const { signUp, signIn, Id } = require('./applicationSchemas')
+const { SignUp, SignIn, Id } = require('./applicationSchemas')
 
 const isValidSignUp = async (ctx, next) =>
-  await validateBody({ ctx, next }, signUp)
+  await validateBody({ ctx, next }, SignUp)
 
 const isValidSignIn = async (ctx, next) =>
-  await validateBody({ ctx, next }, signIn)
+  await validateBody({ ctx, next }, SignIn)
 
 const isValidId = async (ctx, next) => await validateParams({ ctx, next }, Id)
 

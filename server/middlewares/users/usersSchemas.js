@@ -2,7 +2,7 @@ const Joi = require('joi')
 
 const Roles = require('../../types/Roles')
 
-const create = Joi.object().keys({
+const Create = Joi.object().keys({
   firstName: Joi.string().trim().required(),
   lastName: Joi.string().trim().required(),
   email: Joi.string().trim().required(),
@@ -10,19 +10,14 @@ const create = Joi.object().keys({
   roles: Joi.array().items(Joi.string().valid(...Roles)),
 })
 
-const update = Joi.object().keys({
+const Update = Joi.object().keys({
   firstName: Joi.string().trim(),
   lastName: Joi.string().trim(),
   email: Joi.string().trim(),
   password: Joi.string().trim(),
 })
 
-const destroy = Joi.object().keys({
-  id: Joi.number(),
-})
-
 module.exports = {
-  create,
-  update,
-  destroy,
+  Create,
+  Update,
 }

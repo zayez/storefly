@@ -7,14 +7,14 @@ const {
   disallowDuplicates,
 } = require('../verify')
 const {
-  isCreateValid,
-  isUploadValid,
-  isCreateCollectionValid,
-  isUpdateValid,
-  isDestroyValid,
-  isValidGet,
+  isValidCreate,
+  isValidUpload,
+  isValidCreateCollection,
+  isValidUpdate,
   isValidGetAll,
 } = require('./productsValidation')
+
+const { isValidId } = require('../application/applicationValidation')
 const ProductsMiddleware = require('./productsMiddleware')
 
 const authorizeManagers = authorizeRoles(['admin', 'editor'])
@@ -22,33 +22,33 @@ const authorizeManagers = authorizeRoles(['admin', 'editor'])
 const create = compose([
   authorizeManagers,
   upload.single('image'),
-  isUploadValid,
-  isCreateValid,
+  isValidUpload,
+  isValidCreate,
   disallowDuplicate('products', 'title'),
   ProductsMiddleware.create,
 ])
 
 const createCollection = compose([
   authorizeAdmin,
-  isCreateCollectionValid,
+  isValidCreateCollection,
   disallowDuplicates('products', 'title'),
   ProductsMiddleware.createCollection,
 ])
 
 const update = compose([
   authorizeManagers,
-  isUpdateValid,
+  isValidUpdate,
   entityExists('products'),
   ProductsMiddleware.update,
 ])
 
 const destroy = compose([
   authorizeManagers,
-  isDestroyValid,
+  isValidId,
   ProductsMiddleware.destroy,
 ])
 
-const get = compose([isValidGet, ProductsMiddleware.get])
+const get = compose([isValidId, ProductsMiddleware.get])
 const getAll = compose([isValidGetAll, ProductsMiddleware.getAll])
 
 module.exports = {

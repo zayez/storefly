@@ -4,7 +4,7 @@ const { COLLECTIONS_MIN_SIZE, COLLECTIONS_MAX_SIZE, IMAGE_MAX_SIZE_MB } =
 
 const IMAGE_MAX_SIZE = 1024 * (1024 * IMAGE_MAX_SIZE_MB)
 
-const create = Joi.object().keys({
+const Create = Joi.object().keys({
   title: Joi.string().trim().required(),
   description: Joi.string().trim(),
   price: Joi.number().precision(2).required(),
@@ -13,7 +13,7 @@ const create = Joi.object().keys({
   categoryId: Joi.number().integer(),
 })
 
-const uploadImage = Joi.object()
+const UploadImage = Joi.object()
   .keys({
     mimetype: Joi.string().valid(...['image/png', 'image/jpeg']),
     path: Joi.string().trim().required(),
@@ -27,16 +27,16 @@ const uploadImage = Joi.object()
   })
   .options({ allowUnknown: true })
 
-const createCollection = Joi.object().keys({
+const CreateCollection = Joi.object().keys({
   products: Joi.array()
     .min(COLLECTIONS_MIN_SIZE)
     .max(COLLECTIONS_MAX_SIZE)
-    .items(create)
+    .items(Create)
     .required()
     .unique('title'),
 })
 
-const update = Joi.object().keys({
+const Update = Joi.object().keys({
   title: Joi.string().trim(),
   description: Joi.string().trim(),
   price: Joi.number().precision(2),
@@ -46,24 +46,14 @@ const update = Joi.object().keys({
   categoryId: Joi.number().integer(),
 })
 
-const destroy = Joi.object().keys({
-  id: Joi.number(),
-})
-
-const get = Joi.object().keys({
-  id: Joi.number().required(),
-})
-
-const getAll = Joi.object().keys({
+const GetAll = Joi.object().keys({
   page: Joi.number(),
 })
 
 module.exports = {
-  create,
-  createCollection,
-  update,
-  destroy,
-  get,
-  getAll,
-  uploadImage,
+  Create,
+  CreateCollection,
+  Update,
+  GetAll,
+  UploadImage,
 }

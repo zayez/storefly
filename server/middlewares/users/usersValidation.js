@@ -1,14 +1,12 @@
 const { setBody } = require('../../helpers/middlewareHelpers')
 const ActionStatus = require('../../types/ActionStatus')
 const { validateBody } = require('../validations')
-const { create, update, destroy } = require('./usersSchemas')
+const { Create, Update } = require('./usersSchemas')
 
 const isValidCreate = async (ctx, next) =>
-  await validateBody({ ctx, next }, create)
+  await validateBody({ ctx, next }, Create)
 const isValidUpdate = async (ctx, next) =>
-  await validateBody({ ctx, next }, update)
-const isValidDestroy = async (ctx, next) =>
-  await validateBody({ ctx, next }, destroy)
+  await validateBody({ ctx, next }, Update)
 
 const matchUserId = async (ctx, next) => {
   if (Number(ctx.state.user.id) !== Number(ctx.params.id)) {
@@ -21,6 +19,5 @@ const matchUserId = async (ctx, next) => {
 module.exports = {
   isValidCreate,
   isValidUpdate,
-  isValidDestroy,
   matchUserId,
 }

@@ -1,46 +1,32 @@
-const {
-  validateBody,
-  validateQuery,
-  validateParams,
-  validateFile,
-} = require('../validations')
+const { validateBody, validateQuery, validateFile } = require('../validations')
 
 const {
-  create,
-  uploadImage,
-  createCollection,
-  update,
-  destroy,
-  get,
-  getAll,
+  Create,
+  UploadImage,
+  CreateCollection,
+  Update,
+  GetAll,
 } = require('./productsSchemas')
 
-const isCreateValid = async (ctx, next) =>
-  await validateBody({ ctx, next }, create)
+const isValidCreate = async (ctx, next) =>
+  await validateBody({ ctx, next }, Create)
 
-const isUploadValid = async (ctx, next) =>
-  await validateFile({ ctx, next }, uploadImage)
+const isValidUpload = async (ctx, next) =>
+  await validateFile({ ctx, next }, UploadImage)
 
-const isCreateCollectionValid = async (ctx, next) =>
-  await validateBody({ ctx, next }, createCollection)
+const isValidCreateCollection = async (ctx, next) =>
+  await validateBody({ ctx, next }, CreateCollection)
 
-const isUpdateValid = async (ctx, next) =>
-  await validateBody({ ctx, next }, update)
-
-const isDestroyValid = async (ctx, next) =>
-  await validateParams({ ctx, next }, destroy)
-
-const isValidGet = async (ctx, next) => await validateParams({ ctx, next }, get)
+const isValidUpdate = async (ctx, next) =>
+  await validateBody({ ctx, next }, Update)
 
 const isValidGetAll = async (ctx, next) =>
-  await validateQuery({ ctx, next }, getAll)
+  await validateQuery({ ctx, next }, GetAll)
 
 module.exports = {
-  isCreateValid,
-  isUploadValid,
-  isCreateCollectionValid,
-  isUpdateValid,
-  isDestroyValid,
-  isValidGet,
+  isValidCreate,
+  isValidUpload,
+  isValidCreateCollection,
+  isValidUpdate,
   isValidGetAll,
 }

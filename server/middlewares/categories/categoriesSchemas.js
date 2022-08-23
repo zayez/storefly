@@ -1,29 +1,19 @@
 const Joi = require('joi')
 
-const create = Joi.object().keys({
+const Create = Joi.object().keys({
   title: Joi.string().required(),
 })
 
-const update = Joi.object().keys({
+const Update = Joi.object().keys({
   title: Joi.string().required(),
 })
 
-const destroy = Joi.object().keys({
-  id: Joi.number(),
-})
-
-const get = Joi.object().keys({
-  id: Joi.number().required(),
-})
-
-const getAll = Joi.object().keys({
+const GetAll = Joi.object().keys({
   page: Joi.number(),
 })
 
 module.exports = {
-  create,
-  update,
-  destroy,
-  get,
-  getAll,
+  Create,
+  Update,
+  GetAll,
 }

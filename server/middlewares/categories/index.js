@@ -2,39 +2,38 @@ const compose = require('koa-compose')
 const { authorizeAdmin } = require('../authorization')
 const { entityExists, disallowDuplicate } = require('../verify')
 
+const { isValidId } = require('../application/applicationValidation')
 const {
-  isCreateValid,
-  isUpdateValid,
-  isDestroyValid,
-  isGetValid,
-  isGetAllValid,
+  isValidCreate,
+  isValidUpdate,
+  isValidGetAll,
 } = require('./categoriesValidations')
 
 const CategoriesMiddleware = require('./categoriesMiddleware')
 
 const create = compose([
   authorizeAdmin,
-  isCreateValid,
+  isValidCreate,
   disallowDuplicate('categories', 'title'),
   CategoriesMiddleware.create,
 ])
 
 const update = compose([
   authorizeAdmin,
-  isUpdateValid,
+  isValidUpdate,
   entityExists('categories'),
   CategoriesMiddleware.update,
 ])
 
 const destroy = compose([
   authorizeAdmin,
-  isDestroyValid,
+  isValidId,
   CategoriesMiddleware.destroy,
 ])
-const get = compose([authorizeAdmin, isGetValid, CategoriesMiddleware.get])
+const get = compose([authorizeAdmin, isValidId, CategoriesMiddleware.get])
 const getAll = compose([
   authorizeAdmin,
-  isGetAllValid,
+  isValidGetAll,
   CategoriesMiddleware.getAll,
 ])
 

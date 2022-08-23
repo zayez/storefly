@@ -17,7 +17,7 @@ const Id = Joi.object().keys({
 })
 
 module.exports = {
-  signUp: SignUp,
-  signIn: SignIn,
+  SignUp,
+  SignIn,
   Id,
 }
