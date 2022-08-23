@@ -91,7 +91,19 @@ test('As a customer I should:', (t) => {
   })
 
   t.test('be able to update my password', async (assert) => {
-    // assert.end()
+    const newPassword = 'abcd1234'
+    const res = await update(
+      userId,
+      { password: newPassword },
+      { token, status: STATUS.Ok },
+    )
+    const updatedUser = await User.findById(userId)
+    const isMatch = await User.comparePassword(
+      newPassword,
+      updatedUser.password,
+    )
+    assert.ok(isMatch)
+    assert.end()
   })
 
   test('teardown', async (t) => {

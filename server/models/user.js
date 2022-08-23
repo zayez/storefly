@@ -5,6 +5,7 @@ const TABLE_NAME = 'users'
 const SELECTABLE_FIELDS = [
   'id',
   'email',
+  'password',
   'firstName',
   'lastName',
   'updatedAt',
@@ -12,6 +13,15 @@ const SELECTABLE_FIELDS = [
 ]
 
 const queries = require('../lib/queryBuilder')(TABLE_NAME, SELECTABLE_FIELDS)
+
+const hashPassword = async (password, saltRounds = 10) => {
+  try {
+    const salt = await bcrypt.genSalt(saltRounds)
+    return await bcrypt.hash(password, salt)
+  } catch (err) {
+    throw err
+  }
+}
 
 const getUserRoles = async (id) => {
   return await knex('roles').whereIn(
@@ -30,6 +40,14 @@ async function matchPassword(email, password) {
 
   try {
     return await bcrypt.compare(password, user.password)
+  } catch (err) {
+    throw err
+  }
+}
+
+async function comparePassword(password, encryptedPassword) {
+  try {
+    return await bcrypt.compare(password, encryptedPassword)
   } catch (err) {
     throw err
   }
@@ -57,6 +75,15 @@ async function create(user, roles = ['customer']) {
   return createdUser
 }
 
+const update = async (id, props = {}) => {
+  if (props.password) {
+    const hashedPassword = await hashPassword(props.password)
+    props.password = hashedPassword
+  }
+  await knex(TABLE_NAME).update(props).where({ id })
+  return await findById(id)
+}
+
 const findOne = async (filters) => {
   const user = await knex(TABLE_NAME).first(SELECTABLE_FIELDS).where(filters)
   if (!user) return null
@@ -76,10 +103,12 @@ const findById = async (id) => {
 }
 
 module.exports = {
+  ...queries,
   hasRole,
   matchPassword,
-  ...queries,
+  comparePassword,
   create,
+  update,
   findOne,
   findById,
 }

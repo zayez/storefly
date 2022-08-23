@@ -67,26 +67,16 @@ const mapProduct = ({
  * @param {string=} props.firstName user's firstName
  * @param {string=} props.lastName user's lastName
  * @param {string=} props.email user's email
- * @param {string=} props.password user's password
  * @param {datetime=} props.createdAt created at
  * @param {datetime=} props.updatedAt updated at
  * @returns {User} user
  */
-const mapUser = ({
-  id,
-  firstName,
-  lastName,
-  email,
-  password,
-  createdAt,
-  updatedAt,
-}) => {
+const mapUser = ({ id, firstName, lastName, email, createdAt, updatedAt }) => {
   const user = {}
   if (id) user.id = id
   if (firstName) user.firstName = firstName
   if (lastName) user.lastName = lastName
   if (email) user.email = email
-  if (password) user.password = password
   if (createdAt) user.createdAt = createdAt
   if (updatedAt) user.updatedAt = updatedAt
 
