@@ -1,9 +1,13 @@
 const test = require('tape')
+const { faker } = require('@faker-js/faker')
 const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
 const { logEditor } = require('../infrastructure/login')
 const products = require('../fixtures/products.json').products
-
+const productTitle = () => {
+  const title = `${faker.commerce.productAdjective()} ${faker.commerce.productName()}`
+  return title
+}
 const {
   server,
   create,
@@ -22,7 +26,7 @@ test('[clean db] As editor I should:', (t) => {
 
   t.test('setup', async (assert) => {
     await knex.migrate.latest()
-    await knex.seed.run()
+    await knex.seed.run({ directory: 'tests/seeds' })
     token = await logEditor()
     assert.end()
   })
@@ -30,6 +34,7 @@ test('[clean db] As editor I should:', (t) => {
   t.test('be able to create a product', async (assert) => {
     const product = { ...products[0] }
     delete product.id
+    product.title = productTitle()
     const res = await create(product, { token, status: STATUS.Created })
     assert.equal(res.body.title, 'Created', 'Item created')
     assert.equal(res.body.product.title, product.title)
@@ -39,9 +44,10 @@ test('[clean db] As editor I should:', (t) => {
 
   t.test('be able to update a product', async (assert) => {
     const productCreate = { ...products[1] }
+    productCreate.title = productTitle()
     delete productCreate.id
     const productUpdate = {
-      title: 'FORD Focus Premium',
+      title: productTitle(),
     }
 
     const resCreate = await create(productCreate, {
@@ -63,7 +69,7 @@ test('[clean db] As editor I should:', (t) => {
     "NOT be able to update a product that don't exists",
     async (assert) => {
       const product = {
-        title: 'Hardware',
+        title: productTitle(),
       }
       const res = await update(6456, product, {
         token,
@@ -76,6 +82,7 @@ test('[clean db] As editor I should:', (t) => {
 
   t.test('be able to delete a product', async (assert) => {
     const product = { ...products[2] }
+    product.title = productTitle()
     delete product.id
 
     const resCreate = await create(product, { token, status: STATUS.Created })
@@ -87,6 +94,7 @@ test('[clean db] As editor I should:', (t) => {
 
   t.test('be able to retrieve a product', async (assert) => {
     const product = { ...products[3] }
+    product.title = productTitle()
     delete product.id
 
     const resCreate = await create(product, { token, status: STATUS.Created })
@@ -94,25 +102,6 @@ test('[clean db] As editor I should:', (t) => {
     const res = await getOne(resProd.id, { token, status: STATUS.Ok })
     assert.equal(res.body.title, 'Ok', 'Product retrieved')
     assert.equal(res.body.product.title, product.title, 'equal name')
-    assert.end()
-  })
-
-  t.test('teardown', async (assert) => {
-    await knex.seed.run()
-    assert.end()
-  })
-
-  t.end()
-})
-
-test('[seeded db] As editor I should:', (t) => {
-  let token
-
-  t.test('setup', async (assert) => {
-    await knex.migrate.latest()
-    await knex.seed.run({ directory: 'tests/seeds' })
-
-    token = await logEditor()
     assert.end()
   })
 
@@ -127,11 +116,12 @@ test('[seeded db] As editor I should:', (t) => {
   })
 
   t.test('be able to retrieve all products', async (assert) => {
+    const allProducts = await knex('products')
     const res = await getAll({ token, status: STATUS.Ok })
     const resProds = res.body.products
     assert.equal(res.body.title, 'Ok', 'Products retrieved')
     assert.ok(Array.isArray(resProds))
-    assert.equal(resProds.length, products.length, 'array w/ right length')
+    assert.equal(resProds.length, allProducts.length, 'array w/ right length')
     assert.end()
   })
 
@@ -139,6 +129,8 @@ test('[seeded db] As editor I should:', (t) => {
     await knex.seed.run()
     assert.end()
   })
+
+  t.end()
 })
 
 test('teardown', async (t) => {

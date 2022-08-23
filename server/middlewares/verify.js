@@ -36,6 +36,33 @@ function entityExists(entity) {
   }
 }
 
+function referenceExists(column, tableName) {
+  const Model = require('../models/entity')(tableName)
+  return async function (ctx, next) {
+    try {
+      const id = ctx.request.body[column]
+      if (!id) {
+        await next()
+        return
+      }
+      const foundReference = await Model.findById(id)
+
+      if (!foundReference) {
+        setBody({
+          ctx,
+          action: ActionStatus.Unprocessable,
+          payload: { error: `${column} references inexistent entity.` },
+        })
+        return
+      }
+
+      await next()
+    } catch (err) {
+      setBodyError(ctx, err)
+    }
+  }
+}
+
 function disallowDuplicate(entity, attr) {
   const Entity = require('../models/entity')(entity)
   return async function (ctx, next) {
@@ -83,6 +110,7 @@ function disallowDuplicates(entity, attr) {
 module.exports = {
   userExists,
   entityExists,
+  referenceExists,
   disallowDuplicate,
   disallowDuplicates,
 }

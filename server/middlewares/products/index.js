@@ -3,6 +3,7 @@ const { authorizeAdmin, authorizeManagers } = require('../authorization')
 const upload = require('../../helpers/uploadHelper')
 const {
   entityExists,
+  referenceExists,
   disallowDuplicate,
   disallowDuplicates,
 } = require('../verify')
@@ -22,6 +23,8 @@ const create = compose([
   upload.single('image'),
   isValidUpload,
   isValidCreate,
+  referenceExists('categoryId', 'categories'),
+  referenceExists('statusId', 'productStatus'),
   disallowDuplicate('products', 'title'),
   ProductsMiddleware.create,
 ])
@@ -37,6 +40,7 @@ const update = compose([
   authorizeManagers,
   isValidUpdate,
   entityExists('products'),
+  referenceExists('categoryId', 'categories'),
   ProductsMiddleware.update,
 ])
 
