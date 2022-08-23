@@ -91,7 +91,6 @@ module.exports = (controllerName) => {
   const getAll = async (pagination) => {
     try {
       const models = await Model.findAll(pagination)
-      // conos
       if (models) {
         const payload = {}
         payload[controllerName] = models.map(mapEntity)
