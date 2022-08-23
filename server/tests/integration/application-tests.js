@@ -8,7 +8,7 @@ test('setup', async (t) => {
   t.end()
 })
 
-test('As a user I should:', (t) => {
+test('As a visitor I should:', (t) => {
   t.test('setup', async (assert) => {
     assert.end()
   })
