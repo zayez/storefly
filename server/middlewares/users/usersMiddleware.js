@@ -35,8 +35,19 @@ const destroy = async (ctx) => {
   }
 }
 
+const get = async (ctx) => {
+  try {
+    const id = ctx.state.user.id
+    const { action, payload } = await UsersController.getOne(id)
+    setBody({ ctx, action, payload })
+  } catch (err) {
+    setBodyError(ctx, err)
+  }
+}
+
 module.exports = {
   create,
   update,
   destroy,
+  get,
 }

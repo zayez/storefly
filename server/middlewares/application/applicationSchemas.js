@@ -12,7 +12,12 @@ const SignIn = Joi.object().keys({
   password: Joi.string().trim().min(1).required(),
 })
 
+const Id = Joi.object().keys({
+  id: Joi.number().integer().required(),
+})
+
 module.exports = {
   signUp: SignUp,
   signIn: SignIn,
+  Id,
 }

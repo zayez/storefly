@@ -6,9 +6,10 @@ const { entityExists, disallowDuplicate, userExists } = require('../verify')
 const {
   isValidCreate,
   isValidUpdate,
-  isValidDestroy,
   matchUserId,
 } = require('./usersValidation')
+
+const { isValidId } = require('../application/applicationValidation')
 
 const UsersMiddleware = require('./usersMiddleware')
 
@@ -28,13 +29,16 @@ const update = compose([
 
 const destroy = compose([
   authenticate,
-  isValidDestroy,
+  isValidId,
   matchUserId,
   UsersMiddleware.destroy,
 ])
+
+const get = compose([authenticate, isValidId, matchUserId, UsersMiddleware.get])
 
 module.exports = {
   create,
   update,
   destroy,
+  get,
 }

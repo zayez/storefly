@@ -9,7 +9,14 @@ const STATUS = require('../../types/StatusCode')
 const customers = require('../fixtures/users.json').customers
 
 const { logAdmin, logUser, login } = require('../infrastructure/login')
-const { server, create, update, destroy } = require('../requests/users')
+const {
+  server,
+  create,
+  update,
+  destroy,
+  getOne,
+  getAll,
+} = require('../requests/users')
 const User = require('../../models/user')
 
 test('setup', async (t) => {
@@ -103,6 +110,14 @@ test('As a customer I should:', (t) => {
       updatedUser.password,
     )
     assert.ok(isMatch)
+    assert.end()
+  })
+  t.test('be able to get my data', async (assert) => {
+    const persistedUser = await User.findById(userId)
+    const res = await getOne(userId, { token, status: STATUS.Ok })
+    const retrievedUser = res.body.user
+    assert.equal(retrievedUser.firstName, persistedUser.firstName)
+    assert.equal(retrievedUser.email, persistedUser.email)
     assert.end()
   })
 
