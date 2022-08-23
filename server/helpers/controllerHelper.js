@@ -5,9 +5,9 @@ const ActionStatus = require('../types/ActionStatus')
 
 module.exports = (controllerName) => {
   const modelName = plur.singular(controllerName)
+  const Model = require(`../models/${modelName}`)
   const entity = capitalize(modelName)
   const mapEntity = mapper[`map${entity}`]
-  const Model = require(`../models/${modelName}`)
 
   const create = async (model) => {
     try {
