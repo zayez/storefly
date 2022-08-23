@@ -1,5 +1,5 @@
 const compose = require('koa-compose')
-const { authorizeAdmin, authorizeCustomer } = require('../authorization')
+const { authorizeAdmin, authorizeManagers } = require('../authorization')
 const { authenticate } = require('../authentication')
 const { entityExists, disallowDuplicate, userExists } = require('../verify')
 
@@ -12,6 +12,7 @@ const {
 const { isValidId } = require('../application/applicationValidation')
 
 const UsersMiddleware = require('./usersMiddleware')
+const { isCustomer, isManager } = require('../../helpers/userHelpers')
 
 const create = compose([
   authorizeAdmin,
@@ -34,11 +35,29 @@ const destroy = compose([
   UsersMiddleware.destroy,
 ])
 
-const get = compose([authenticate, isValidId, matchUserId, UsersMiddleware.get])
+const authorizeUserAndManagers = async (ctx, next) => {
+  const user = ctx.state.user
+  if (isCustomer(user)) {
+    await matchUserId(ctx, next)
+  }
+  if (isManager(user)) {
+    await next()
+  }
+}
+
+const get = compose([
+  authenticate,
+  isValidId,
+  authorizeUserAndManagers,
+  UsersMiddleware.get,
+])
+
+const getAll = compose([authorizeManagers, UsersMiddleware.getAll])
 
 module.exports = {
   create,
   update,
   destroy,
   get,
+  getAll,
 }

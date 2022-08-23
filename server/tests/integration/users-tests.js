@@ -7,8 +7,9 @@ const { SECRET } = require('../../config').jwt
 const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
 const customers = require('../fixtures/users.json').customers
+const editors = require('../fixtures/users.json').editors
 
-const { logAdmin, logUser, login } = require('../infrastructure/login')
+const { logAdmin, login } = require('../infrastructure/login')
 const {
   server,
   create,
@@ -126,6 +127,49 @@ test('As a customer I should:', (t) => {
     const deletedUser = await User.findById(userId)
     assert.equal(res.body.title, 'Ok', 'User deleted')
     assert.equal(deletedUser, null)
+    assert.end()
+  })
+
+  test('teardown', async (t) => {
+    await knex.seed.run()
+    t.end()
+  })
+
+  t.end()
+})
+
+test('As an editor I should:', (t) => {
+  let token
+  let userId
+  const user = editors[0]
+
+  t.test('setup', async (assert) => {
+    await knex.seed.run({ directory: 'tests/seeds' })
+    token = await login(user.email, user.password)
+    const decodedToken = jwt.verify(token, SECRET)
+    userId = decodedToken.sub
+    assert.end()
+  })
+
+  t.test('be able to sign in', async (assert) => {
+    assert.notEqual(token, '')
+    assert.end()
+  })
+
+  t.test('be able to get all users', async (assert) => {
+    const res = await getAll({ token, status: STATUS.Ok })
+    const retrivedUsers = res.body.users
+    const storedUsers = await User.findAll()
+    assert.equal(retrivedUsers.length, storedUsers.length)
+    assert.equal(res.body.title, 'Ok')
+    assert.end()
+  })
+
+  t.test('be able to get a specific user', async (assert) => {
+    const customer = await User.findOne({ firstName: customers[1].firstName })
+    const res = await getOne(customer.id, { token, status: STATUS.Ok })
+    const retrievedUser = res.body.user
+    assert.equal(retrievedUser.lastName, customer.lastName)
     assert.end()
   })
 

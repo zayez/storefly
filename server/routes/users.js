@@ -15,5 +15,6 @@ router.post(POST_USER, UsersPipeline.create)
 router.patch(PATCH_USER, UsersPipeline.update)
 router.delete(DELETE_USER, UsersPipeline.destroy)
 router.get(GET_USER, UsersPipeline.get)
+router.get(GET_USERS, UsersPipeline.getAll)
 
 module.exports = router
