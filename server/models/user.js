@@ -54,18 +54,18 @@ async function comparePassword(password, encryptedPassword) {
 }
 
 async function create(user, roles = ['customer']) {
-  const salt = await bcrypt.genSalt(10)
-  const passwordHash = await bcrypt.hash(user.password, salt)
+  const hashedPassword = await hashPassword(user.password)
   const newUser = {
     email: user.email,
-    password: passwordHash,
+    password: hashedPassword,
     firstName: user.firstName,
     lastName: user.lastName,
   }
 
   const userId = await knex('users').insert(newUser)
-  const createdUser = await queries.findById(userId)
+  if (!userId) return null
 
+  const createdUser = await queries.findById(userId)
   const selectedRoles = await knex('roles').select('id').whereIn('name', roles)
 
   for (const role of selectedRoles) {
