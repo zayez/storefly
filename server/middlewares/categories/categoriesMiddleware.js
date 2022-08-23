@@ -1,11 +1,11 @@
 const { setBody, setBodyError } = require('../../helpers/middlewareHelpers')
 const CategoriesController = require('../../controllers/categories')
+const mapper = require('../../helpers/propsMapper').input
 
 const create = async (ctx) => {
   try {
-    const { title } = ctx.request.body
-    const category = { title }
-    const { action, payload } = await CategoriesController.create(category)
+    const props = mapper.mapCategory(ctx.request.body)
+    const { action, payload } = await CategoriesController.create(props)
     setBody({ ctx, action, payload })
   } catch (err) {
     setBodyError(ctx, err)
@@ -14,10 +14,9 @@ const create = async (ctx) => {
 
 const update = async (ctx) => {
   try {
-    const { title } = ctx.request.body
-    const category = { title }
+    const props = mapper.mapCategory(ctx.request.body)
     const { id } = ctx.params
-    const { action, payload } = await CategoriesController.update(id, category)
+    const { action, payload } = await CategoriesController.update(id, props)
     setBody({ ctx, action, payload })
   } catch (err) {
     setBodyError(ctx, err)

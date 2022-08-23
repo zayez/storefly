@@ -1,5 +1,6 @@
 const { setBody, setBodyError } = require('../../helpers/middlewareHelpers')
 const ApplicationController = require('../../controllers/application')
+const mapper = require('../../helpers/propsMapper').input
 
 const getRoot = async (ctx) => {
   try {
@@ -22,13 +23,8 @@ const signIn = async (ctx) => {
 
 const signUp = async (ctx) => {
   try {
-    const { email, password, firstName, lastName } = ctx.request.body
-    const { action, payload } = await ApplicationController.signUp({
-      email,
-      password,
-      firstName,
-      lastName,
-    })
+    const user = mapper.mapUser(ctx.request.body)
+    const { action, payload } = await ApplicationController.signUp(user)
 
     setBody({ ctx, action, payload })
   } catch (err) {

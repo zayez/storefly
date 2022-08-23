@@ -1,15 +1,12 @@
 const { setBody, setBodyError } = require('../../helpers/middlewareHelpers')
 const UsersController = require('../../controllers/users')
-const { mapUser } = require('../../helpers/mappings')
+const mapper = require('../../helpers/propsMapper').input
 
 const create = async (ctx) => {
   try {
-    const { firstName, lastName, email, password } = ctx.request.body
+    const user = mapper.mapUser(ctx.request.body)
     const roles = ctx.request.body.roles || ['customer']
-    const { action, payload } = await UsersController.create(
-      { firstName, lastName, email, password },
-      roles,
-    )
+    const { action, payload } = await UsersController.create(user, roles)
 
     setBody({ ctx, action, payload })
   } catch (err) {
@@ -19,9 +16,9 @@ const create = async (ctx) => {
 
 const update = async (ctx) => {
   try {
-    const user = ctx.state.user
-    const props = ctx.request.body
-    const { action, payload } = await UsersController.update(user.id, props)
+    const id = ctx.state.user.id
+    const user = ctx.request.body
+    const { action, payload } = await UsersController.update(id, user)
     setBody({ ctx, action, payload })
   } catch (err) {
     setBodyError(ctx, err)

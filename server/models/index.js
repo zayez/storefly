@@ -1,6 +1,6 @@
 /**
  * @typedef {object} User User
- * @property {integer=} id user id
+ * @property {number=} id user id
  * @property {string=} email user email
  * @property {string=} firstName user first name
  * @property {string=} lastName user last name
@@ -9,20 +9,20 @@
 
 /**
  * @typedef {object} Category Category
- * @property {integer=} id category id
+ * @property {number=} id category id
  * @property {string=} title category title
  */
 
 /**
  * @typedef {object} Product Category
- * @property {integer=} id product id
+ * @property {number=} id product id
  * @property {string=} title product title
  * @property {string=} description product description
  * @property {string=} image image url
- * @property {integer=} price product price
- * @property {integer=} inventory product inventory
- * @property {integer=} statusId product statusId
- * @property {integer=} categoryId product categoryId
+ * @property {number=} price product price
+ * @property {number=} inventory product inventory
+ * @property {number=} statusId product statusId
+ * @property {number=} categoryId product categoryId
  *
  */
 
