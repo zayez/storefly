@@ -1,9 +1,7 @@
-const mapperInput = require('./propsMapperInput')
-
-const input = {
-  ...mapperInput,
-}
+const input = require('./propsMapperInput')
+const output = require('./propsMapperOutput')
 
 module.exports = {
   input,
+  output,
 }

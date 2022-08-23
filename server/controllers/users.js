@@ -4,7 +4,7 @@ const controller = require('../helpers/controllerHelper')(controllerName)
 
 const ActionStatus = require('../types/ActionStatus')
 const User = require('../models/user')
-const { mapUser } = require('../helpers/mappings')
+const mapper = require('../helpers/propsMapper').output
 
 const create = async (user, roles) => {
   try {
@@ -13,7 +13,7 @@ const create = async (user, roles) => {
     if (savedUser) {
       return {
         action: ActionStatus.Created,
-        payload: { user: mapUser(savedUser, { extra: ['id'] }) },
+        payload: { user: mapper.mapUser(savedUser) },
       }
     }
     return {

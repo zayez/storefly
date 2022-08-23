@@ -1,10 +1,12 @@
 const plur = require('pluralize')
 const capitalize = require('upper-case-first').upperCaseFirst
-const mappings = require('../helpers/mappings')
+const mapper = require('../helpers/propsMapper').output
 const ActionStatus = require('../types/ActionStatus')
 
 module.exports = (controllerName) => {
   const modelName = plur.singular(controllerName)
+  const entity = capitalize(modelName)
+  const mapEntity = mapper[`map${entity}`]
   const Model = require(`../models/${modelName}`)
 
   const create = async (model) => {
@@ -12,10 +14,7 @@ module.exports = (controllerName) => {
       const createdModel = await Model.create(model)
       if (createdModel) {
         const payload = {}
-        payload[modelName] = mappings[`map${capitalize(modelName)}`](
-          createdModel,
-          { extra: ['id'] },
-        )
+        payload[modelName] = mapEntity(createdModel)
         return {
           action: ActionStatus.Created,
           payload,
@@ -35,10 +34,7 @@ module.exports = (controllerName) => {
       const updatedModel = await Model.update(id, model)
       if (updatedModel) {
         const payload = {}
-        payload[modelName] = mappings[`map${capitalize(modelName)}`](
-          updatedModel,
-          { extra: ['id'] },
-        )
+        payload[modelName] = mapEntity(updatedModel)
         return {
           action: ActionStatus.Ok,
           payload,
@@ -76,10 +72,7 @@ module.exports = (controllerName) => {
       const selectedModel = await Model.findById(id)
       if (selectedModel) {
         const payload = {}
-        payload[modelName] = mappings[`map${capitalize(modelName)}`](
-          selectedModel,
-          { extra: ['id'] },
-        )
+        payload[modelName] = mapEntity(selectedModel)
 
         return {
           action: ActionStatus.Ok,
@@ -98,12 +91,10 @@ module.exports = (controllerName) => {
   const getAll = async (pagination) => {
     try {
       const models = await Model.findAll(pagination)
+      // conos
       if (models) {
         const payload = {}
-        payload[controllerName] = mappings[`map${capitalize(controllerName)}`](
-          models,
-          { extra: ['id'] },
-        )
+        payload[controllerName] = models.map(mapEntity)
         return {
           action: ActionStatus.Ok,
           payload,
