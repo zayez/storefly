@@ -24,10 +24,12 @@ const authorizeRoles = (roles = []) => {
 const authorizeAdmin = authorizeRoles(['admin'])
 const authorizeEditor = authorizeRoles(['editor'])
 const authorizeCustomer = authorizeRoles(['customer'])
+const authorizeManagers = authorizeRoles(['admin', 'editor'])
 
 module.exports = {
   authorizeRoles,
   authorizeAdmin,
   authorizeEditor,
   authorizeCustomer,
+  authorizeManagers,
 }

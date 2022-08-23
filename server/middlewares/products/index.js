@@ -1,5 +1,5 @@
 const compose = require('koa-compose')
-const { authorizeRoles, authorizeAdmin } = require('../authorization')
+const { authorizeAdmin, authorizeManagers } = require('../authorization')
 const upload = require('../../helpers/uploadHelper')
 const {
   entityExists,
@@ -16,8 +16,6 @@ const {
 
 const { isValidId } = require('../application/applicationValidation')
 const ProductsMiddleware = require('./productsMiddleware')
-
-const authorizeManagers = authorizeRoles(['admin', 'editor'])
 
 const create = compose([
   authorizeManagers,
