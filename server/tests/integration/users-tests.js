@@ -9,7 +9,7 @@ const STATUS = require('../../types/StatusCode')
 const customers = require('../fixtures/users.json').customers
 
 const { logAdmin, logUser, login } = require('../infrastructure/login')
-const { server, create, update } = require('../requests/users')
+const { server, create, update, destroy } = require('../requests/users')
 const User = require('../../models/user')
 
 test('setup', async (t) => {
@@ -103,6 +103,14 @@ test('As a customer I should:', (t) => {
       updatedUser.password,
     )
     assert.ok(isMatch)
+    assert.end()
+  })
+
+  t.test('be able to delete my account', async (assert) => {
+    const res = await destroy(userId, { token, status: STATUS.Ok })
+    const deletedUser = await User.findById(userId)
+    assert.equal(res.body.title, 'Ok', 'User deleted')
+    assert.equal(deletedUser, null)
     assert.end()
   })
 

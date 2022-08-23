@@ -25,7 +25,18 @@ const update = async (ctx) => {
   }
 }
 
+const destroy = async (ctx) => {
+  try {
+    const id = ctx.state.user.id
+    const { action, payload } = await UsersController.destroy(id)
+    setBody({ ctx, action, payload })
+  } catch (err) {
+    setBodyError(ctx, err)
+  }
+}
+
 module.exports = {
   create,
   update,
+  destroy,
 }

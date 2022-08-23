@@ -10,7 +10,7 @@ const usersRoutes = require('./routes/users')
 const categoriesRoutes = require('./routes/categories')
 const productsRoutes = require('./routes/products')
 const passportConfig = require('./config/passportConfig')
-const { authenticate } = require('./middlewares/authentication')
+const { authenticateOptional } = require('./middlewares/authentication')
 
 const { isProd } = require('./config')
 const { PORT } = require('./config').app
@@ -30,7 +30,7 @@ app
 passportConfig(passport)
 
 app
-  .use(authenticate)
+  .use(authenticateOptional)
   .use(indexRoutes.routes())
   .use(usersRoutes.routes())
   .use(categoriesRoutes.routes())

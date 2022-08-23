@@ -17,7 +17,12 @@ const update = Joi.object().keys({
   password: Joi.string().trim(),
 })
 
+const destroy = Joi.object().keys({
+  id: Joi.number(),
+})
+
 module.exports = {
   create,
   update,
+  destroy,
 }
