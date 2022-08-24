@@ -2,15 +2,15 @@ const ActionStatus = require('../types/ActionStatus')
 
 function setBody({ ctx, action, payload }) {
   const { code, title, message } = getResponse(action)
-  ctx.status = code
-  ctx.body = { title, message }
-  ctx.body = { ...ctx.body, ...payload }
+  ctx.response.status = code
+  ctx.response.body = { title, message }
+  ctx.response.body = { ...ctx.body, ...payload }
 }
 
 function setBodyError(ctx, err) {
   const { code, title, message } = getResponse(ActionStatus.Error)
-  ctx.status = code
-  ctx.body = {
+  ctx.response.status = code
+  ctx.response.body = {
     title: title,
     message: message,
     error: {
