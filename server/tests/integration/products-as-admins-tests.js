@@ -96,9 +96,16 @@ test('As admin I should:', (t) => {
   })
 
   t.test('be able to create a collection of products', async (assert) => {
-    const newProducts = [{ ...products[0] }]
+    const newProducts = [{ ...products[0] }, { ...products[1] }]
     delete newProducts[0].id
-    newProducts[0].title = productTitle()
+    delete newProducts[1].id
+    const image0 = `${faker.system.directoryPath()}/image0.jpg`
+    const image1 = `${faker.system.directoryPath()}/image1.jpg`
+    const name0 = productTitle()
+    newProducts[0].title = name0
+    newProducts[0].image = image0
+    newProducts[1].title = productTitle()
+    newProducts[1].image = image1
     const res = await createAll(
       { products: newProducts },
       {
@@ -106,12 +113,13 @@ test('As admin I should:', (t) => {
         status: STATUS.Created,
       },
     )
-
+    const prod0 = await knex('products').where({ title: name0 }).first('*')
     const lastProduct = res.body.lastProduct
     assert.equal(res.body.title, 'Created', 'Items created')
     assert.ok(
       lastProduct instanceof Object && lastProduct.constructor === Object,
     )
+    assert.equal(prod0.image, image0)
     // assert.ok(Array.isArray(res.body.products))
     assert.end()
   })

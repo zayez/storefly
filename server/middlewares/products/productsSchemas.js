@@ -27,12 +27,21 @@ const UploadImage = Joi.object()
   })
   .options({ allowUnknown: true })
 
-// TODO: Add create collection item to allow to send image param
+const CreateCollectionItem = Joi.object().keys({
+  title: Joi.string().trim().required(),
+  description: Joi.string().trim(),
+  price: Joi.number().precision(2).required(),
+  inventory: Joi.number().integer().required(),
+  image: Joi.string().trim(),
+  statusId: Joi.number().integer(),
+  categoryId: Joi.number().integer(),
+})
+
 const CreateCollection = Joi.object().keys({
   products: Joi.array()
     .min(COLLECTIONS_MIN_SIZE)
     .max(COLLECTIONS_MAX_SIZE)
-    .items(Create)
+    .items(CreateCollectionItem)
     .required()
     .unique('title'),
 })
