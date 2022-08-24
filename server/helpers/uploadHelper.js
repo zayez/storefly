@@ -1,11 +1,12 @@
 const multer = require('@koa/multer')
 const { format } = require('date-fns')
 const fs = require('fs')
-const { isProd } = require('../config')
+const { isProd, isDev } = require('../config')
 const { IMAGE_MAX_SIZE_MB } = require('../config').app
 const IMAGE_MAX_SIZE = 1024 * (1024 * IMAGE_MAX_SIZE_MB)
 
-const uploadsDir = isProd ? './public/uploads/' : './tests/data/uploads/'
+const uploadsDir =
+  isProd || isDev ? './public/uploads/' : './tests/data/uploads/'
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
