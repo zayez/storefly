@@ -22,15 +22,8 @@ const {
 const isValidCreate = async (ctx) => isValidBody({ ctx }, Create)
 const isValidUpdate = async (ctx) => isValidBody({ ctx }, Update)
 
-/*
-TODO:
-- Rename props (maybe to action?)
-- Create a new enum (ActionType?)
-- Maybe something like react (action.type & action payload)
-*/
 const validateCreate = async (ctx, next) => {
   try {
-    let props
     const validators = [
       isValidCreate,
       isValidReference('categoryId', 'categories'),
@@ -38,12 +31,12 @@ const validateCreate = async (ctx, next) => {
       isUnique('title', 'products'),
     ]
     for (const validator of validators) {
-      props = await validator(ctx)
-      if (props.action !== ActionStatus.Ok) {
+      const action = await validator(ctx)
+      if (action.type !== ActionStatus.Ok) {
         if (ctx.request.file) {
           await deleteFile(ctx.request.file.path)
         }
-        setBody({ ctx, action: props.action, payload: props.payload })
+        setBody({ ctx, action: action.type, payload: action.payload })
         return
       }
     }
@@ -55,7 +48,6 @@ const validateCreate = async (ctx, next) => {
 
 const validateUpdate = async (ctx, next) => {
   try {
-    let props
     const validators = [
       isValidUpdate,
       isValidReference('categoryId', 'categories'),
@@ -64,12 +56,12 @@ const validateUpdate = async (ctx, next) => {
       itExists('products'),
     ]
     for (let validator of validators) {
-      props = await validator(ctx)
-      if (props.action !== ActionStatus.Ok) {
+      const action = await validator(ctx)
+      if (action.type !== ActionStatus.Ok) {
         if (ctx.request.file) {
           await deleteFile(ctx.request.file.path)
         }
-        setBody({ ctx, action: props.action, payload: props.payload })
+        setBody({ ctx, action: action.type, payload: action.payload })
         return
       }
     }

@@ -80,12 +80,12 @@ function isValidBody({ ctx }, schema) {
     })
     if (result.error) {
       return {
-        action: ActionStatus.Unprocessable,
+        type: ActionStatus.Unprocessable,
         payload: { error: result.error },
       }
     }
 
-    return { action: ActionStatus.Ok, payload: result.value }
+    return { type: ActionStatus.Ok, payload: result.value }
   } catch (err) {
     ctx.throw(400, err.message)
   }
@@ -98,19 +98,19 @@ function isValidReference(column, tableName) {
       const id = ctx.request.body[column]
       if (!id) {
         return {
-          action: ActionStatus.Ok,
+          type: ActionStatus.Ok,
         }
       }
       const foundReference = await Model.findById(id)
 
       if (!foundReference) {
         return {
-          action: ActionStatus.Unprocessable,
+          type: ActionStatus.Unprocessable,
           payload: { error: `${column} references inexistent entity.` },
         }
       }
       return {
-        action: ActionStatus.Ok,
+        type: ActionStatus.Ok,
       }
     } catch (err) {
       setBodyError(ctx, err)
@@ -127,10 +127,10 @@ function isUnique(attr, entity) {
       const entityFound = await Entity.findOne(payload)
 
       if (entityFound) {
-        return { action: ActionStatus.Conflict }
+        return { type: ActionStatus.Conflict }
       }
       return {
-        action: ActionStatus.Ok,
+        type: ActionStatus.Ok,
       }
     } catch (err) {
       setBodyError(ctx, err)
@@ -146,9 +146,9 @@ function itExists(entity) {
       const foundEntity = await Entity.findById(id)
 
       if (foundEntity) {
-        return { action: ActionStatus.Ok, payload: foundEntity }
+        return { type: ActionStatus.Ok, payload: foundEntity }
       }
-      return { action: ActionStatus.NotFound }
+      return { type: ActionStatus.NotFound }
     } catch (err) {
       setBodyError(ctx, err)
     }
