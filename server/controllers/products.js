@@ -4,6 +4,31 @@ const controller = require('../helpers/controllerHelper')(controllerName)
 const mapper = require('../helpers/propsMapper').output
 const Product = require('../models/product')
 const ActionStatus = require('../types/ActionStatus')
+const { deleteFile } = require('../helpers/fsHelper')
+
+const update = async (id, props = {}) => {
+  try {
+    if (props.image) {
+      const product = await Product.findById(id)
+      await deleteFile(product.image)
+    }
+    const updatedProduct = await Product.update(id, props)
+    if (updatedProduct) {
+      const payload = {}
+      payload.product = mapper.mapProduct(updatedProduct)
+      return {
+        action: ActionStatus.Ok,
+        payload,
+      }
+    }
+    return {
+      action: ActionStatus.BadRequest,
+      payload: null,
+    }
+  } catch (err) {
+    throw err
+  }
+}
 
 const createCollection = async (products) => {
   try {
@@ -63,6 +88,7 @@ const getOneActive = async (id) => {
 
 module.exports = {
   ...controller,
+  update,
   createCollection,
   getAllActive,
   getOneActive,

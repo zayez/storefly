@@ -27,6 +27,7 @@ const UploadImage = Joi.object()
   })
   .options({ allowUnknown: true })
 
+// TODO: Add create collection item to allow to send image param
 const CreateCollection = Joi.object().keys({
   products: Joi.array()
     .min(COLLECTIONS_MIN_SIZE)

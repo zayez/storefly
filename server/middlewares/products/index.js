@@ -1,18 +1,13 @@
 const compose = require('koa-compose')
 const { authorizeAdmin, authorizeManagers } = require('../authorization')
 const upload = require('../../helpers/uploadHelper')
+const { disallowDuplicates } = require('../verify')
 const {
-  entityExists,
-  referenceExists,
-  disallowDuplicate,
-  disallowDuplicates,
-} = require('../verify')
-const {
-  isValidCreate,
-  isValidUpload,
-  isValidCreateCollection,
-  isValidUpdate,
-  isValidGetAll,
+  validateCreate,
+  validateUpdate,
+  validateCreateCollection,
+  validateGetAll,
+  validateUpload,
 } = require('./productsValidation')
 
 const { isValidId } = require('../application/applicationValidation')
@@ -21,27 +16,24 @@ const ProductsMiddleware = require('./productsMiddleware')
 const create = compose([
   authorizeManagers,
   upload.single('image'),
-  isValidUpload,
-  isValidCreate,
-  referenceExists('categoryId', 'categories'),
-  referenceExists('statusId', 'productStatus'),
-  disallowDuplicate('products', 'title'),
+  validateUpload,
+  validateCreate,
   ProductsMiddleware.create,
-])
-
-const createCollection = compose([
-  authorizeAdmin,
-  isValidCreateCollection,
-  disallowDuplicates('products', 'title'),
-  ProductsMiddleware.createCollection,
 ])
 
 const update = compose([
   authorizeManagers,
-  isValidUpdate,
-  entityExists('products'),
-  referenceExists('categoryId', 'categories'),
+  upload.single('image'),
+  validateUpload,
+  validateUpdate,
   ProductsMiddleware.update,
+])
+
+const createCollection = compose([
+  authorizeAdmin,
+  validateCreateCollection,
+  disallowDuplicates('products', 'title'),
+  ProductsMiddleware.createCollection,
 ])
 
 const destroy = compose([
@@ -51,7 +43,7 @@ const destroy = compose([
 ])
 
 const get = compose([isValidId, ProductsMiddleware.get])
-const getAll = compose([isValidGetAll, ProductsMiddleware.getAll])
+const getAll = compose([validateGetAll, ProductsMiddleware.getAll])
 
 module.exports = {
   create,

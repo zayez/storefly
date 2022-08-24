@@ -30,8 +30,11 @@ const createCollection = async (ctx) => {
 
 const update = async (ctx) => {
   try {
-    const props = mapper.mapProduct(ctx.request.body)
     const { id } = ctx.params
+    const props = mapper.mapProduct(ctx.request.body)
+    if (ctx.request.file) {
+      props.image = ctx.request.file.path
+    }
     const { action, payload } = await ProductsController.update(id, props)
     setBody({ ctx, action, payload })
   } catch (err) {

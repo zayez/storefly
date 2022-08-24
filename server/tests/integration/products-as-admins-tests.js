@@ -5,6 +5,7 @@ const { faker } = require('@faker-js/faker')
 const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
 const { logAdmin } = require('../infrastructure/login')
+const { existsFile } = require('../../helpers/fsHelper')
 const products = require('../fixtures/products.json').products
 const images = require('../fixtures/images.json').images
 const productTitle = () => faker.commerce.productName()
@@ -16,6 +17,7 @@ const {
   destroy,
   createAll,
   createUpload,
+  updateUpload,
   getOne,
   getAll,
 } = require('../requests/products')
@@ -48,6 +50,7 @@ test('As admin I should:', (t) => {
   t.test('be able to create a product with image', async (assert) => {
     const product = { ...products[0] }
     product.title = productTitle()
+    delete product.description
     delete product.id
     const res = await createUpload(product, images[0], {
       token,
@@ -60,6 +63,34 @@ test('As admin I should:', (t) => {
     const img = `./${res.body.product.image}`
     const fileExists = await fs.stat(img)
     assert.ok(fileExists, 'file was created')
+
+    assert.end()
+  })
+
+  t.test('be able to update a product with new image', async (assert) => {
+    const product = { ...products[0] }
+    product.title = productTitle()
+    delete product.id
+    const res = await createUpload(product, images[0], {
+      token,
+      status: STATUS.Created,
+    })
+    const newProduct = res.body.product
+
+    const productUpdate = {}
+    const resUpdate = await updateUpload(newProduct.id, {}, images[1], {
+      token,
+      status: STATUS.Ok,
+    })
+    const updatedProduct = resUpdate.body.product
+
+    assert.equal(resUpdate.body.title, 'Ok', 'Item created')
+    assert.ok(updatedProduct.image.endsWith(path.basename(images[1].path)))
+    const oldImg = `./${newProduct.image}`
+    const newImg = `./${updatedProduct.image}`
+
+    assert.ok(await existsFile(newImg), 'new image was created')
+    assert.notOk(await existsFile(oldImg), 'old image was deleted')
 
     assert.end()
   })
