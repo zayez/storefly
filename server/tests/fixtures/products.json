@@ -2,48 +2,84 @@
   "products": [
     {
       "id": 1,
-      "title": "Ford Focus",
-      "description": "An automobile from theamerican manufacturer Ford.",
-      "price": 9000,
-      "inventory": 5,
-      "statusId": 1,
+      "title": "Honda Civid",
+      "description": "The Honda Civic is a series of automobiles manufactured by Honda since 1972.",
+      "price": 3000,
+      "inventory": 15,
+      "statusId": 2,
       "categoryId": 1
     },
     {
       "id": 2,
-      "title": "Dodge Viper",
-      "description": "An automobile from the american manufacturer Dodge.",
-      "price": 29000,
-      "inventory": 2,
+      "title": "Chevrolet Spark",
+      "description": "The Chevrolet Spark is a city car manufactured by General Motors's subsidiary GM Korea, currently in its fourth generation.",
+      "price": 9000,
+      "inventory": 20,
       "statusId": 2,
       "categoryId": 1
     },
     {
       "id": 3,
-      "title": "Honda Civid",
-      "description": "An automobile from the japonese manufacturer Honda.",
-      "price": 15000,
+      "title": "Cibola Burn",
+      "description": "The fourth novel in James S.A. Corey’s New York Times bestselling Expanse series.",
+      "price": 31.33,
       "inventory": 7,
       "statusId": 1,
-      "categoryId": 1
+      "categoryId": 3
     },
     {
       "id": 4,
-      "title": "Volkswagen Golf",
-      "description": "An automobile from the german manufacturer Volkswagen.",
-      "price": 19000,
-      "inventory": 2,
-      "statusId": 1,
-      "categoryId": 1
+      "title": "The Restaurant at the End of the Universe",
+      "description": "The Restaurant at the End of the Universe is the second book in the Hitchhiker's Guide to the Galaxy comedy science fiction 'trilogy of six books' by Douglas Adams, and is a sequel.",
+      "price": 42.0,
+      "inventory": 15,
+      "statusId": 2,
+      "categoryId": 3
     },
     {
       "id": 5,
-      "title": "Peugeout 307",
-      "description": "An automobile from the french manufacturer Peugeout.",
-      "price": 13000,
-      "inventory": 4,
+      "title": "The Eye of the World",
+      "description": "The Eye of the World is a high fantasy novel by American writer Robert Jordan, the first book of The Wheel of Time series. ",
+      "price": 47.33,
+      "inventory": 20,
+      "statusId": 1,
+      "categoryId": 3
+    },
+    {
+      "id": 6,
+      "title": "The Old Man and the Sea",
+      "description": "The Old Man and the Sea is a novella written by the American author Ernest Hemingway in 1951 in Cayo Blanco, and published in 1952.",
+      "price": 29.99,
+      "inventory": 25,
       "statusId": 2,
-      "categoryId": 1
+      "categoryId": 3
+    },
+    {
+      "id": 7,
+      "title": "The Last Kingdom",
+      "description": "This is the story of the making of England in the 9th and 10th centuries, the years in which King Alfred the Great, his son and grandson defeated the Danish Vikings who had invaded and occupied three of England’s four kingdoms.",
+      "price": 42.5,
+      "inventory": 15,
+      "statusId": 1,
+      "categoryId": 3
+    },
+    {
+      "id": 8,
+      "title": "Samsung 55-inch TU-7000 Series Class Smart TV",
+      "description": "Experience crystal clear colors that are fine-tuned to deliver a naturally crisp and vivid picture | Unveils shades of color you can't find on HDTV",
+      "price": 199.0,
+      "inventory": 30,
+      "statusId": 2,
+      "categoryId": 2
+    },
+    {
+      "id": 9,
+      "title": "Roku Streaming Stick 4K 2021",
+      "description": "Powerful and portable. Roku® Streaming Stick® features smooth HD streaming to your TV. Its small form-factor makes it easy to hide behind your TV and perfectly portable to use while traveling. ",
+      "price": 46.0,
+      "inventory": 30,
+      "statusId": 1,
+      "categoryId": 2
     }
   ]
 }

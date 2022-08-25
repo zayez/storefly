@@ -51,15 +51,15 @@ test('[seeded db] As a user I should:', (t) => {
   })
 
   t.test('be able to retrieve an active product', async (assert) => {
-    const product = products[1]
+    const product = await knex('products').where({ statusId: 2 }).first()
     const res = await getOne(product.id, { status: STATUS.Ok })
     assert.equal(res.body.title, 'Ok', 'correctly retrieved')
-    assert.equal(res.body.product.title, products[1].title)
+    assert.equal(res.body.product.title, product.title)
     assert.end()
   })
 
   t.test('NOT be able to retrieve a draft product', async (assert) => {
-    const product = products[0]
+    const product = await knex('products').where({ statusId: 1 }).first()
     const res = await getOne(product.id, { status: STATUS.NotFound })
     assert.equal(res.body.title, 'Not Found', 'correctly retrieved')
     assert.end()
