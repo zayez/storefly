@@ -9,6 +9,7 @@ const indexRoutes = require('./routes/index')
 const usersRoutes = require('./routes/users')
 const categoriesRoutes = require('./routes/categories')
 const productsRoutes = require('./routes/products')
+const ordersRoutes = require('./routes/orders')
 const passportConfig = require('./config/passportConfig')
 const { authenticateOptional } = require('./middlewares/authentication')
 
@@ -35,6 +36,7 @@ app
   .use(usersRoutes.routes())
   .use(categoriesRoutes.routes())
   .use(productsRoutes.routes())
+  .use(ordersRoutes.routes())
 
 const server = app.listen(PORT, () => {
   console.log(`Server listening on port: ${PORT}`)

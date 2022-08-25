@@ -64,8 +64,23 @@ const mapUser = ({ firstName, lastName, email, password }) => {
   return user
 }
 
+const mapOrderItem = ({ productId, quantity }) => {
+  const item = {}
+  item.productId = productId
+  item.quantity = quantity
+  return item
+}
+
+const mapOrder = ({ items, dateOrdered }) => {
+  const order = {}
+  if (items) order.items = items.map(mapOrderItem)
+  if (dateOrdered) order.dateOrdered = dateOrdered
+  return order
+}
+
 module.exports = {
   mapCategory,
   mapProduct,
   mapUser,
+  mapOrder,
 }

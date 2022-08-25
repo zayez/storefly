@@ -1,5 +1,5 @@
 const { ORDERS, POST_ORDER } = require('../../api/endpointUrls')
-const { setHeaders } = require('../helpers/requestHelpers')
+const { setHeaders, debugStatus } = require('../helpers/requestHelpers')
 const requests = require('../helpers/requestBuilder')(ORDERS)
 const agent = requests.agent
 

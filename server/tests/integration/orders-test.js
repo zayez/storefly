@@ -27,11 +27,10 @@ test('As a customer I should:', (t) => {
   t.test('be able to place an order', async (assert) => {
     const product = await knex('products').first()
     const order = {
-      products: [{ productId: product.id, quantitity: 1 }],
+      items: [{ productId: product.id, quantity: 1 }],
     }
 
     const res = await placeOrder(order, { token, status: STATUS.Created })
-    console.log(res.body)
     assert.equal(res.body.title, 'Created', 'order placed')
     assert.end()
   })
