@@ -86,10 +86,36 @@ const getOneActive = async (id) => {
   }
 }
 
+const validateItems = async (items) => {
+  try {
+    const values = items.map((i) => i.productId)
+    const foundItems = await Product.includesAll('id', values)
+    if (!foundItems) {
+      return {
+        action: ActionStatus.Unprocessable,
+        payload: { error: 'Some of the items have not been found.' },
+      }
+    }
+    const hasInventory = await Product.hasInventory(items)
+    if (!hasInventory) {
+      return {
+        action: ActionStatus.Unprocessable,
+        payload: {
+          error: 'Insufficient inventory for some of the items ordered.',
+        },
+      }
+    }
+    return { action: ActionStatus.Ok }
+  } catch (err) {
+    throw err
+  }
+}
+
 module.exports = {
   ...controller,
   update,
   createCollection,
   getAllActive,
   getOneActive,
+  validateItems,
 }

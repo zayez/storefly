@@ -1,3 +1,4 @@
+const knex = require('../db')
 const TABLE_NAME = 'products'
 const SELECTABLE_FIELDS = [
   'id',
@@ -13,7 +14,6 @@ const SELECTABLE_FIELDS = [
 ]
 
 const { PROD_ACTIVE } = require('../types/ProductStatus')
-
 const queries = require('../lib/queryBuilder')(TABLE_NAME, SELECTABLE_FIELDS)
 const ProductStatus = require('../lib/queryBuilder')('productStatus')
 
@@ -28,10 +28,29 @@ const findOneActive = async (id) => {
   return await queries.findOne({ id, statusId })
 }
 
+const includesAll = async (field, values) => {
+  if (!values.length > 0) return false
+  const products = await knex(TABLE_NAME).select('id').whereIn(field, values)
+  return products.length === values.length
+}
+
+const hasInventory = async (items) => {
+  for (const item of items) {
+    const product = await knex(TABLE_NAME)
+      .select('inventory')
+      .where('id', item.productId)
+      .first()
+    if (product.inventory < item.quantity) return false
+  }
+  return true
+}
+
 module.exports = {
   tableName: TABLE_NAME,
   fields: SELECTABLE_FIELDS,
   ...queries,
   findAllActive,
   findOneActive,
+  includesAll,
+  hasInventory,
 }

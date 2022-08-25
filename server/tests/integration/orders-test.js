@@ -35,6 +35,56 @@ test('As a customer I should:', (t) => {
     assert.end()
   })
 
+  t.test(
+    'NOT be able to place order with nonexistent products',
+    async (assert) => {
+      const order = {
+        items: [
+          { productId: 9992, quantity: 1 },
+          { productId: 9999, quantity: 1 },
+        ],
+      }
+
+      const res = await placeOrder(order, {
+        token,
+        status: STATUS.Unprocessable,
+      })
+      assert.equal(res.body.title, 'Unprocessable', 'order not placed')
+      assert.end()
+    },
+  )
+
+  t.test('NOT be able to place order without items', async (assert) => {
+    const order = {
+      items: [],
+    }
+
+    const res = await placeOrder(order, {
+      token,
+      status: STATUS.Unprocessable,
+    })
+    assert.equal(res.body.title, 'Unprocessable', 'order not placed')
+    assert.end()
+  })
+
+  t.test(
+    'NOT be able to place order with insufficient inventory',
+    async (assert) => {
+      const product = await knex('products').first()
+      const quantity = product.inventory + 10
+      const order = {
+        items: [{ productId: product.id, quantity }],
+      }
+
+      const res = await placeOrder(order, {
+        token,
+        status: STATUS.Unprocessable,
+      })
+      assert.equal(res.body.title, 'Unprocessable', 'order not placed')
+      assert.end()
+    },
+  )
+
   test('teardown', async (t) => {
     t.end()
   })
