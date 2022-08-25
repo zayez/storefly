@@ -1,0 +1,64 @@
+{
+  "orders": [
+    {
+      "id": 1,
+      "userId": 6,
+      "dateOrder": "2022-08-25",
+      "items": [
+        {
+          "productId": 1,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "userId": 5,
+      "dateOrder": "2022-08-25",
+      "items": [
+        {
+          "productId": 4,
+          "quantity": 2
+        },
+        {
+          "productId": 5,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "userId": 6,
+      "dateOrder": "2022-08-25",
+      "items": [
+        {
+          "productId": 10,
+          "quantity": 1
+        },
+        {
+          "productId": 8,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "userId": 4,
+      "dateOrder": "2022-08-25",
+      "items": [
+        {
+          "productId": 4,
+          "quantity": 4
+        },
+        {
+          "productId": 5,
+          "quantity": 1
+        },
+        {
+          "productId": 6,
+          "quantity": 2
+        }
+      ]
+    }
+  ]
+}

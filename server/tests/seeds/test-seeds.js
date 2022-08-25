@@ -6,9 +6,11 @@ const editors = require('../fixtures/users.json').editors
 const customers = require('../fixtures/users.json').customers
 const categories = require('../fixtures/categories.json').categories
 const products = require('../fixtures/products.json').products
+const orders = require('../fixtures/orders.json').orders
 const User = require('../../models/user')
 const Category = require('../../models/category')
 const Product = require('../../models/product')
+const Order = require('../../models/order')
 
 exports.seed = async (knex) => {
   await knex('roles').del()
@@ -32,5 +34,15 @@ exports.seed = async (knex) => {
 
   for (const product of products) {
     await Product.create(product)
+  }
+
+  await knex('orderItem').del()
+  await knex('orders').del()
+
+  for (const order of orders) {
+    await Order.create(
+      { dateOrder: order.dateOrder, items: order.items },
+      order.userId,
+    )
   }
 }

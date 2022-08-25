@@ -1,6 +1,7 @@
 const mapper = require('../../helpers/propsMapper').input
 const OrdersController = require('../../controllers/orders')
 const { setBodyError, setBody } = require('../../helpers/middlewareHelpers')
+
 const placeOrder = async (ctx) => {
   try {
     const userId = ctx.state.user.id
@@ -12,4 +13,14 @@ const placeOrder = async (ctx) => {
   }
 }
 
-module.exports = { placeOrder }
+const getAllByUser = async (ctx) => {
+  try {
+    const { id } = ctx.params
+    const { action, payload } = await OrdersController.getAllByUser(id)
+    setBody({ ctx, action, payload })
+  } catch (err) {
+    setBodyError(ctx, err)
+  }
+}
+
+module.exports = { placeOrder, getAllByUser }
