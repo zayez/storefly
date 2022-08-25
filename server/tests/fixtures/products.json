@@ -66,7 +66,7 @@
     {
       "id": 8,
       "title": "Samsung 55-inch TU-7000 Series Class Smart TV",
-      "description": "Experience crystal clear colors that are fine-tuned to deliver a naturally crisp and vivid picture | Unveils shades of color you can't find on HDTV",
+      "description": "Experience crystal clear colors that are fine-tuned to deliver a naturally crisp and vivid picture | Unveils shades of color you can't find on HDTV.",
       "price": 199.0,
       "inventory": 30,
       "statusId": 2,
@@ -75,10 +75,19 @@
     {
       "id": 9,
       "title": "Roku Streaming Stick 4K 2021",
-      "description": "Powerful and portable. Roku® Streaming Stick® features smooth HD streaming to your TV. Its small form-factor makes it easy to hide behind your TV and perfectly portable to use while traveling. ",
+      "description": "Powerful and portable. Roku® Streaming Stick® features smooth HD streaming to your TV. Its small form-factor makes it easy to hide behind your TV and perfectly portable to use while traveling.",
       "price": 46.0,
       "inventory": 30,
       "statusId": 1,
+      "categoryId": 2
+    },
+    {
+      "id": 10,
+      "title": "Nintento Switch",
+      "description": "The Nintendo Switch is a video game console developed by Nintendo and released worldwide in most regions on March 3, 2017. ",
+      "price": 299.99,
+      "inventory": 220,
+      "statusId": 2,
       "categoryId": 2
     }
   ]
