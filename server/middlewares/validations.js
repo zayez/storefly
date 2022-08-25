@@ -1,4 +1,4 @@
-const { setBodyError } = require('../helpers/middlewareHelpers')
+const { setBodyError, setBody } = require('../helpers/middlewareHelpers')
 const ActionStatus = require('../types/ActionStatus')
 
 async function validateBody({ ctx, next }, schema) {
@@ -155,6 +155,14 @@ function itExists(entity) {
   }
 }
 
+const matchUserId = async (ctx, next) => {
+  if (Number(ctx.state.user.id) !== Number(ctx.params.id)) {
+    setBody({ ctx, action: ActionStatus.NotFound })
+    return
+  }
+  await next()
+}
+
 module.exports = {
   validateBody,
   validateQuery,
@@ -164,4 +172,5 @@ module.exports = {
   isValidReference,
   isUnique,
   itExists,
+  matchUserId,
 }

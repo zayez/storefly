@@ -7,6 +7,7 @@ const {
 } = require('./ordersValidation')
 const OrdersMiddleware = require('./ordersMiddleware')
 const { authenticate } = require('../authentication')
+const { matchUserId } = require('../validations')
 
 const placeOrder = compose([
   authenticate,
@@ -19,6 +20,7 @@ const placeOrder = compose([
 const getAllByUser = compose([
   authenticate,
   authorizeCustomer,
+  matchUserId,
   validateGetAllByUser,
   OrdersMiddleware.getAllByUser,
 ])

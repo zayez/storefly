@@ -92,7 +92,7 @@ test('As a customer I should:', (t) => {
     const res = await update(
       users[0].id,
       { firstName: name },
-      { token, status: STATUS.Forbidden },
+      { token, status: STATUS.NotFound },
     )
 
     assert.end()

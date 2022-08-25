@@ -119,6 +119,16 @@ test('As a customer I should:', (t) => {
     assert.deepEqual(retrievedOrders, userOrders, 'retrieved orders match')
     assert.end()
   })
+  t.test('NOT be able to get orders from another customer', async (assert) => {
+    const order = await knex('orders').whereNot({ userId: customerId }).first()
+
+    const res = await getByUser(order.userId, {
+      token,
+      status: STATUS.NotFound,
+    })
+    assert.equal(res.status, 404, 'response returns correct status code')
+    assert.end()
+  })
 
   test('teardown', async (t) => {
     t.end()

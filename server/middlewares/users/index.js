@@ -2,13 +2,8 @@ const compose = require('koa-compose')
 const { authorizeAdmin, authorizeManagers } = require('../authorization')
 const { authenticate } = require('../authentication')
 const { entityExists, disallowDuplicate, userExists } = require('../verify')
-
-const {
-  isValidCreate,
-  isValidUpdate,
-  matchUserId,
-} = require('./usersValidation')
-
+const { isValidCreate, isValidUpdate } = require('./usersValidation')
+const { matchUserId } = require('../validations')
 const { isValidId } = require('../application/applicationValidation')
 
 const UsersMiddleware = require('./usersMiddleware')
