@@ -71,10 +71,10 @@ const mapOrderItem = ({ productId, quantity }) => {
   return item
 }
 
-const mapOrder = ({ items, dateOrdered }) => {
+const mapOrder = ({ items, dateOrder }) => {
   const order = {}
   if (items) order.items = items.map(mapOrderItem)
-  if (dateOrdered) order.dateOrdered = dateOrdered
+  if (dateOrder) order.dateOrder = dateOrder
   return order
 }
 

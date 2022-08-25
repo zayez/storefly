@@ -6,7 +6,7 @@ exports.up = async function (knex) {
   await knex.schema.createTable('orders', (table) => {
     table.increments()
     table.integer('userId').references('users.id').notNullable()
-    table.date('dateOrdered')
+    table.date('dateOrder')
     table.timestamps(true, true, true)
   })
 
