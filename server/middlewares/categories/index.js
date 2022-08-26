@@ -31,6 +31,7 @@ const destroy = compose([
   CategoriesMiddleware.destroy,
 ])
 const get = compose([authorizeAdmin, isValidId, CategoriesMiddleware.get])
+
 const getAll = compose([
   authorizeAdmin,
   isValidGetAll,
