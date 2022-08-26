@@ -31,6 +31,8 @@ const GET_USERS = `${USERS}`
 
 const ORDERS = `${BASE_URL}/orders`
 const POST_ORDER = `${BASE_URL}/orders`
+const GET_ORDERS = `${BASE_URL}/orders`
+const GET_ORDER = `${BASE_URL}/orders/:id`
 
 // GET USER ORDERS
 const GET_USER_ORDERS = `${USERS}/:userId/orders`
@@ -92,6 +94,10 @@ const EndpointUrls = {
   USERS,
   /** @member {string} */
   POST_ORDER,
+  /** @member {string} */
+  GET_ORDERS,
+  /** @member {string} */
+  GET_ORDER,
   /** @member {string} */
   GET_USER_ORDERS,
   /** @member {string} */

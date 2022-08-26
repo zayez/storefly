@@ -1,11 +1,12 @@
 const compose = require('koa-compose')
-const { authorizeCustomer } = require('../authorization')
+const { authorizeCustomer, authorizeManagers } = require('../authorization')
 const {
   validateOrder,
   validateItems,
   validateGetAllByUser,
   validateGetOneByUser,
   validateAuthorization,
+  validateGetAll,
 } = require('./ordersValidation')
 const OrdersMiddleware = require('./ordersMiddleware')
 const { authenticate } = require('../authentication')
@@ -35,8 +36,16 @@ const getOneByUser = compose([
   OrdersMiddleware.getOneByUser,
 ])
 
+const getAll = compose([
+  authenticate,
+  authorizeManagers,
+  validateGetAll,
+  OrdersMiddleware.getAll,
+])
+
 module.exports = {
   placeOrder,
   getAllByUser,
   getOneByUser,
+  getAll,
 }

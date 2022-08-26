@@ -19,8 +19,13 @@ const GetOneByUser = Joi.object().keys({
   orderId: Joi.number().integer().required(),
 })
 
+const GetAll = Joi.object().keys({
+  page: Joi.number(),
+})
+
 module.exports = {
   PlaceOrder,
   GetAllByUser,
   GetOneByUser,
+  GetAll,
 }

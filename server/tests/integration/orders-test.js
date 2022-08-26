@@ -9,6 +9,7 @@ const {
   placeOrder,
   getByUser,
   getOneByUser,
+  getAll,
 } = require('../requests/orders')
 
 test('setup', async (t) => {
@@ -218,6 +219,18 @@ test('As a manager(admin/editor) I should:', (t) => {
     const retrievedOrdersIds = res.body.orders.map((o) => o.id)
     assert.equal(res.status, 200, 'correct status code')
     assert.deepEqual(retrievedOrdersIds, ordersIds, 'orders retrieved match')
+    assert.end()
+  })
+
+  t.test('be able to get all orders', async (assert) => {
+    const orders = await knex('orders')
+    const ordersIds = orders.map((o) => o.id)
+
+    const res = await getAll({ token, status: STATUS.Ok })
+    const resRetrievedOrdersIds = res.body.orders.map((o) => o.id)
+
+    assert.equal(res.status, 200, 'status is correct')
+    assert.deepEqual(resRetrievedOrdersIds, ordersIds, 'correct orders')
     assert.end()
   })
 

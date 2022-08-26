@@ -1,9 +1,22 @@
-const { validateBody, validateParams, matchUserId } = require('../validations')
-const { PlaceOrder, GetAllByUser, GetOneByUser } = require('./ordersSchema')
+const {
+  validateBody,
+  validateParams,
+  matchUserId,
+  validateQuery,
+} = require('../validations')
+const {
+  PlaceOrder,
+  GetAllByUser,
+  GetOneByUser,
+  GetAll,
+} = require('./ordersSchema')
 const ProductsController = require('../../controllers/products')
 const { setBody, setBodyError } = require('../../helpers/middlewareHelpers')
 const ActionStatus = require('../../types/ActionStatus')
 const { isManager } = require('../../helpers/userHelpers')
+
+const validateGetAll = async (ctx, next) =>
+  await validateQuery({ ctx, next }, GetAll)
 
 const validateOrder = async (ctx, next) => {
   await validateBody({ ctx, next }, PlaceOrder)
@@ -40,6 +53,7 @@ const validateItems = async (ctx, next) => {
 }
 
 module.exports = {
+  validateGetAll,
   validateOrder,
   validateItems,
   validateGetAllByUser,

@@ -59,6 +59,7 @@ const getOneByUser = async ({ orderId, userId }) => {
 }
 
 module.exports = {
+  getAll: controller.getAll,
   placeOrder,
   getAllByUser,
   getOneByUser,
