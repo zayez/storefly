@@ -10,6 +10,7 @@ const BASE_PATH = path.join(__dirname, 'db')
 module.exports = {
   test: {
     client: 'sqlite3',
+    debug: false,
     useNullAsDefault: true,
     connection: {
       filename: dbTest,
