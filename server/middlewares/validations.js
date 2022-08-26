@@ -166,12 +166,15 @@ function itExists(entity) {
   }
 }
 
-const matchUserId = async (ctx, next) => {
-  if (Number(ctx.state.user.id) !== Number(ctx.params.id)) {
-    setBody({ ctx, action: ActionStatus.NotFound })
-    return
+const matchUserId = (param = 'id') => {
+  return async (ctx, next) => {
+    const value = ctx.params[param]
+    if (Number(value) !== ctx.state.user.id) {
+      setBody({ ctx, action: ActionStatus.NotFound })
+      return
+    }
+    await next()
   }
-  await next()
 }
 
 module.exports = {

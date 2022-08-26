@@ -19,21 +19,21 @@ const create = compose([
 const update = compose([
   authenticate,
   isValidUpdate,
-  matchUserId,
+  matchUserId(),
   UsersMiddleware.update,
 ])
 
 const destroy = compose([
   authenticate,
   isValidId,
-  matchUserId,
+  matchUserId(),
   UsersMiddleware.destroy,
 ])
 
 const authorizeUserAndManagers = async (ctx, next) => {
   const user = ctx.state.user
   if (isCustomer(user)) {
-    await matchUserId(ctx, next)
+    await matchUserId()(ctx, next)
   }
   if (isManager(user)) {
     await next()
