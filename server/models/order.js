@@ -2,11 +2,13 @@ const { format, isFirstDayOfMonth } = require('date-fns')
 const knex = require('../db')
 const TABLE_NAME = 'orders'
 const SELECTABLE_FIELDS = ['id']
+const { ITEMS_PER_PAGE } = require('../config').app
 
 const queries = require('../lib/queryBuilder')(TABLE_NAME, SELECTABLE_FIELDS)
 
 const create = async ({ dateOrder, items }, userId) => {
-  const date = format(new Date(), 'yyyy-MM-dd-hh-mm-ss')
+  const dateFormat = 'yyyy-MM-dd-hh-mm-ss'
+  const date = format(dateOrder ? dateOrder : new Date(), dateFormat)
   const newOrder = { dateOrder: date, userId }
   const id = await knex('orders').insert(newOrder)
   if (!id) return null
@@ -42,12 +44,15 @@ const findItems = async (orderId) => {
   return products
 }
 
-const find = async (filters) => {
-  const orders = await knex('orders as o')
+const find = async (filters, { page = 1, perPage = ITEMS_PER_PAGE } = {}) => {
+  const ordersPaginated = await knex('orders as o')
     .distinct()
     .join('orderItem as i', 'i.orderId', 'o.id')
     .select('o.id as id', 'o.dateOrder as dateOrder', 'o.userId as userId')
     .where(filters)
+    .paginate({ perPage, currentPage: page })
+
+  const orders = ordersPaginated.data
 
   if (!orders) return null
 
@@ -57,6 +62,8 @@ const find = async (filters) => {
 
   return orders
 }
+
+const findAll = async (pagination = {}) => await find({}, pagination)
 
 const findOneByUser = async ({ orderId, userId }) => {
   const order = await knex('orders as o')
@@ -79,6 +86,7 @@ module.exports = {
   ...queries,
   create,
   find,
+  findAll,
   findOneByUser,
   findById,
 }
