@@ -1,8 +1,6 @@
-const { assert } = require('joi')
 const test = require('tape')
 const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
-const { debugStatus } = require('../helpers/requestHelpers')
 const { login, decodeToken } = require('../infrastructure/login')
 const customers = require('../fixtures/users.json').customers
 const {
