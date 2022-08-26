@@ -194,7 +194,7 @@ test('As a manager(admin/editor) I should:', (t) => {
     assert.end()
   })
 
-  t.test('be able to get any specific order', async (assert) => {
+  t.test('be able to get any specific order by any user', async (assert) => {
     const order = await knex('orders').whereNot({ userId: managerId }).first()
 
     const res = await getOneByUser(
