@@ -26,8 +26,20 @@ const getByUser = async (userId, { token, status }) => {
     .then((res) => res)
 }
 
+const getOneByUser = async ({ orderId, userId }, { token, status }) => {
+  const headers = setHeaders(token)
+  return await agent
+    .get(`${USERS}/${userId}/orders/${orderId}`)
+    .set(headers)
+    .expect('Content-Type', /json/)
+    .expect((res) => debugStatus(res, status))
+    .expect(status)
+    .then((res) => res)
+}
+
 module.exports = {
   server: requests.server,
   placeOrder,
   getByUser,
+  getOneByUser,
 }

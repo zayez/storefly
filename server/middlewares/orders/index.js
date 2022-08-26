@@ -4,6 +4,8 @@ const {
   validateOrder,
   validateItems,
   validateGetAllByUser,
+  validateGetOneByUser,
+  validateAuthorization,
 } = require('./ordersValidation')
 const OrdersMiddleware = require('./ordersMiddleware')
 const { authenticate } = require('../authentication')
@@ -20,12 +22,21 @@ const placeOrder = compose([
 const getAllByUser = compose([
   authenticate,
   authorizeCustomer,
-  matchUserId,
+  validateAuthorization,
   validateGetAllByUser,
   OrdersMiddleware.getAllByUser,
+])
+
+const getOneByUser = compose([
+  authenticate,
+  authorizeCustomer,
+  validateAuthorization,
+  validateGetOneByUser,
+  OrdersMiddleware.getOneByUser,
 ])
 
 module.exports = {
   placeOrder,
   getAllByUser,
+  getOneByUser,
 }

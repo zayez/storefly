@@ -3,7 +3,13 @@ const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
 const { login, decodeToken } = require('../infrastructure/login')
 const customers = require('../fixtures/users.json').customers
-const { server, placeOrder, getByUser } = require('../requests/orders')
+const editors = require('../fixtures/users.json').editors
+const {
+  server,
+  placeOrder,
+  getByUser,
+  getOneByUser,
+} = require('../requests/orders')
 
 test('setup', async (t) => {
   t.end()
@@ -119,6 +125,7 @@ test('As a customer I should:', (t) => {
     assert.deepEqual(retrievedOrders, userOrders, 'retrieved orders match')
     assert.end()
   })
+
   t.test('NOT be able to get orders from another customer', async (assert) => {
     const order = await knex('orders').whereNot({ userId: customerId }).first()
 
@@ -127,6 +134,90 @@ test('As a customer I should:', (t) => {
       status: STATUS.NotFound,
     })
     assert.equal(res.status, 404, 'response returns correct status code')
+    assert.end()
+  })
+
+  t.test('be able to get a specific order that I placed', async (assert) => {
+    const order = await knex('orders').where({ userId: customerId }).first()
+
+    const res = await getOneByUser(
+      { orderId: order.id, userId: customerId },
+      {
+        token,
+        status: STATUS.Ok,
+      },
+    )
+    assert.equal(res.status, 200, 'response returns correct status code')
+    assert.equal(res.body.order.id, order.id, 'is the same order')
+    assert.end()
+  })
+
+  t.test(
+    'NOT be able to get an order placed by another user',
+    async (assert) => {
+      const order = await knex('orders')
+        .whereNot({ userId: customerId })
+        .first()
+
+      const res = await getOneByUser(
+        { orderId: order.id, userId: order.userId },
+        {
+          token,
+          status: STATUS.NotFound,
+        },
+      )
+      assert.equal(res.status, 404, 'response returns correct status code')
+      assert.end()
+    },
+  )
+
+  test('teardown', async (t) => {
+    t.end()
+  })
+})
+
+test('As a manager(admin/editor) I should:', (t) => {
+  const manager = editors[0]
+  let token
+  let managerId = ''
+
+  t.test('setup', async (assert) => {
+    await knex.seed.run({ directory: 'tests/seeds' })
+    assert.end()
+  })
+
+  t.test('be able to sign in', async (assert) => {
+    token = await login(manager.email, manager.password)
+    managerId = decodeToken(token)
+    assert.notEqual(token, '', 'user signed in')
+    assert.notEqual(managerId, '', 'token decoded')
+    assert.end()
+  })
+
+  t.test('be able to get any specific order', async (assert) => {
+    const order = await knex('orders').whereNot({ userId: managerId }).first()
+
+    const res = await getOneByUser(
+      { orderId: order.id, userId: order.userId },
+      {
+        token,
+        status: STATUS.Ok,
+      },
+    )
+    assert.equal(res.status, 200, 'response returns correct status code')
+    assert.equal(res.body.order.id, order.id, 'is the same order')
+    assert.end()
+  })
+
+  t.test('be able to get all orders from a specific user', async (assert) => {
+    const order = await knex('orders').whereNot({ userId: managerId }).first()
+    const orders = await knex('orders').where({ userId: order.userId })
+    const ordersIds = orders.map((o) => o.id)
+
+    const res = await getByUser(order.userId, { token, status: STATUS.Ok })
+    const retrievedOrdersIds = res.body.orders.map((o) => o.id)
+    assert.equal(res.status, 200, 'correct status code')
+    assert.deepEqual(retrievedOrdersIds, ordersIds, 'orders retrieved match')
     assert.end()
   })
 

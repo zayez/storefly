@@ -15,12 +15,25 @@ const placeOrder = async (ctx) => {
 
 const getAllByUser = async (ctx) => {
   try {
-    const { id } = ctx.params
-    const { action, payload } = await OrdersController.getAllByUser(id)
+    const { userId } = ctx.params
+    const { action, payload } = await OrdersController.getAllByUser(userId)
     setBody({ ctx, action, payload })
   } catch (err) {
     setBodyError(ctx, err)
   }
 }
 
-module.exports = { placeOrder, getAllByUser }
+const getOneByUser = async (ctx) => {
+  try {
+    const { orderId, userId } = ctx.params
+    const { action, payload } = await OrdersController.getOneByUser({
+      orderId,
+      userId,
+    })
+    setBody({ ctx, action, payload })
+  } catch (err) {
+    setBodyError(ctx, err)
+  }
+}
+
+module.exports = { placeOrder, getAllByUser, getOneByUser }

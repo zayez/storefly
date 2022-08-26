@@ -36,15 +36,15 @@ const findItems = async (orderId) => {
     .join('orderItem as i', 'i.productId', 'p.id')
     .join('orders as o', 'o.id', 'i.orderId')
     .select('p.id as id', 'p.title as title', 'i.quantity as quantity')
-    .where({ orderId })
+    .where(`o.id`, orderId)
   return products
 }
 
 const find = async (filters) => {
   const orders = await knex('orders as o')
+    .distinct()
     .join('orderItem as i', 'i.orderId', 'o.id')
-    .join('users as u', 'u.id', 'o.userId')
-    .select('o.id as id', 'o.dateOrder as dateOrder')
+    .select('o.id as id', 'o.dateOrder as dateOrder', 'o.userId as userId')
     .where(filters)
 
   if (!orders) return null
@@ -56,10 +56,26 @@ const find = async (filters) => {
   return orders
 }
 
+const findOneByUser = async ({ orderId, userId }) => {
+  const order = await knex('orders as o')
+    .join('orderItem as i', 'i.orderId', 'o.id')
+    .distinct()
+    .select('o.id as id', 'o.dateOrder as dateOrder', 'o.userId as userId')
+    .where('o.id', '=', orderId)
+    .andWhere('o.userId', '=', userId)
+    .first()
+
+  if (!order) return null
+
+  order.items = await findItems(order.id)
+  return order
+}
+
 module.exports = {
   tableName: TABLE_NAME,
   fields: SELECTABLE_FIELDS,
   ...queries,
   create,
   find,
+  findOneByUser,
 }

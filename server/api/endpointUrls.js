@@ -33,7 +33,8 @@ const ORDERS = `${BASE_URL}/orders`
 const POST_ORDER = `${BASE_URL}/orders`
 
 // GET USER ORDERS
-const GET_USER_ORDERS = `${USERS}/:id/orders`
+const GET_USER_ORDERS = `${USERS}/:userId/orders`
+const GET_USER_ORDER = `${USERS}/:userId/orders/:orderId`
 
 /**
  * Enum for API endpoints.
@@ -93,6 +94,8 @@ const EndpointUrls = {
   POST_ORDER,
   /** @member {string} */
   GET_USER_ORDERS,
+  /** @member {string} */
+  GET_USER_ORDER,
 }
 
 module.exports = EndpointUrls

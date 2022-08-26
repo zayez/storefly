@@ -1,8 +1,9 @@
-const { validateBody, validateParams } = require('../validations')
-const { PlaceOrder, GetAllByUser } = require('./ordersSchema')
+const { validateBody, validateParams, matchUserId } = require('../validations')
+const { PlaceOrder, GetAllByUser, GetOneByUser } = require('./ordersSchema')
 const ProductsController = require('../../controllers/products')
 const { setBody, setBodyError } = require('../../helpers/middlewareHelpers')
 const ActionStatus = require('../../types/ActionStatus')
+const { isManager } = require('../../helpers/userHelpers')
 
 const validateOrder = async (ctx, next) => {
   await validateBody({ ctx, next }, PlaceOrder)
@@ -10,6 +11,18 @@ const validateOrder = async (ctx, next) => {
 
 const validateGetAllByUser = async (ctx, next) => {
   await validateParams({ ctx, next }, GetAllByUser)
+}
+
+const validateAuthorization = async (ctx, next) => {
+  if (isManager(ctx.state.user)) {
+    await next()
+    return
+  }
+  await matchUserId('userId')(ctx, next)
+}
+
+const validateGetOneByUser = async (ctx, next) => {
+  await validateParams({ ctx, next }, GetOneByUser)
 }
 
 const validateItems = async (ctx, next) => {
@@ -30,4 +43,6 @@ module.exports = {
   validateOrder,
   validateItems,
   validateGetAllByUser,
+  validateGetOneByUser,
+  validateAuthorization,
 }

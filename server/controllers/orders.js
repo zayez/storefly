@@ -1,4 +1,5 @@
 const path = require('path')
+const order = require('../models/order')
 const controllerName = path.parse(__filename).name
 const controller = require('../helpers/controllerHelper')(controllerName)
 const Order = require('../models/order')
@@ -40,7 +41,25 @@ const getAllByUser = async (id) => {
   }
 }
 
+const getOneByUser = async ({ orderId, userId }) => {
+  try {
+    const order = await Order.findOneByUser({ orderId, userId })
+    if (order) {
+      return {
+        action: ActionStatus.Ok,
+        payload: { order: mapper.mapOrder(order) },
+      }
+    }
+    return {
+      action: ActionStatus.Error,
+    }
+  } catch (err) {
+    throw err
+  }
+}
+
 module.exports = {
   placeOrder,
   getAllByUser,
+  getOneByUser,
 }

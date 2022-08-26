@@ -11,10 +11,16 @@ const PlaceOrder = Joi.object().keys({
 })
 
 const GetAllByUser = Joi.object().keys({
-  id: Joi.number().integer().required(),
+  userId: Joi.number().integer().required(),
+})
+
+const GetOneByUser = Joi.object().keys({
+  userId: Joi.number().integer().required(),
+  orderId: Joi.number().integer().required(),
 })
 
 module.exports = {
   PlaceOrder,
   GetAllByUser,
+  GetOneByUser,
 }
