@@ -8,7 +8,7 @@ const queries = require('../lib/queryBuilder')(TABLE_NAME, SELECTABLE_FIELDS)
 
 const create = async ({ dateOrder, items }, userId) => {
   const dateFormat = 'yyyy-MM-dd-hh-mm-ss'
-  const date = format(dateOrder ? dateOrder : new Date(), dateFormat)
+  const date = dateOrder ? dateOrder : format(new Date(), dateFormat)
   const newOrder = { dateOrder: date, userId }
   const id = await knex('orders').insert(newOrder)
   if (!id) return null
@@ -21,13 +21,18 @@ const create = async ({ dateOrder, items }, userId) => {
   return createdOrder
 }
 
+const queryOrders = knex('orders as o')
+  .distinct()
+  .join('orderItem as i', 'i.orderId', 'o.id')
+  .select('o.id as id', 'o.dateOrder as dateOrder', 'o.userId as userId')
+
+const queryOrderItems = knex('products as p')
+  .join('orderItem as i', 'i.productId', 'p.id')
+  .join('orders as o', 'o.id', 'i.orderId')
+  .select('p.id as id', 'p.title as title', 'i.quantity as quantity')
+
 const findById = async (id) => {
-  const order = await knex('orders as o')
-    .distinct()
-    .join('orderItem as i', 'i.orderId', 'o.id')
-    .select('o.id as id', 'o.dateOrder as dateOrder', 'o.userId as userId')
-    .where('o.id', id)
-    .first()
+  const order = await queryOrders.clone().where('o.id', id).first()
 
   if (!order) return null
 
@@ -36,19 +41,13 @@ const findById = async (id) => {
 }
 
 const findItems = async (orderId) => {
-  const products = await knex('products as p')
-    .join('orderItem as i', 'i.productId', 'p.id')
-    .join('orders as o', 'o.id', 'i.orderId')
-    .select('p.id as id', 'p.title as title', 'i.quantity as quantity')
-    .where(`o.id`, orderId)
+  const products = await queryOrderItems.clone().where(`o.id`, orderId)
   return products
 }
 
 const find = async (filters, { page = 1, perPage = ITEMS_PER_PAGE } = {}) => {
-  const ordersPaginated = await knex('orders as o')
-    .distinct()
-    .join('orderItem as i', 'i.orderId', 'o.id')
-    .select('o.id as id', 'o.dateOrder as dateOrder', 'o.userId as userId')
+  const ordersPaginated = await queryOrders
+    .clone()
     .where(filters)
     .paginate({ perPage, currentPage: page })
 
@@ -66,10 +65,8 @@ const find = async (filters, { page = 1, perPage = ITEMS_PER_PAGE } = {}) => {
 const findAll = async (pagination = {}) => await find({}, pagination)
 
 const findOneByUser = async ({ orderId, userId }) => {
-  const order = await knex('orders as o')
-    .join('orderItem as i', 'i.orderId', 'o.id')
-    .distinct()
-    .select('o.id as id', 'o.dateOrder as dateOrder', 'o.userId as userId')
+  const order = await queryOrders
+    .clone()
     .where('o.id', '=', orderId)
     .andWhere('o.userId', '=', userId)
     .first()
