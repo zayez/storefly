@@ -90,8 +90,11 @@ test('[clean db] As admin I should:', (t) => {
         status: STATUS.Created,
       })
       const resCat = resCreate.body.category
-      const res = await getOne('clothes', { token, status: STATUS.BadRequest })
-      assert.equal(res.status, STATUS.BadRequest)
+      const res = await getOne('clothes', {
+        token,
+        status: STATUS.Unprocessable,
+      })
+      assert.equal(res.status, STATUS.Unprocessable)
       assert.end()
     },
   )
@@ -153,7 +156,10 @@ test('[seeded db] As admin I should', (t) => {
     'NOT be able to retrieve categories with page query as string',
     async (assert) => {
       const queryString = '?page=one'
-      const res = await get(queryString, { token, status: STATUS.BadRequest })
+      const res = await get(queryString, {
+        token,
+        status: STATUS.Unprocessable,
+      })
       assert.end()
     },
   )

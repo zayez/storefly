@@ -137,7 +137,7 @@ test('As admin I should:', (t) => {
         { products: newProducts },
         {
           token,
-          status: STATUS.BadRequest,
+          status: STATUS.Unprocessable,
         },
       )
       assert.end()

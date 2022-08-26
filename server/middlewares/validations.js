@@ -1,4 +1,4 @@
-const { setBodyError, setBody } = require('../helpers/middlewareHelpers')
+const { setBody, setBodyError } = require('../helpers/middlewareHelpers')
 const ActionStatus = require('../types/ActionStatus')
 
 async function validateBody({ ctx, next }, schema) {
@@ -7,11 +7,13 @@ async function validateBody({ ctx, next }, schema) {
       abortEarly: false,
     })
     if (result.error) {
-      ctx.response.status = 400
-      ctx.response.body = result.error
+      setBody({
+        ctx,
+        action: ActionStatus.Unprocessable,
+        payload: result.error,
+      })
       return
     }
-
     ctx.request.body = result.value
     return await next()
   } catch (err) {
@@ -25,8 +27,11 @@ async function validateQuery({ ctx, next }, schema) {
       abortEarly: false,
     })
     if (result.error) {
-      ctx.response.status = 400
-      ctx.response.body = result.error
+      setBody({
+        ctx,
+        action: ActionStatus.Unprocessable,
+        payload: result.error,
+      })
       return
     }
 
@@ -43,8 +48,11 @@ async function validateParams({ ctx, next }, schema) {
       abortEarly: false,
     })
     if (result.error) {
-      ctx.response.status = 400
-      ctx.response.body = result.error
+      setBody({
+        ctx,
+        action: ActionStatus.Unprocessable,
+        payload: result.error,
+      })
       return
     }
 
@@ -61,8 +69,11 @@ async function validateFile({ ctx, next }, schema) {
       abortEarly: false,
     })
     if (result.error) {
-      ctx.response.status = 400
-      ctx.response.body = result.error
+      setBody({
+        ctx,
+        action: ActionStatus.Unprocessable,
+        payload: result.error,
+      })
       return
     }
 
@@ -81,7 +92,7 @@ function isValidBody({ ctx }, schema) {
     if (result.error) {
       return {
         type: ActionStatus.Unprocessable,
-        payload: { error: result.error },
+        payload: result.error,
       }
     }
 
