@@ -19,10 +19,12 @@ const create = async ({ dateOrder, items }, userId) => {
   return createdOrder
 }
 
-async function findById(id) {
-  const order = await knex('orders')
-    .select('id', 'dateOrder')
-    .where({ id })
+const findById = async (id) => {
+  const order = await knex('orders as o')
+    .distinct()
+    .join('orderItem as i', 'i.orderId', 'o.id')
+    .select('o.id as id', 'o.dateOrder as dateOrder', 'o.userId as userId')
+    .where('o.id', id)
     .first()
 
   if (!order) return null
@@ -78,4 +80,5 @@ module.exports = {
   create,
   find,
   findOneByUser,
+  findById,
 }

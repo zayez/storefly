@@ -1,18 +1,19 @@
+const { assert } = require('joi')
 const test = require('tape')
 const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
+const { debugStatus } = require('../helpers/requestHelpers')
 const { login, decodeToken } = require('../infrastructure/login')
 const customers = require('../fixtures/users.json').customers
-const editors = require('../fixtures/users.json').editors
 const {
   server,
   placeOrder,
   getByUser,
   getOneByUser,
-  getAll,
 } = require('../requests/orders')
 
 test('setup', async (t) => {
+  await knex.seed.run({ directory: 'tests/seeds' })
   t.end()
 })
 
@@ -22,13 +23,12 @@ test('As a customer I should:', (t) => {
   let customerId = ''
 
   t.test('setup', async (assert) => {
-    await knex.seed.run({ directory: 'tests/seeds' })
+    token = await login(customer.email, customer.password)
+    customerId = decodeToken(token)
     assert.end()
   })
 
   t.test('be able to sign in', async (assert) => {
-    token = await login(customer.email, customer.password)
-    customerId = decodeToken(token)
     assert.notEqual(token, '', 'user signed in')
     assert.notEqual(customerId, '', 'token decoded')
     assert.end()
@@ -172,70 +172,8 @@ test('As a customer I should:', (t) => {
     },
   )
 
-  test('teardown', async (t) => {
-    t.end()
-  })
-})
-
-test('As a manager(admin/editor) I should:', (t) => {
-  const manager = editors[0]
-  let token
-  let managerId = ''
-
-  t.test('setup', async (assert) => {
-    await knex.seed.run({ directory: 'tests/seeds' })
+  t.test('teardown', async (assert) => {
     assert.end()
-  })
-
-  t.test('be able to sign in', async (assert) => {
-    token = await login(manager.email, manager.password)
-    managerId = decodeToken(token)
-    assert.notEqual(token, '', 'user signed in')
-    assert.notEqual(managerId, '', 'token decoded')
-    assert.end()
-  })
-
-  t.test('be able to get any specific order by any user', async (assert) => {
-    const order = await knex('orders').whereNot({ userId: managerId }).first()
-
-    const res = await getOneByUser(
-      { orderId: order.id, userId: order.userId },
-      {
-        token,
-        status: STATUS.Ok,
-      },
-    )
-    assert.equal(res.status, 200, 'response returns correct status code')
-    assert.equal(res.body.order.id, order.id, 'is the same order')
-    assert.end()
-  })
-
-  t.test('be able to get all orders from a specific user', async (assert) => {
-    const order = await knex('orders').whereNot({ userId: managerId }).first()
-    const orders = await knex('orders').where({ userId: order.userId })
-    const ordersIds = orders.map((o) => o.id)
-
-    const res = await getByUser(order.userId, { token, status: STATUS.Ok })
-    const retrievedOrdersIds = res.body.orders.map((o) => o.id)
-    assert.equal(res.status, 200, 'correct status code')
-    assert.deepEqual(retrievedOrdersIds, ordersIds, 'orders retrieved match')
-    assert.end()
-  })
-
-  t.test('be able to get all orders', async (assert) => {
-    const orders = await knex('orders')
-    const ordersIds = orders.map((o) => o.id)
-
-    const res = await getAll({ token, status: STATUS.Ok })
-    const resRetrievedOrdersIds = res.body.orders.map((o) => o.id)
-
-    assert.equal(res.status, 200, 'status is correct')
-    assert.deepEqual(resRetrievedOrdersIds, ordersIds, 'correct orders')
-    assert.end()
-  })
-
-  test('teardown', async (t) => {
-    t.end()
   })
 })
 

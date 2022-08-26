@@ -30,9 +30,9 @@ const GET_USER = `${USERS}/:id`
 const GET_USERS = `${USERS}`
 
 const ORDERS = `${BASE_URL}/orders`
-const POST_ORDER = `${BASE_URL}/orders`
-const GET_ORDERS = `${BASE_URL}/orders`
-const GET_ORDER = `${BASE_URL}/orders/:id`
+const POST_ORDER = `${ORDERS}`
+const GET_ORDER = `${ORDERS}/:id`
+const GET_ORDERS = `${ORDERS}`
 
 // GET USER ORDERS
 const GET_USER_ORDERS = `${USERS}/:userId/orders`

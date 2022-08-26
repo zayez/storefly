@@ -39,7 +39,9 @@ const getOneByUser = async ({ orderId, userId }, { token, status }) => {
 
 module.exports = {
   server: requests.server,
+  agent,
   getAll: requests.getAll,
+  getOne: requests.getOne,
   placeOrder,
   getByUser,
   getOneByUser,

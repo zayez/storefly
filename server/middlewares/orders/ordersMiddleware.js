@@ -2,6 +2,16 @@ const mapper = require('../../helpers/propsMapper').input
 const OrdersController = require('../../controllers/orders')
 const { setBodyError, setBody } = require('../../helpers/middlewareHelpers')
 
+const get = async (ctx) => {
+  try {
+    const { id } = ctx.params
+    const { action, payload } = await OrdersController.getOne(id)
+    setBody({ ctx, action, payload })
+  } catch (err) {
+    setBodyError(ctx, err)
+  }
+}
+
 const getAll = async (ctx) => {
   try {
     const { page } = ctx.request.query
@@ -46,4 +56,4 @@ const getOneByUser = async (ctx) => {
   }
 }
 
-module.exports = { getAll, placeOrder, getAllByUser, getOneByUser }
+module.exports = { getAll, get, placeOrder, getAllByUser, getOneByUser }

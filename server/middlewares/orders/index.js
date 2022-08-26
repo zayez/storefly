@@ -1,5 +1,6 @@
 const compose = require('koa-compose')
 const { authorizeCustomer, authorizeManagers } = require('../authorization')
+const { isValidId } = require('../application/applicationValidation')
 const {
   validateOrder,
   validateItems,
@@ -9,11 +10,8 @@ const {
   validateGetAll,
 } = require('./ordersValidation')
 const OrdersMiddleware = require('./ordersMiddleware')
-const { authenticate } = require('../authentication')
-const { matchUserId } = require('../validations')
 
 const placeOrder = compose([
-  authenticate,
   authorizeCustomer,
   validateOrder,
   validateItems,
@@ -21,7 +19,6 @@ const placeOrder = compose([
 ])
 
 const getAllByUser = compose([
-  authenticate,
   authorizeCustomer,
   validateAuthorization,
   validateGetAllByUser,
@@ -29,7 +26,6 @@ const getAllByUser = compose([
 ])
 
 const getOneByUser = compose([
-  authenticate,
   authorizeCustomer,
   validateAuthorization,
   validateGetOneByUser,
@@ -37,15 +33,17 @@ const getOneByUser = compose([
 ])
 
 const getAll = compose([
-  authenticate,
   authorizeManagers,
   validateGetAll,
   OrdersMiddleware.getAll,
 ])
+
+const get = compose([authorizeManagers, isValidId, OrdersMiddleware.get])
 
 module.exports = {
   placeOrder,
   getAllByUser,
   getOneByUser,
   getAll,
+  get,
 }
