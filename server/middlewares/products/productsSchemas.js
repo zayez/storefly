@@ -5,9 +5,19 @@ const { COLLECTIONS_MIN_SIZE, COLLECTIONS_MAX_SIZE, IMAGE_MAX_SIZE_MB } =
 const IMAGE_MAX_SIZE = 1024 * (1024 * IMAGE_MAX_SIZE_MB)
 
 const Create = Joi.object().keys({
-  title: Joi.string().trim().required(),
-  description: Joi.string().trim(),
-  price: Joi.number().precision(2).required(),
+  title: Joi.string().trim().required().messages({
+    'string.base': 'Invalid type, title must be a string',
+    'string.empty': 'Title is not allowed to be empty',
+    'any.required': 'Title is required',
+  }),
+  description: Joi.string().allow(null, ''),
+  price: Joi.number().precision(2).positive().required().messages({
+    'number.base': 'Invalid type, price must be a number',
+    'number.precision':
+      'Invalid price, the price must have only {#limit} decimal places',
+    'number.positive': 'Invalid price, the price must be positive',
+    'any.required': 'Price required',
+  }),
   inventory: Joi.number().integer().required(),
   statusId: Joi.number().integer(),
   categoryId: Joi.number().integer(),
