@@ -1,7 +1,11 @@
 const Joi = require('joi')
 
 const Create = Joi.object().keys({
-  title: Joi.string().required(),
+  title: Joi.string().required().messages({
+    'string.base': 'Invalid type, title must be a string',
+    'string.empty': 'title is not allowed to be empty',
+    'any.required': 'title is required',
+  }),
 })
 
 const Update = Joi.object().keys({
