@@ -1,5 +1,8 @@
 const { formatValidations } = require('../helpers/joiHelpers')
-const { setBody, setBodyError } = require('../helpers/middlewareHelpers')
+const {
+  setResponse,
+  setResponseError,
+} = require('../helpers/middlewareHelpers')
 const ActionStatus = require('../types/ActionStatus')
 
 const optsJoi = {
@@ -15,8 +18,7 @@ async function validateBody({ ctx, next }, schema) {
   try {
     const result = schema.validate(ctx.request.body, optsJoi)
     if (result.error) {
-      setBody({
-        ctx,
+      setResponse(ctx, {
         action: ActionStatus.Unprocessable,
         payload: formatValidations(result.error.details),
       })
@@ -33,8 +35,7 @@ async function validateQuery({ ctx, next }, schema) {
   try {
     const result = schema.validate(ctx.request.query, optsJoi)
     if (result.error) {
-      setBody({
-        ctx,
+      setResponse(ctx, {
         action: ActionStatus.Unprocessable,
         payload: formatValidations(result.error.details),
       })
@@ -52,8 +53,7 @@ async function validateParams({ ctx, next }, schema) {
   try {
     const result = schema.validate(ctx.params, optsJoi)
     if (result.error) {
-      setBody({
-        ctx,
+      setResponse(ctx, {
         action: ActionStatus.Unprocessable,
         payload: formatValidations(result.error.details),
       })
@@ -71,8 +71,7 @@ async function validateFile({ ctx, next }, schema) {
   try {
     const result = schema.validate(ctx.request.file, optsJoi)
     if (result.error) {
-      setBody({
-        ctx,
+      setResponse(ctx, {
         action: ActionStatus.Unprocessable,
         payload: formatValidations(result.error.details),
       })
@@ -124,7 +123,7 @@ function isValidReference(column, tableName) {
         type: ActionStatus.Ok,
       }
     } catch (err) {
-      setBodyError(ctx, err)
+      setResponseError(ctx, { error: err })
     }
   }
 }
@@ -144,7 +143,7 @@ function isUnique(attr, entity) {
         type: ActionStatus.Ok,
       }
     } catch (err) {
-      setBodyError(ctx, err)
+      setResponseError(ctx, err)
     }
   }
 }
@@ -161,7 +160,7 @@ function itExists(entity) {
       }
       return { type: ActionStatus.NotFound }
     } catch (err) {
-      setBodyError(ctx, err)
+      setResponseError(ctx, { error: err })
     }
   }
 }
@@ -170,7 +169,7 @@ const matchUserId = (param = 'id') => {
   return async (ctx, next) => {
     const value = ctx.params[param]
     if (Number(value) !== ctx.state.user.id) {
-      setBody({ ctx, action: ActionStatus.NotFound })
+      setResponse(ctx, { action: ActionStatus.NotFound })
       return
     }
     await next()

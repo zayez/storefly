@@ -1,4 +1,7 @@
-const { setBody, setBodyError } = require('../../helpers/middlewareHelpers')
+const {
+  setResponse,
+  setResponseError,
+} = require('../../helpers/middlewareHelpers')
 const CategoriesController = require('../../controllers/categories')
 const mapper = require('../../helpers/propsMapper').input
 
@@ -6,9 +9,9 @@ const create = async (ctx) => {
   try {
     const props = mapper.mapCategory(ctx.request.body)
     const { action, payload } = await CategoriesController.create(props)
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -17,9 +20,9 @@ const update = async (ctx) => {
     const props = mapper.mapCategory(ctx.request.body)
     const { id } = ctx.params
     const { action, payload } = await CategoriesController.update(id, props)
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -27,9 +30,9 @@ const destroy = async (ctx) => {
   try {
     const { id } = ctx.params
     const { action, payload } = await CategoriesController.destroy(id)
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -37,9 +40,9 @@ const get = async (ctx) => {
   try {
     const { id } = ctx.params
     const { action, payload } = await CategoriesController.getOne(id)
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -47,9 +50,9 @@ const getAll = async (ctx) => {
   try {
     const { page } = ctx.request.query
     const { action, payload } = await CategoriesController.getAll({ page })
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 

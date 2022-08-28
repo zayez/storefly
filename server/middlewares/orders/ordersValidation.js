@@ -11,7 +11,10 @@ const {
   GetAll,
 } = require('./ordersSchema')
 const ProductsController = require('../../controllers/products')
-const { setBody, setBodyError } = require('../../helpers/middlewareHelpers')
+const {
+  setResponse,
+  setResponseError,
+} = require('../../helpers/middlewareHelpers')
 const ActionStatus = require('../../types/ActionStatus')
 const { isManager } = require('../../helpers/userHelpers')
 
@@ -43,12 +46,12 @@ const validateItems = async (ctx, next) => {
     const items = ctx.request.body.items
     const { action, payload } = await ProductsController.validateItems(items)
     if (action !== ActionStatus.Ok) {
-      setBody({ ctx, action, payload })
+      setResponse(ctx, { action, payload })
       return
     }
     await next()
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 

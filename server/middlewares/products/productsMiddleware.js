@@ -1,4 +1,7 @@
-const { setBody, setBodyError } = require('../../helpers/middlewareHelpers')
+const {
+  setResponse,
+  setResponseError,
+} = require('../../helpers/middlewareHelpers')
 const ProductsController = require('../../controllers/products')
 const mapper = require('../../helpers/propsMapper').input
 const { isManager } = require('../../helpers/userHelpers')
@@ -10,9 +13,9 @@ const create = async (ctx) => {
       product.image = ctx.request.file.path
     }
     const { action, payload } = await ProductsController.create(product)
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -22,9 +25,9 @@ const createCollection = async (ctx) => {
     const { action, payload } = await ProductsController.createCollection(
       products,
     )
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -36,9 +39,9 @@ const update = async (ctx) => {
       props.image = ctx.request.file.path
     }
     const { action, payload } = await ProductsController.update(id, props)
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -46,9 +49,9 @@ const destroy = async (ctx) => {
   try {
     const { id } = ctx.params
     const { action, payload } = await ProductsController.destroy(id)
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -60,9 +63,9 @@ const get = async (ctx) => {
       : ProductsController.getOneActive
     const { action, payload } = await get(id)
 
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -73,9 +76,9 @@ const getAll = async (ctx) => {
       ? ProductsController.getAll
       : ProductsController.getAllActive
     const { action, payload } = await get({ page })
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 

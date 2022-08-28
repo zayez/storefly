@@ -1,14 +1,17 @@
 const mapper = require('../../helpers/propsMapper').input
 const OrdersController = require('../../controllers/orders')
-const { setBodyError, setBody } = require('../../helpers/middlewareHelpers')
+const {
+  setResponse,
+  setResponseError,
+} = require('../../helpers/middlewareHelpers')
 
 const get = async (ctx) => {
   try {
     const { id } = ctx.params
     const { action, payload } = await OrdersController.getOne(id)
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -16,9 +19,9 @@ const getAll = async (ctx) => {
   try {
     const { page } = ctx.request.query
     const { action, payload } = await OrdersController.getAll({ page })
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -27,9 +30,9 @@ const placeOrder = async (ctx) => {
     const userId = ctx.state.user.id
     const order = mapper.mapOrder(ctx.request.body)
     const { action, payload } = await OrdersController.placeOrder(order, userId)
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -37,9 +40,9 @@ const getAllByUser = async (ctx) => {
   try {
     const { userId } = ctx.params
     const { action, payload } = await OrdersController.getAllByUser(userId)
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -50,9 +53,10 @@ const getOneByUser = async (ctx) => {
       orderId,
       userId,
     })
-    setBody({ ctx, action, payload })
+    console.log(orderId)
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 

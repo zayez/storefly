@@ -1,5 +1,8 @@
 const ActionStatus = require('../types/ActionStatus')
-const { setBody, setBodyError } = require('../helpers/middlewareHelpers')
+const {
+  setResponse,
+  setResponseError,
+} = require('../helpers/middlewareHelpers')
 const User = require('../models/user')
 
 const authorizeRoles = (roles = []) => {
@@ -7,16 +10,16 @@ const authorizeRoles = (roles = []) => {
     try {
       const user = ctx.state.user
       if (!user) {
-        setBody({ ctx, action: ActionStatus.Forbidden })
+        setResponse(ctx, { action: ActionStatus.Forbidden })
         return
       }
 
       if (!(await User.hasRole(user, roles))) {
-        setBody({ ctx, action: ActionStatus.Forbidden })
+        setResponse(ctx, { action: ActionStatus.Forbidden })
       }
       await next()
     } catch (err) {
-      setBodyError(ctx, err)
+      setResponseError(ctx, { error: err })
     }
   }
 }

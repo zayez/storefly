@@ -1,4 +1,7 @@
-const { setBody, setBodyError } = require('../../helpers/middlewareHelpers')
+const {
+  setResponse,
+  setResponseError,
+} = require('../../helpers/middlewareHelpers')
 const UsersController = require('../../controllers/users')
 const { isManager } = require('../../helpers/userHelpers')
 const mapper = require('../../helpers/propsMapper').input
@@ -9,9 +12,9 @@ const create = async (ctx) => {
     const roles = ctx.request.body.roles || ['customer']
     const { action, payload } = await UsersController.create(user, roles)
 
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -20,9 +23,9 @@ const update = async (ctx) => {
     const id = ctx.state.user.id
     const user = ctx.request.body
     const { action, payload } = await UsersController.update(id, user)
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -30,9 +33,9 @@ const destroy = async (ctx) => {
   try {
     const id = ctx.state.user.id
     const { action, payload } = await UsersController.destroy(id)
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -41,18 +44,18 @@ const get = async (ctx) => {
     const user = ctx.state.user
     const id = isManager(user) ? ctx.params.id : ctx.state.user.id
     const { action, payload } = await UsersController.getOne(id)
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
 const getAll = async (ctx) => {
   try {
     const { action, payload } = await UsersController.getAll()
-    setBody({ ctx, action, payload })
+    setResponse(ctx, { action, payload })
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 

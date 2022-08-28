@@ -1,6 +1,13 @@
 const ActionStatus = require('../types/ActionStatus')
 
-function setBody({ ctx, action, payload }) {
+/**
+ * Sets the response based on the action with the payload.
+ * @param {Koa.ParameterizedContext} ctx context
+ * @param {Object} obj
+ * @param {ActionStatus} obj.action action type
+ * @param {Object} obj.payload payload
+ */
+function setResponse(ctx, { action, payload }) {
   const { title, status, detail } = getResponse(action)
   const contentType = getContentType(action)
   ctx.response.status = status
@@ -9,7 +16,7 @@ function setBody({ ctx, action, payload }) {
   ctx.set('Content-Type', contentType)
 }
 
-function setBodyError(ctx, err) {
+function setResponseError(ctx, { error }) {
   const { title, status, detail } = getResponse(ActionStatus.Error)
   ctx.response.status = status
   ctx.response.body = {
@@ -84,7 +91,7 @@ function getResponse(action) {
 }
 
 module.exports = {
-  setBody,
-  setBodyError,
+  setResponse,
+  setResponseError,
   getResponse,
 }

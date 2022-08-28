@@ -1,4 +1,7 @@
-const { setBody, setBodyError } = require('../helpers/middlewareHelpers')
+const {
+  setResponse,
+  setResponseError,
+} = require('../helpers/middlewareHelpers')
 const ActionStatus = require('../types/ActionStatus')
 const User = require('../models/user')
 
@@ -8,12 +11,12 @@ async function userExists(ctx, next) {
     const foundUser = await User.findOne({ email })
 
     if (foundUser) {
-      setBody({ ctx, action: ActionStatus.Conflict })
+      setResponse(ctx, { action: ActionStatus.Conflict })
     }
 
     await next()
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -25,13 +28,13 @@ function entityExists(entity) {
       const foundEntity = await Entity.findById(id)
 
       if (!foundEntity) {
-        setBody({ ctx, action: ActionStatus.NotFound })
+        setResponse(ctx, { action: ActionStatus.NotFound })
         return
       }
 
       await next()
     } catch (err) {
-      setBodyError(ctx, err)
+      setResponseError(ctx, { error: err })
     }
   }
 }
@@ -48,8 +51,7 @@ function referenceExists(column, tableName) {
       const foundReference = await Model.findById(id)
 
       if (!foundReference) {
-        setBody({
-          ctx,
+        setResponse(ctx, {
           action: ActionStatus.Unprocessable,
           payload: { error: `${column} references inexistent entity.` },
         })
@@ -58,7 +60,7 @@ function referenceExists(column, tableName) {
 
       await next()
     } catch (err) {
-      setBodyError(ctx, err)
+      setResponseError(ctx, { error: err })
     }
   }
 }
@@ -72,13 +74,13 @@ function disallowDuplicate(entity, attr) {
       const duplicated = await Entity.findOne(payload)
 
       if (duplicated) {
-        setBody({ ctx, action: ActionStatus.Conflict })
+        setResponse(ctx, { action: ActionStatus.Conflict })
         return
       }
 
       await next()
     } catch (err) {
-      setBodyError(ctx, err)
+      setResponseError(ctx, { error: err })
     }
   }
 }
@@ -96,13 +98,13 @@ function disallowDuplicates(entity, attr) {
       const values = payload.map((p) => p[attr])
 
       if (await Entity.includesAny(attr, values)) {
-        setBody({ ctx, action: ActionStatus.Conflict })
+        setResponse(ctx, { action: ActionStatus.Conflict })
         return
       }
 
       await next()
     } catch (err) {
-      setBodyError(ctx, err)
+      setResponseError(ctx, { error: err })
     }
   }
 }

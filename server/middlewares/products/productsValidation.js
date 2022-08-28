@@ -1,5 +1,8 @@
 const { deleteFile } = require('../../helpers/fsHelper')
-const { setBody, setBodyError } = require('../../helpers/middlewareHelpers')
+const {
+  setResponse,
+  setResponseError,
+} = require('../../helpers/middlewareHelpers')
 const ActionStatus = require('../../types/ActionStatus')
 const {
   validateBody,
@@ -36,13 +39,13 @@ const validateCreate = async (ctx, next) => {
         if (ctx.request.file) {
           await deleteFile(ctx.request.file.path)
         }
-        setBody({ ctx, action: action.type, payload: action.payload })
+        setResponse(ctx, { action: action.type, payload: action.payload })
         return
       }
     }
     await next()
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
@@ -61,13 +64,13 @@ const validateUpdate = async (ctx, next) => {
         if (ctx.request.file) {
           await deleteFile(ctx.request.file.path)
         }
-        setBody({ ctx, action: action.type, payload: action.payload })
+        setResponse(ctx, { action: action.type, payload: action.payload })
         return
       }
     }
     await next()
   } catch (err) {
-    setBodyError(ctx, err)
+    setResponseError(ctx, { error: err })
   }
 }
 
