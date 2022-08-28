@@ -1,79 +1,86 @@
 const ActionStatus = require('../types/ActionStatus')
 
 function setBody({ ctx, action, payload }) {
-  const { code, title, message } = getResponse(action)
-  ctx.response.status = code
-  ctx.response.body = { title, message }
+  const { title, status, detail } = getResponse(action)
+  const contentType = getContentType(action)
+  ctx.response.status = status
+  ctx.response.body = { title, status, detail }
   ctx.response.body = { ...ctx.body, ...payload }
+  ctx.set('Content-Type', contentType)
 }
 
 function setBodyError(ctx, err) {
-  const { code, title, message } = getResponse(ActionStatus.Error)
-  ctx.response.status = code
+  const { title, status, detail } = getResponse(ActionStatus.Error)
+  ctx.response.status = status
   ctx.response.body = {
-    title: title,
-    message: message,
-    error: {
-      name: err.name,
-      message: err.message,
-    },
+    title,
+    status,
+    detail,
   }
 }
 
+function getContentType(action) {
+  const type =
+    action === ActionStatus.Unprocessable
+      ? 'application/problem+json'
+      : 'application/json'
+  return type
+}
+
 function getResponse(action) {
-  let code, title, message
+  let status, title, detail
   switch (action) {
     case ActionStatus.Ok:
-      code = 200
+      status = 200
       title = 'Ok'
-      message = 'The request has succeeded'
+      detail = 'The request has succeeded'
       break
     case ActionStatus.Created:
-      code = 201
+      status = 201
       title = 'Created'
-      message = 'The request has succeeded and a new resource has been created'
+      detail = 'The request has succeeded and a new resource has been created'
       break
 
     case ActionStatus.BadRequest:
-      code = 400
+      status = 400
       title = 'Bad Request'
-      message =
+      detail =
         'The server could not understand the request due to invalid syntax.'
       break
     case ActionStatus.Forbidden:
-      code = 403
+      status = 403
       title = 'Forbidden'
-      message = 'The client does not have access rights to the content'
+      detail = 'The client does not have access rights to the content'
       break
 
     case ActionStatus.Conflict:
-      code = 409
+      status = 409
       title = 'Conflict'
-      message = 'The request conflicts with the current state of the server'
+      detail = 'The request conflicts with the current state of the server'
       break
     case ActionStatus.Unprocessable:
-      code = 422
+      status = 422
       title = 'Unprocessable'
-      message = 'The request was unable to process the contained entity'
+      detail = 'The request was unable to process the contained entity'
       break
     case ActionStatus.Error:
-      code = 500
-      title = 'Error'
-      message = 'Internal server error'
+      status = 500
+      title = 'Internal server error'
+      detail = 'A fatal error occured'
       break
     case ActionStatus.CreateError:
-      code = 400
+      status = 400
       title = 'Create - failed to create'
-      message = 'The server was unable to insert the data.'
+      detail = 'The server was unable to insert the data.'
       break
     default:
-      code = 404
+      status = 404
       title = 'Not Found'
-      message = 'The server can not find the requested resource.'
+      detail = 'The server can not find the requested resource.'
       break
   }
 
-  return { code, title, message }
+  return { status, title, detail }
 }
 
 module.exports = {

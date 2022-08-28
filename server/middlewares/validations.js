@@ -1,16 +1,24 @@
+const { formatValidations } = require('../helpers/joiHelpers')
 const { setBody, setBodyError } = require('../helpers/middlewareHelpers')
 const ActionStatus = require('../types/ActionStatus')
 
+const optsJoi = {
+  abortEarly: false,
+  errors: {
+    wrap: {
+      label: '',
+    },
+  },
+}
+
 async function validateBody({ ctx, next }, schema) {
   try {
-    const result = schema.validate(ctx.request.body, {
-      abortEarly: false,
-    })
+    const result = schema.validate(ctx.request.body, optsJoi)
     if (result.error) {
       setBody({
         ctx,
         action: ActionStatus.Unprocessable,
-        payload: result.error,
+        payload: formatValidations(result.error.details),
       })
       return
     }
@@ -23,14 +31,12 @@ async function validateBody({ ctx, next }, schema) {
 
 async function validateQuery({ ctx, next }, schema) {
   try {
-    const result = schema.validate(ctx.request.query, {
-      abortEarly: false,
-    })
+    const result = schema.validate(ctx.request.query, optsJoi)
     if (result.error) {
       setBody({
         ctx,
         action: ActionStatus.Unprocessable,
-        payload: result.error,
+        payload: formatValidations(result.error.details),
       })
       return
     }
@@ -44,14 +50,12 @@ async function validateQuery({ ctx, next }, schema) {
 
 async function validateParams({ ctx, next }, schema) {
   try {
-    const result = schema.validate(ctx.params, {
-      abortEarly: false,
-    })
+    const result = schema.validate(ctx.params, optsJoi)
     if (result.error) {
       setBody({
         ctx,
         action: ActionStatus.Unprocessable,
-        payload: result.error,
+        payload: formatValidations(result.error.details),
       })
       return
     }
@@ -65,14 +69,12 @@ async function validateParams({ ctx, next }, schema) {
 
 async function validateFile({ ctx, next }, schema) {
   try {
-    const result = schema.validate(ctx.request.file, {
-      abortEarly: false,
-    })
+    const result = schema.validate(ctx.request.file, optsJoi)
     if (result.error) {
       setBody({
         ctx,
         action: ActionStatus.Unprocessable,
-        payload: result.error,
+        payload: formatValidations(result.error.details),
       })
       return
     }
@@ -86,13 +88,11 @@ async function validateFile({ ctx, next }, schema) {
 
 function isValidBody({ ctx }, schema) {
   try {
-    const result = schema.validate(ctx.request.body, {
-      abortEarly: false,
-    })
+    const result = schema.validate(ctx.request.body, optsJoi)
     if (result.error) {
       return {
         type: ActionStatus.Unprocessable,
-        payload: result.error,
+        payload: formatValidations(result.error.details),
       }
     }
 
