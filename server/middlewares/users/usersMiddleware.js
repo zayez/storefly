@@ -1,9 +1,7 @@
-const {
-  setResponse,
-  setResponseError,
-} = require('../../helpers/middlewareHelpers')
+const { setResponse } = require('../../helpers/middlewareHelpers')
 const UsersController = require('../../controllers/users')
 const { isManager } = require('../../helpers/userHelpers')
+const ActionStatus = require('../../types/ActionStatus')
 const mapper = require('../../helpers/propsMapper').input
 
 const create = async (ctx) => {
@@ -14,7 +12,7 @@ const create = async (ctx) => {
 
     setResponse(ctx, { action, payload })
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 
@@ -25,7 +23,7 @@ const update = async (ctx) => {
     const { action, payload } = await UsersController.update(id, user)
     setResponse(ctx, { action, payload })
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 
@@ -35,7 +33,7 @@ const destroy = async (ctx) => {
     const { action, payload } = await UsersController.destroy(id)
     setResponse(ctx, { action, payload })
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 
@@ -46,7 +44,7 @@ const get = async (ctx) => {
     const { action, payload } = await UsersController.getOne(id)
     setResponse(ctx, { action, payload })
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 
@@ -55,7 +53,7 @@ const getAll = async (ctx) => {
     const { action, payload } = await UsersController.getAll()
     setResponse(ctx, { action, payload })
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 

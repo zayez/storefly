@@ -13,7 +13,7 @@ const placeOrder = async (order, userId) => {
     if (savedOrder) {
       return {
         action: ActionStatus.Created,
-        payload: { order: mapper.mapOrder(savedOrder) },
+        payload: mapper.mapOrder(savedOrder),
       }
     }
     return {
@@ -30,7 +30,7 @@ const getAllByUser = async (id) => {
     if (orders) {
       return {
         action: ActionStatus.Ok,
-        payload: { orders: orders.map(mapper.mapOrder) },
+        payload: orders.map(mapper.mapOrder),
       }
     }
     return {
@@ -47,7 +47,7 @@ const getOneByUser = async ({ orderId, userId }) => {
     if (order) {
       return {
         action: ActionStatus.Ok,
-        payload: { order: mapper.mapOrder(order) },
+        payload: mapper.mapOrder(order),
       }
     }
     return {

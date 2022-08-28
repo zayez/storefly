@@ -36,8 +36,8 @@ test('[clean db] As admin I should:', (t) => {
       status: STATUS.Created,
     })
 
-    assert.equal(res.body.title, 'Created', 'Category created')
-    assert.equal(res.body.category.title, 'Books')
+    assert.equal(res.status, STATUS.Created)
+    assert.equal(res.body.title, 'Books')
     assert.end()
   })
 
@@ -48,14 +48,13 @@ test('[clean db] As admin I should:', (t) => {
       status: STATUS.Created,
     })
     const categoryUpdate = { title: 'Eletronics' }
-    const resUpdate = await update(resCreate.body.category.id, categoryUpdate, {
+    const resUpdate = await update(resCreate.body.id, categoryUpdate, {
       token,
       status: STATUS.Ok,
     })
-    const resCat = resUpdate.body.category
 
-    assert.equal(resUpdate.body.title, 'Ok', 'Category updated')
-    assert.equal(resCat.title, 'Eletronics')
+    assert.equal(resUpdate.status, STATUS.Ok)
+    assert.equal(resUpdate.body.title, 'Eletronics')
     assert.end()
   })
 
@@ -67,17 +66,23 @@ test('[clean db] As admin I should:', (t) => {
         token,
         status: STATUS.NotFound,
       })
-      assert.equal(res.body.title, 'Not Found', 'title is a match')
+      assert.equal(res.status, STATUS.NotFound)
       assert.end()
     },
   )
 
   t.test('be able to delete a category', async (assert) => {
-    const category = { title: 'Beverages' }
+    catTitle = 'Beverages'
+    const category = { title: catTitle }
     const resCreate = await create(category, { token, status: STATUS.Created })
-    const catCreated = resCreate.body.category
+    const catCreated = resCreate.body
     const res = await destroy(catCreated.id, { token, status: STATUS.Ok })
-    assert.equal(res.body.title, 'Ok', 'Category deleted')
+    const deletedCategory = await knex('categories')
+      .where({ title: catTitle })
+      .first()
+
+    assert.equal(res.status, STATUS.Ok)
+    assert.equal(deletedCategory, undefined)
     assert.end()
   })
 
@@ -89,7 +94,7 @@ test('[clean db] As admin I should:', (t) => {
         token,
         status: STATUS.Created,
       })
-      const resCat = resCreate.body.category
+      const resCat = resCreate.body
       const res = await getOne('clothes', {
         token,
         status: STATUS.Unprocessable,
@@ -102,11 +107,12 @@ test('[clean db] As admin I should:', (t) => {
   t.test('be able to retrieve a category', async (assert) => {
     const category = { title: 'Cars' }
     const resCreate = await create(category, { token, status: STATUS.Created })
-    const catCreated = resCreate.body.category
+    const catCreated = resCreate.body
 
     const res = await getOne(catCreated.id, { token, status: STATUS.Ok })
-    assert.equal(res.body.title, 'Ok', 'Category retrieved')
-    assert.equal(res.body.category.title, 'Cars', 'equal name')
+
+    assert.equal(res.status, STATUS.Ok)
+    assert.equal(res.body.title, 'Cars', 'equal name')
     assert.end()
   })
 
@@ -133,22 +139,25 @@ test('[seeded db] As admin I should', (t) => {
     const category = { ...categories[0] }
     delete category.id
     const res = await create(category, { token, status: STATUS.Conflict })
-    assert.equal(res.body.title, 'Conflict', 'Category alreadly exists')
+
+    assert.equal(res.status, STATUS.Conflict)
     assert.end()
   })
 
   t.test('be able to retrieve a category', async (assert) => {
     const category = categories[1]
     const res = await getOne(category.id, { token, status: STATUS.Ok })
-    assert.equal(res.body.title, 'Ok', 'Category retrieved')
-    assert.equal(res.body.category.title, 'Eletronics', 'equal name')
+
+    assert.equal(res.status, STATUS.Ok)
+    assert.equal(res.body.title, 'Eletronics', 'equal name')
     assert.end()
   })
 
   t.test('be able to retrieve all categories', async (assert) => {
     const res = await getAll({ token, status: STATUS.Ok })
-    assert.equal(res.body.title, 'Ok', 'Category retrieved')
-    assert.ok(Array.isArray(res.body.categories))
+
+    assert.equal(res.status, STATUS.Ok, 'Category retrieved')
+    assert.ok(Array.isArray(res.body))
     assert.end()
   })
 
@@ -160,6 +169,8 @@ test('[seeded db] As admin I should', (t) => {
         token,
         status: STATUS.Unprocessable,
       })
+
+      assert.equal(res.status, STATUS.Unprocessable)
       assert.end()
     },
   )

@@ -22,7 +22,8 @@ test('[clean db] As a user I should:', (t) => {
     delete product.id
 
     const res = await await create(product, { status: STATUS.Forbidden })
-    assert.equal(res.body.title, 'Forbidden', 'not created')
+
+    assert.equal(res.status, STATUS.Forbidden)
     assert.end()
   })
 
@@ -42,10 +43,10 @@ test('[seeded db] As a user I should:', (t) => {
 
   t.test('be able to retrieve only active products', async (assert) => {
     const res = await getAll({ status: STATUS.Ok })
+    const prodsDraft = res.body.filter((p) => p.statusId == 1)
 
-    assert.equal(res.body.title, 'Ok', 'correctly retrieved')
-    assert.ok(Array.isArray(res.body.products))
-    const prodsDraft = res.body.products.filter((p) => p.statusId == 1)
+    assert.equal(res.status, STATUS.Ok)
+    assert.ok(Array.isArray(res.body))
     assert.equal(prodsDraft.length, 0, 'only active products')
     assert.end()
   })
@@ -53,15 +54,17 @@ test('[seeded db] As a user I should:', (t) => {
   t.test('be able to retrieve an active product', async (assert) => {
     const product = await knex('products').where({ statusId: 2 }).first()
     const res = await getOne(product.id, { status: STATUS.Ok })
-    assert.equal(res.body.title, 'Ok', 'correctly retrieved')
-    assert.equal(res.body.product.title, product.title)
+
+    assert.equal(res.status, STATUS.Ok)
+    assert.equal(res.body.title, product.title)
     assert.end()
   })
 
   t.test('NOT be able to retrieve a draft product', async (assert) => {
     const product = await knex('products').where({ statusId: 1 }).first()
     const res = await getOne(product.id, { status: STATUS.NotFound })
-    assert.equal(res.body.title, 'Not Found', 'correctly retrieved')
+
+    assert.equal(res.status, STATUS.NotFound)
     assert.end()
   })
 

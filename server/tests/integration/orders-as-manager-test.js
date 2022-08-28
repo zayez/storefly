@@ -37,8 +37,9 @@ test('As a manager(admin/editor) I should:', (t) => {
     const order = await knex('orders').whereNot({ userId: managerId }).first()
 
     const res = await getOne(order.id, { token, status: STATUS.Ok })
-    const retrievedOrder = res.body.order
-    assert.equal(res.status, 200, 'correct status')
+    const retrievedOrder = res.body
+
+    assert.equal(res.status, STATUS.Ok, 'correct status')
     assert.equal(order.id, retrievedOrder.id, 'order is the same')
     assert.end()
   })
@@ -53,8 +54,8 @@ test('As a manager(admin/editor) I should:', (t) => {
         status: STATUS.Ok,
       },
     )
-    assert.equal(res.status, 200, 'response returns correct status code')
-    assert.equal(res.body.order.id, order.id, 'is the same order')
+    assert.equal(res.status, STATUS.Ok, 'response returns correct status code')
+    assert.equal(res.body.id, order.id, 'is the same order')
     assert.end()
   })
 
@@ -64,8 +65,9 @@ test('As a manager(admin/editor) I should:', (t) => {
     const ordersIds = orders.map((o) => o.id)
 
     const res = await getByUser(order.userId, { token, status: STATUS.Ok })
-    const retrievedOrdersIds = res.body.orders.map((o) => o.id)
-    assert.equal(res.status, 200, 'correct status code')
+    const retrievedOrdersIds = res.body.map((o) => o.id)
+
+    assert.equal(res.status, STATUS.Ok, 'correct status code')
     assert.deepEqual(retrievedOrdersIds, ordersIds, 'orders retrieved match')
     assert.end()
   })
@@ -75,9 +77,9 @@ test('As a manager(admin/editor) I should:', (t) => {
     const ordersIds = orders.map((o) => o.id)
 
     const res = await getAll({ token, status: STATUS.Ok })
-    const resRetrievedOrdersIds = res.body.orders.map((o) => o.id)
+    const resRetrievedOrdersIds = res.body.map((o) => o.id)
 
-    assert.equal(res.status, 200, 'status is correct')
+    assert.equal(res.status, STATUS.Ok, 'status is correct')
     assert.deepEqual(resRetrievedOrdersIds, ordersIds, 'correct orders')
     assert.end()
   })

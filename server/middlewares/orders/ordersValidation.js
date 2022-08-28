@@ -11,10 +11,7 @@ const {
   GetAll,
 } = require('./ordersSchema')
 const ProductsController = require('../../controllers/products')
-const {
-  setResponse,
-  setResponseError,
-} = require('../../helpers/middlewareHelpers')
+const { setResponse } = require('../../helpers/middlewareHelpers')
 const ActionStatus = require('../../types/ActionStatus')
 const { isManager } = require('../../helpers/userHelpers')
 
@@ -51,7 +48,7 @@ const validateItems = async (ctx, next) => {
     }
     await next()
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 

@@ -41,9 +41,10 @@ test('As admin I should:', (t) => {
     delete product.id
     product.title = productTitle()
     const res = await create(product, { token, status: STATUS.Created })
-    assert.equal(res.body.title, 'Created', 'Item created')
-    assert.equal(res.body.product.title, product.title)
-    assert.ok(Number.isInteger(res.body.product.id))
+
+    assert.equal(res.status, STATUS.Created)
+    assert.equal(res.body.title, product.title)
+    assert.ok(Number.isInteger(res.body.id))
     assert.end()
   })
 
@@ -57,10 +58,12 @@ test('As admin I should:', (t) => {
       status: STATUS.Created,
     })
 
-    assert.equal(res.body.title, 'Created', 'Item created')
-    assert.ok(res.body.product.image.endsWith(path.basename(images[0].path)))
-    assert.ok(Number.isInteger(res.body.product.id))
-    const img = `./${res.body.product.image}`
+    const resProduct = res.body
+
+    assert.equal(res.status, STATUS.Created)
+    assert.ok(resProduct.image.endsWith(path.basename(images[0].path)))
+    assert.ok(Number.isInteger(resProduct.id))
+    const img = `./${resProduct.image}`
     const fileExists = await fs.stat(img)
     assert.ok(fileExists, 'file was created')
 
@@ -75,16 +78,16 @@ test('As admin I should:', (t) => {
       token,
       status: STATUS.Created,
     })
-    const newProduct = res.body.product
+    const newProduct = res.body
 
     const productUpdate = {}
     const resUpdate = await updateUpload(newProduct.id, {}, images[1], {
       token,
       status: STATUS.Ok,
     })
-    const updatedProduct = resUpdate.body.product
+    const updatedProduct = resUpdate.body
 
-    assert.equal(resUpdate.body.title, 'Ok', 'Item created')
+    assert.equal(resUpdate.status, STATUS.Ok)
     assert.ok(updatedProduct.image.endsWith(path.basename(images[1].path)))
     const oldImg = `./${newProduct.image}`
     const newImg = `./${updatedProduct.image}`
@@ -115,7 +118,8 @@ test('As admin I should:', (t) => {
     )
     const prod0 = await knex('products').where({ title: name0 }).first('*')
     const lastProduct = res.body.lastProduct
-    assert.equal(res.body.title, 'Created', 'Items created')
+
+    assert.equal(res.status, STATUS.Created)
     assert.ok(
       lastProduct instanceof Object && lastProduct.constructor === Object,
     )
@@ -140,6 +144,8 @@ test('As admin I should:', (t) => {
           status: STATUS.Unprocessable,
         },
       )
+
+      assert.equal(res.status, STATUS.Unprocessable)
       assert.end()
     },
   )
@@ -162,7 +168,7 @@ test('As admin I should:', (t) => {
           status: STATUS.Conflict,
         },
       )
-      assert.equal(res.body.title, 'Conflict')
+      assert.equal(res.status, STATUS.Conflict)
       assert.end()
     },
   )
@@ -176,7 +182,8 @@ test('As admin I should:', (t) => {
       token,
       status: STATUS.Unprocessable,
     })
-    assert.equal(res.body.title, 'Unprocessable')
+
+    assert.equal(res.status, STATUS.Unprocessable)
     assert.equal(res.body.error, 'categoryId references inexistent entity.')
     assert.end()
   })
@@ -190,7 +197,8 @@ test('As admin I should:', (t) => {
       token,
       status: STATUS.Unprocessable,
     })
-    assert.equal(res.body.title, 'Unprocessable')
+
+    assert.equal(res.status, STATUS.Unprocessable)
     assert.equal(res.body.error, 'statusId references inexistent entity.')
     assert.end()
   })
@@ -202,7 +210,9 @@ test('As admin I should:', (t) => {
     const id = prod.id
     delete prod.id
     const res = await update(id, prod, { token, status: STATUS.Ok })
-    assert.equal(res.body.product.categoryId, 3)
+
+    assert.equal(res.status, STATUS.Ok)
+    assert.equal(res.body.categoryId, 3)
     assert.end()
   })
 
@@ -216,13 +226,15 @@ test('As admin I should:', (t) => {
         token,
         status: STATUS.Created,
       })
-      const createdProd = res.body.product
+      const createdProd = res.body
 
-      const updateProduct = { categoryId: 987 }
+      const updateProduct = { categoryId: 98237 }
       const resUpdate = await update(createdProd.id, updateProduct, {
         token,
         status: STATUS.Unprocessable,
       })
+
+      assert.equal(resUpdate.status, STATUS.Unprocessable)
       assert.end()
     },
   )
@@ -239,14 +251,14 @@ test('As admin I should:', (t) => {
       token,
       status: STATUS.Created,
     })
-    resProd = resCreate.body.product
+    resProd = resCreate.body
     const res = await update(resProd.id, productUpdate, {
       token,
       status: STATUS.Ok,
     })
 
-    assert.equal(res.body.title, 'Ok', 'Product updated')
-    assert.equal(res.body.product.title, productUpdate.title)
+    assert.equal(res.status, STATUS.Ok)
+    assert.equal(res.body.title, productUpdate.title)
     assert.end()
   })
 
@@ -260,7 +272,8 @@ test('As admin I should:', (t) => {
         token,
         status: STATUS.NotFound,
       })
-      assert.equal(res.body.title, 'Not Found', 'title is a match')
+
+      assert.equal(res.status, STATUS.NotFound)
       assert.end()
     },
   )
@@ -271,12 +284,13 @@ test('As admin I should:', (t) => {
     product.title = productTitle()
 
     const resCreate = await create(product, { token, status: STATUS.Created })
-    const resProd = resCreate.body.product
+    const resProd = resCreate.body
     const res = await destroy(resProd.id, {
       token,
       status: STATUS.Ok,
     })
-    assert.equal(res.body.title, 'Ok', 'Product deleted')
+
+    assert.equal(res.status, STATUS.Ok)
     assert.end()
   })
 
@@ -286,10 +300,11 @@ test('As admin I should:', (t) => {
     product.title = productTitle()
 
     const resCreate = await create(product, { token, status: STATUS.Created })
-    const resProd = resCreate.body.product
+    const resProd = resCreate.body
     const res = await getOne(resProd.id, { token, status: STATUS.Ok })
-    assert.equal(res.body.title, 'Ok', 'Product retrieved')
-    assert.equal(res.body.product.title, product.title, 'equal name')
+
+    assert.equal(res.status, STATUS.Ok)
+    assert.equal(res.body.title, product.title, 'equal name')
     assert.end()
   })
 
@@ -301,22 +316,25 @@ test('As admin I should:', (t) => {
       token,
       status: STATUS.Conflict,
     })
-    assert.equal(res.body.title, 'Conflict', 'Product alreadly exists')
+
+    assert.equal(res.status, STATUS.Conflict)
     assert.end()
   })
 
   t.test('be able to retrieve a draft product', async (assert) => {
     const product = products[0]
     const res = await getOne(product.id, { token, status: STATUS.Ok })
-    assert.equal(res.body.title, 'Ok', 'correctly retrieved')
+
+    assert.equal(res.status, STATUS.Ok)
     assert.end()
   })
 
   t.test('be able to retrieve all products', async (assert) => {
     const allProducts = await knex('products')
     const res = await getAll({ token, status: STATUS.Ok })
-    const resProds = res.body.products
-    assert.equal(res.body.title, 'Ok', 'Products retrieved')
+    const resProds = res.body
+
+    assert.equal(res.status, STATUS.Ok)
     assert.ok(Array.isArray(resProds))
     assert.equal(resProds.length, allProducts.length, 'array w/ right length')
     assert.end()

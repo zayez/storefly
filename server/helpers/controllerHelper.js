@@ -13,8 +13,8 @@ module.exports = (controllerName) => {
     try {
       const createdModel = await Model.create(model)
       if (createdModel) {
-        const payload = {}
-        payload[modelName] = mapEntity(createdModel)
+        const payload = mapEntity(createdModel)
+
         return {
           action: ActionStatus.Created,
           payload,
@@ -33,8 +33,7 @@ module.exports = (controllerName) => {
     try {
       const updatedModel = await Model.update(id, model)
       if (updatedModel) {
-        const payload = {}
-        payload[modelName] = mapEntity(updatedModel)
+        const payload = mapEntity(updatedModel)
         return {
           action: ActionStatus.Ok,
           payload,
@@ -71,8 +70,7 @@ module.exports = (controllerName) => {
     try {
       const selectedModel = await Model.findById(id)
       if (selectedModel) {
-        const payload = {}
-        payload[modelName] = mapEntity(selectedModel)
+        const payload = mapEntity(selectedModel)
 
         return {
           action: ActionStatus.Ok,
@@ -92,8 +90,7 @@ module.exports = (controllerName) => {
     try {
       const models = await Model.findAll(pagination)
       if (models) {
-        const payload = {}
-        payload[controllerName] = models.map(mapEntity)
+        const payload = models.map(mapEntity)
         return {
           action: ActionStatus.Ok,
           payload,

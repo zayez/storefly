@@ -1,10 +1,8 @@
-const {
-  setResponse,
-  setResponseError,
-} = require('../../helpers/middlewareHelpers')
+const { setResponse } = require('../../helpers/middlewareHelpers')
 const ProductsController = require('../../controllers/products')
 const mapper = require('../../helpers/propsMapper').input
 const { isManager } = require('../../helpers/userHelpers')
+const ActionStatus = require('../../types/ActionStatus')
 
 const create = async (ctx) => {
   try {
@@ -15,7 +13,7 @@ const create = async (ctx) => {
     const { action, payload } = await ProductsController.create(product)
     setResponse(ctx, { action, payload })
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 
@@ -27,7 +25,7 @@ const createCollection = async (ctx) => {
     )
     setResponse(ctx, { action, payload })
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 
@@ -41,7 +39,7 @@ const update = async (ctx) => {
     const { action, payload } = await ProductsController.update(id, props)
     setResponse(ctx, { action, payload })
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 
@@ -51,7 +49,7 @@ const destroy = async (ctx) => {
     const { action, payload } = await ProductsController.destroy(id)
     setResponse(ctx, { action, payload })
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 
@@ -65,7 +63,7 @@ const get = async (ctx) => {
 
     setResponse(ctx, { action, payload })
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 
@@ -78,7 +76,7 @@ const getAll = async (ctx) => {
     const { action, payload } = await get({ page })
     setResponse(ctx, { action, payload })
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 

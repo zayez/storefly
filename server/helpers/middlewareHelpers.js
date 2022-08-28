@@ -1,4 +1,5 @@
 const ActionStatus = require('../types/ActionStatus')
+const SuccessStatuses = [ActionStatus.Ok, ActionStatus.Created]
 
 /**
  * Sets the response based on the action with the payload.
@@ -8,21 +9,17 @@ const ActionStatus = require('../types/ActionStatus')
  * @param {Object} obj.payload payload
  */
 function setResponse(ctx, { action, payload }) {
-  const { title, status, detail } = getResponse(action)
   const contentType = getContentType(action)
-  ctx.response.status = status
-  ctx.response.body = { title, status, detail }
-  ctx.response.body = { ...ctx.body, ...payload }
   ctx.set('Content-Type', contentType)
-}
-
-function setResponseError(ctx, { error }) {
-  const { title, status, detail } = getResponse(ActionStatus.Error)
-  ctx.response.status = status
-  ctx.response.body = {
-    title,
-    status,
-    detail,
+  if (SuccessStatuses.includes(action)) {
+    const status = getResponse(action)
+    ctx.response.status = status
+    ctx.response.body = payload
+  } else {
+    const { status, title, detail } = getResponseError(action)
+    ctx.response.status = status
+    ctx.response.body = { status, title, detail }
+    if (payload) ctx.response.body = { ...ctx.response.body, ...payload }
   }
 }
 
@@ -35,19 +32,24 @@ function getContentType(action) {
 }
 
 function getResponse(action) {
-  let status, title, detail
+  let status
   switch (action) {
     case ActionStatus.Ok:
       status = 200
-      title = 'Ok'
-      detail = 'The request has succeeded'
       break
     case ActionStatus.Created:
       status = 201
-      title = 'Created'
-      detail = 'The request has succeeded and a new resource has been created'
       break
+    default:
+      status = 200
+      break
+  }
+  return status
+}
 
+function getResponseError(action) {
+  let status, title, detail
+  switch (action) {
     case ActionStatus.BadRequest:
       status = 400
       title = 'Bad Request'
@@ -92,6 +94,4 @@ function getResponse(action) {
 
 module.exports = {
   setResponse,
-  setResponseError,
-  getResponse,
 }

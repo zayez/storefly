@@ -10,6 +10,7 @@ test('setup', async (t) => {
 
 test('As a visitor I should:', (t) => {
   t.test('setup', async (assert) => {
+    await knex.seed.run()
     assert.end()
   })
 
@@ -28,7 +29,7 @@ test('As a visitor I should:', (t) => {
     }
 
     const res = await signUp(user, { status: STATUS.Created })
-    assert.equal(res.body.title, 'Created', 'User was created')
+    assert.equal(res.status, STATUS.Created)
     assert.ok(res.body instanceof Object && res.body.constructor === Object)
     assert.end()
   })
@@ -50,7 +51,7 @@ test('[seeded db] As a customer I should:', (t) => {
     const res = await signIn(customer.email, customer.password, {
       status: STATUS.Ok,
     })
-    assert.equal(res.body.title, 'Ok', 'user signed in')
+    assert.equal(res.status, STATUS.Ok)
     assert.notEqual(res.body.token, '', 'token is not empty')
     assert.end()
   })

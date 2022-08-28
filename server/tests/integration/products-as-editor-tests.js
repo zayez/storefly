@@ -36,9 +36,10 @@ test('[clean db] As editor I should:', (t) => {
     delete product.id
     product.title = productTitle()
     const res = await create(product, { token, status: STATUS.Created })
-    assert.equal(res.body.title, 'Created', 'Item created')
-    assert.equal(res.body.product.title, product.title)
-    assert.ok(Number.isInteger(res.body.product.id))
+
+    assert.equal(res.status, STATUS.Created)
+    assert.equal(res.body.title, product.title)
+    assert.ok(Number.isInteger(res.body.id))
     assert.end()
   })
 
@@ -54,14 +55,15 @@ test('[clean db] As editor I should:', (t) => {
       token,
       status: STATUS.Created,
     })
-    const resProd = resCreate.body.product
+    const resProd = resCreate.body
 
     const res = await update(resProd.id, productUpdate, {
       token,
       status: STATUS.Ok,
     })
-    assert.equal(res.body.title, 'Ok', 'Product updated')
-    assert.equal(res.body.product.title, productUpdate.title)
+
+    assert.equal(res.status, STATUS.Ok)
+    assert.equal(res.body.title, productUpdate.title)
     assert.end()
   })
 
@@ -75,7 +77,8 @@ test('[clean db] As editor I should:', (t) => {
         token,
         status: STATUS.NotFound,
       })
-      assert.equal(res.body.title, 'Not Found', 'title is a match')
+
+      assert.equal(res.status, STATUS.NotFound)
       assert.end()
     },
   )
@@ -86,9 +89,10 @@ test('[clean db] As editor I should:', (t) => {
     delete product.id
 
     const resCreate = await create(product, { token, status: STATUS.Created })
-    const resProd = resCreate.body.product
+    const resProd = resCreate.body
     const res = await destroy(resProd.id, { token, status: STATUS.Ok })
-    assert.equal(res.body.title, 'Ok', 'Product deleted')
+
+    assert.equal(res.status, STATUS.Ok)
     assert.end()
   })
 
@@ -98,10 +102,11 @@ test('[clean db] As editor I should:', (t) => {
     delete product.id
 
     const resCreate = await create(product, { token, status: STATUS.Created })
-    const resProd = resCreate.body.product
+    const resProd = resCreate.body
     const res = await getOne(resProd.id, { token, status: STATUS.Ok })
-    assert.equal(res.body.title, 'Ok', 'Product retrieved')
-    assert.equal(res.body.product.title, product.title, 'equal name')
+
+    assert.equal(res.status, STATUS.Ok)
+    assert.equal(res.body.title, product.title, 'equal name')
     assert.end()
   })
 
@@ -111,15 +116,16 @@ test('[clean db] As editor I should:', (t) => {
 
     const res = await create(product, { token, status: STATUS.Conflict })
 
-    assert.equal(res.body.title, 'Conflict', 'Product alreadly exists')
+    assert.equal(res.status, STATUS.Conflict)
     assert.end()
   })
 
   t.test('be able to retrieve all products', async (assert) => {
     const allProducts = await knex('products')
     const res = await getAll({ token, status: STATUS.Ok })
-    const resProds = res.body.products
-    assert.equal(res.body.title, 'Ok', 'Products retrieved')
+    const resProds = res.body
+
+    assert.equal(res.status, STATUS.Ok)
     assert.ok(Array.isArray(resProds))
     assert.equal(resProds.length, allProducts.length, 'array w/ right length')
     assert.end()

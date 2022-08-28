@@ -1,9 +1,6 @@
 const mapper = require('../../helpers/propsMapper').input
 const OrdersController = require('../../controllers/orders')
-const {
-  setResponse,
-  setResponseError,
-} = require('../../helpers/middlewareHelpers')
+const { setResponse } = require('../../helpers/middlewareHelpers')
 
 const get = async (ctx) => {
   try {
@@ -11,7 +8,7 @@ const get = async (ctx) => {
     const { action, payload } = await OrdersController.getOne(id)
     setResponse(ctx, { action, payload })
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 
@@ -21,7 +18,7 @@ const getAll = async (ctx) => {
     const { action, payload } = await OrdersController.getAll({ page })
     setResponse(ctx, { action, payload })
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 
@@ -32,7 +29,7 @@ const placeOrder = async (ctx) => {
     const { action, payload } = await OrdersController.placeOrder(order, userId)
     setResponse(ctx, { action, payload })
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 
@@ -42,7 +39,7 @@ const getAllByUser = async (ctx) => {
     const { action, payload } = await OrdersController.getAllByUser(userId)
     setResponse(ctx, { action, payload })
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 
@@ -53,10 +50,9 @@ const getOneByUser = async (ctx) => {
       orderId,
       userId,
     })
-    console.log(orderId)
     setResponse(ctx, { action, payload })
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 

@@ -38,11 +38,12 @@ test('As an admin I should:', (t) => {
     const user = { ...customers[0] }
     delete user.id
     const res = await create(user, { token, status: STATUS.Created })
-    const newUser = res.body.user
+    const newUser = res.body
+
+    assert.equal(res.status, STATUS.Created)
     assert.equal(newUser.email, user.email)
     assert.equal(newUser.firstName, user.firstName)
     assert.ok(Number.isInteger(newUser.id))
-
     assert.end()
   })
 
@@ -63,6 +64,7 @@ test('As a customer I should:', (t) => {
     token = await login(user.email, user.password)
     const decodedToken = jwt.verify(token, SECRET)
     userId = decodedToken.sub
+
     assert.end()
   })
 
@@ -78,11 +80,12 @@ test('As a customer I should:', (t) => {
       { firstName: name },
       { token, status: STATUS.Ok },
     )
-    const updatedUser = res.body.user
+    const updatedUser = res.body
+
+    assert.equal(res.status, STATUS.Ok)
     assert.equal(updatedUser.firstName, name)
     assert.equal(updatedUser.id, userId)
     assert.ok(Number.isInteger(updatedUser.id))
-
     assert.end()
   })
 
@@ -95,6 +98,7 @@ test('As a customer I should:', (t) => {
       { token, status: STATUS.NotFound },
     )
 
+    assert.equal(res.status, STATUS.NotFound)
     assert.end()
   })
 
@@ -110,13 +114,16 @@ test('As a customer I should:', (t) => {
       newPassword,
       updatedUser.password,
     )
+
+    assert.equal(res.status, STATUS.Ok)
     assert.ok(isMatch)
     assert.end()
   })
   t.test('be able to get my data', async (assert) => {
     const persistedUser = await User.findById(userId)
     const res = await getOne(userId, { token, status: STATUS.Ok })
-    const retrievedUser = res.body.user
+    const retrievedUser = res.body
+
     assert.equal(retrievedUser.firstName, persistedUser.firstName)
     assert.equal(retrievedUser.email, persistedUser.email)
     assert.end()
@@ -125,7 +132,8 @@ test('As a customer I should:', (t) => {
   t.test('be able to delete my account', async (assert) => {
     const res = await destroy(userId, { token, status: STATUS.Ok })
     const deletedUser = await User.findById(userId)
-    assert.equal(res.body.title, 'Ok', 'User deleted')
+
+    assert.equal(res.status, STATUS.Ok)
     assert.equal(deletedUser, null)
     assert.end()
   })
@@ -148,6 +156,7 @@ test('As an editor I should:', (t) => {
     token = await login(user.email, user.password)
     const decodedToken = jwt.verify(token, SECRET)
     userId = decodedToken.sub
+
     assert.end()
   })
 
@@ -158,17 +167,19 @@ test('As an editor I should:', (t) => {
 
   t.test('be able to get all users', async (assert) => {
     const res = await getAll({ token, status: STATUS.Ok })
-    const retrivedUsers = res.body.users
+    const retrivedUsers = res.body
     const storedUsers = await User.findAll()
+
+    assert.equal(res.status, STATUS.Ok)
     assert.equal(retrivedUsers.length, storedUsers.length)
-    assert.equal(res.body.title, 'Ok')
     assert.end()
   })
 
   t.test('be able to get a specific user', async (assert) => {
     const customer = await User.findOne({ firstName: customers[1].firstName })
     const res = await getOne(customer.id, { token, status: STATUS.Ok })
-    const retrievedUser = res.body.user
+    const retrievedUser = res.body
+
     assert.equal(retrievedUser.lastName, customer.lastName)
     assert.end()
   })

@@ -39,8 +39,9 @@ test('As a customer I should:', (t) => {
     }
 
     const res = await placeOrder(order, { token, status: STATUS.Created })
-    const createdOrder = res.body.order
-    assert.equal(res.body.title, 'Created', 'order placed')
+    const createdOrder = res.body
+
+    assert.equal(res.status, STATUS.Created)
     assert.equal(
       createdOrder.items[0].id,
       product.id,
@@ -63,7 +64,8 @@ test('As a customer I should:', (t) => {
         token,
         status: STATUS.Unprocessable,
       })
-      assert.equal(res.body.title, 'Unprocessable', 'order not placed')
+
+      assert.equal(res.status, STATUS.Unprocessable)
       assert.end()
     },
   )
@@ -77,7 +79,8 @@ test('As a customer I should:', (t) => {
       token,
       status: STATUS.Unprocessable,
     })
-    assert.equal(res.body.title, 'Unprocessable', 'order not placed')
+
+    assert.equal(res.status, STATUS.Unprocessable)
     assert.end()
   })
 
@@ -94,7 +97,8 @@ test('As a customer I should:', (t) => {
         token,
         status: STATUS.Unprocessable,
       })
-      assert.equal(res.body.title, 'Unprocessable', 'order not placed')
+
+      assert.equal(res.status, STATUS.Unprocessable)
       assert.end()
     },
   )
@@ -118,9 +122,9 @@ test('As a customer I should:', (t) => {
     )
 
     const res = await getByUser(customerId, { token, status: STATUS.Ok })
-    const retrievedOrders = res.body.orders.map((o) => o.id)
+    const retrievedOrders = res.body.map((o) => o.id)
 
-    assert.equal(res.body.title, 'Ok', 'orders retrieved')
+    assert.equal(res.status, STATUS.Ok)
     assert.deepEqual(retrievedOrders, userOrders, 'retrieved orders match')
     assert.end()
   })
@@ -132,7 +136,11 @@ test('As a customer I should:', (t) => {
       token,
       status: STATUS.NotFound,
     })
-    assert.equal(res.status, 404, 'response returns correct status code')
+    assert.equal(
+      res.status,
+      STATUS.NotFound,
+      'response returns correct status code',
+    )
     assert.end()
   })
 
@@ -146,8 +154,8 @@ test('As a customer I should:', (t) => {
         status: STATUS.Ok,
       },
     )
-    assert.equal(res.status, 200, 'response returns correct status code')
-    assert.equal(res.body.order.id, order.id, 'is the same order')
+    assert.equal(res.status, STATUS.Ok, 'response returns correct status code')
+    assert.equal(res.body.id, order.id, 'is the same order')
     assert.end()
   })
 
@@ -165,7 +173,11 @@ test('As a customer I should:', (t) => {
           status: STATUS.NotFound,
         },
       )
-      assert.equal(res.status, 404, 'response returns correct status code')
+      assert.equal(
+        res.status,
+        STATUS.NotFound,
+        'response returns correct status code',
+      )
       assert.end()
     },
   )

@@ -1,7 +1,4 @@
-const {
-  setResponse,
-  setResponseError,
-} = require('../helpers/middlewareHelpers')
+const { setResponse } = require('../helpers/middlewareHelpers')
 const ActionStatus = require('../types/ActionStatus')
 const User = require('../models/user')
 
@@ -16,7 +13,7 @@ async function userExists(ctx, next) {
 
     await next()
   } catch (err) {
-    setResponseError(ctx, { error: err })
+    setResponse(ctx, { action: ActionStatus.Error })
   }
 }
 
@@ -34,7 +31,7 @@ function entityExists(entity) {
 
       await next()
     } catch (err) {
-      setResponseError(ctx, { error: err })
+      setResponse(ctx, { action: ActionStatus.Error })
     }
   }
 }
@@ -60,7 +57,7 @@ function referenceExists(column, tableName) {
 
       await next()
     } catch (err) {
-      setResponseError(ctx, { error: err })
+      setResponse(ctx, { action: ActionStatus.Error })
     }
   }
 }
@@ -80,7 +77,7 @@ function disallowDuplicate(entity, attr) {
 
       await next()
     } catch (err) {
-      setResponseError(ctx, { error: err })
+      setResponse(ctx, { action: ActionStatus.Error })
     }
   }
 }
@@ -104,7 +101,7 @@ function disallowDuplicates(entity, attr) {
 
       await next()
     } catch (err) {
-      setResponseError(ctx, { error: err })
+      setResponse(ctx, { action: ActionStatus.Error })
     }
   }
 }

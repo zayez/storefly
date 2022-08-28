@@ -1,8 +1,5 @@
-const { formatValidations } = require('../helpers/joiHelpers')
-const {
-  setResponse,
-  setResponseError,
-} = require('../helpers/middlewareHelpers')
+const { formatValidations } = require('../helpers/responseHelpers')
+const { setResponse } = require('../helpers/middlewareHelpers')
 const ActionStatus = require('../types/ActionStatus')
 
 const optsJoi = {
@@ -123,7 +120,7 @@ function isValidReference(column, tableName) {
         type: ActionStatus.Ok,
       }
     } catch (err) {
-      setResponseError(ctx, { error: err })
+      setResponse(ctx, { action: ActionStatus.Error })
     }
   }
 }
@@ -143,7 +140,7 @@ function isUnique(attr, entity) {
         type: ActionStatus.Ok,
       }
     } catch (err) {
-      setResponseError(ctx, err)
+      setResponse(ctx, { action: ActionStatus.Error })
     }
   }
 }
@@ -160,7 +157,7 @@ function itExists(entity) {
       }
       return { type: ActionStatus.NotFound }
     } catch (err) {
-      setResponseError(ctx, { error: err })
+      setResponse(ctx, { action: ActionStatus.Error })
     }
   }
 }

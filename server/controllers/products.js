@@ -14,8 +14,7 @@ const update = async (id, props = {}) => {
     }
     const updatedProduct = await Product.update(id, props)
     if (updatedProduct) {
-      const payload = {}
-      payload.product = mapper.mapProduct(updatedProduct)
+      const payload = mapper.mapProduct(updatedProduct)
       return {
         action: ActionStatus.Ok,
         payload,
@@ -55,7 +54,7 @@ const getAllActive = async (pagination) => {
     if (productsFound) {
       return {
         action: ActionStatus.Ok,
-        payload: { products: productsFound.map(mapper.mapProduct) },
+        payload: productsFound.map(mapper.mapProduct),
       }
     }
     return {
@@ -74,7 +73,7 @@ const getOneActive = async (id) => {
       const product = mapper.mapProduct(productFound)
       return {
         action: ActionStatus.Ok,
-        payload: { product },
+        payload: product,
       }
     }
     return {

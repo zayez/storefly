@@ -13,7 +13,7 @@ const create = async (user, roles) => {
     if (savedUser) {
       return {
         action: ActionStatus.Created,
-        payload: { user: mapper.mapUser(savedUser) },
+        payload: mapper.mapUser(savedUser),
       }
     }
     return {

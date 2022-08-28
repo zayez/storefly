@@ -1,8 +1,5 @@
 const ActionStatus = require('../types/ActionStatus')
-const {
-  setResponse,
-  setResponseError,
-} = require('../helpers/middlewareHelpers')
+const { setResponse } = require('../helpers/middlewareHelpers')
 const User = require('../models/user')
 
 const authorizeRoles = (roles = []) => {
@@ -19,7 +16,7 @@ const authorizeRoles = (roles = []) => {
       }
       await next()
     } catch (err) {
-      setResponseError(ctx, { error: err })
+      setResponse(ctx, { action: ActionStatus.Error })
     }
   }
 }

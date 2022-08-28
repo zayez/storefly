@@ -4,9 +4,9 @@
  * @param {array} details joi error details
  * @returns problem json details object
  */
-const formatValidations = (validationErrors) => {
+const formatValidations = (errorsDetails) => {
   const errors = {}
-  errors['invalid-params'] = validationErrors.map((item) => {
+  errors['invalid-params'] = errorsDetails.map((item) => {
     return {
       name: item.path[0],
       reason: item.message.replace('/', ''),
@@ -16,6 +16,13 @@ const formatValidations = (validationErrors) => {
   return errors
 }
 
+const formatPayload = (payload) => {
+  return {
+    ...payload,
+  }
+}
+
 module.exports = {
   formatValidations,
+  formatPayload,
 }
