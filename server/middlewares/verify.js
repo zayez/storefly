@@ -9,6 +9,7 @@ async function userExists(ctx, next) {
 
     if (foundUser) {
       setResponse(ctx, { action: ActionStatus.Conflict })
+      return
     }
 
     await next()

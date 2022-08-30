@@ -31,6 +31,16 @@ test('As a visitor I should:', (t) => {
     assert.end()
   })
 
+  t.test('NOT be able to sign up with email already used', async (assert) => {
+    const user = await knex('users').first()
+    const newUser = createRandomUser()
+    newUser.email = user.email
+    const res = await signUp(newUser, { status: STATUS.Conflict })
+
+    assert.equal(res.status, STATUS.Conflict)
+    assert.end()
+  })
+
   test('teardown', async (t) => {
     t.end()
   })
