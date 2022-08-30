@@ -1,15 +1,8 @@
 const test = require('tape')
-
 const jwt = require('jsonwebtoken')
-
-const { SECRET } = require('../../config').jwt
-
 const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
-const customers = require('../fixtures/users.json').customers
-const editors = require('../fixtures/users.json').editors
-
-const { logAdmin, login } = require('../infrastructure/login')
+const { login } = require('../infrastructure/login')
 const {
   server,
   create,
@@ -19,6 +12,10 @@ const {
   getAll,
 } = require('../requests/users')
 const User = require('../../models/user')
+const { SECRET } = require('../../config').jwt
+const customers = require('../fixtures/users.json').customers
+const editors = require('../fixtures/users.json').editors
+const admins = require('../fixtures/users.json').admins
 
 test('setup', async (t) => {
   await knex.migrate.latest()
@@ -28,9 +25,10 @@ test('setup', async (t) => {
 
 test('As an admin I should:', (t) => {
   let token
+  let admin = admins[0]
 
   t.test('setup', async (assert) => {
-    token = await logAdmin()
+    token = await login(admin.email, admin.password)
     assert.end()
   })
 
@@ -57,11 +55,11 @@ test('As an admin I should:', (t) => {
 test('As a customer I should:', (t) => {
   let token
   let userId
-  const user = customers[0]
+  const customer = customers[0]
 
   t.test('setup', async (assert) => {
     await knex.seed.run({ directory: 'tests/seeds' })
-    token = await login(user.email, user.password)
+    token = await login(customer.email, customer.password)
     const decodedToken = jwt.verify(token, SECRET)
     userId = decodedToken.sub
 
@@ -148,20 +146,21 @@ test('As a customer I should:', (t) => {
 
 test('As an editor I should:', (t) => {
   let token
-  let userId
-  const user = editors[0]
+  let editorId = null
+  const editor = editors[0]
 
   t.test('setup', async (assert) => {
     await knex.seed.run({ directory: 'tests/seeds' })
-    token = await login(user.email, user.password)
+    token = await login(editor.email, editor.password)
     const decodedToken = jwt.verify(token, SECRET)
-    userId = decodedToken.sub
+    editorId = decodedToken.sub
 
     assert.end()
   })
 
   t.test('be able to sign in', async (assert) => {
     assert.notEqual(token, '')
+    assert.notEqual(editorId, null)
     assert.end()
   })
 
