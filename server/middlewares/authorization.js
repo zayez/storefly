@@ -7,7 +7,8 @@ const authorizeRoles = (roles = []) => {
     try {
       const user = ctx.state.user
       if (!user) {
-        setResponse(ctx, { action: ActionStatus.Forbidden })
+        setResponse(ctx, { action: ActionStatus.Unauthorized })
+        ctx.set('WWW-Authenticate', 'Bearer')
         return
       }
 

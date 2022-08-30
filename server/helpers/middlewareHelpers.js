@@ -9,8 +9,6 @@ const SuccessStatuses = [ActionStatus.Ok, ActionStatus.Created]
  * @param {Object} obj.payload payload
  */
 function setResponse(ctx, { action, payload }) {
-  const contentType = getContentType(action)
-  ctx.set('Content-Type', contentType)
   if (SuccessStatuses.includes(action)) {
     const status = getResponse(action)
     ctx.response.status = status
@@ -21,6 +19,8 @@ function setResponse(ctx, { action, payload }) {
     ctx.response.body = { status, title, detail }
     if (payload) ctx.response.body = { ...ctx.response.body, ...payload }
   }
+  const contentType = getContentType(action)
+  ctx.set('Content-Type', contentType)
 }
 
 function getContentType(action) {
@@ -55,6 +55,12 @@ function getResponseError(action) {
       title = 'Bad Request'
       detail =
         'The server could not understand the request due to invalid syntax.'
+      break
+    case ActionStatus.Unauthorized:
+      status = 401
+      title = 'Unauthorized'
+      detail =
+        'The request lacks valid authentication credentials for the requested resource.'
       break
     case ActionStatus.Forbidden:
       status = 403

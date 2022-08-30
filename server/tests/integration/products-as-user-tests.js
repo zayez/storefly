@@ -17,15 +17,18 @@ test('As a visitor I should:', (t) => {
     assert.end()
   })
 
-  t.test('NOT be able to create a product', async (assert) => {
-    const product = { ...products[0] }
-    delete product.id
+  t.test(
+    'NOT be able to create a product when unauthenticated',
+    async (assert) => {
+      const product = { ...products[0] }
+      delete product.id
 
-    const res = await await create(product, { status: STATUS.Forbidden })
+      const res = await await create(product, { status: STATUS.Unauthorized })
 
-    assert.equal(res.status, STATUS.Forbidden)
-    assert.end()
-  })
+      assert.equal(res.status, STATUS.Unauthorized)
+      assert.end()
+    },
+  )
 
   t.test('be able to retrieve only active products', async (assert) => {
     const res = await getAll({ status: STATUS.Ok })

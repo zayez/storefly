@@ -11,6 +11,8 @@ const StatusCode = {
   /** @member {integer} */
   BadRequest: 400,
   /** @member {integer} */
+  Unauthorized: 401,
+  /** @member {integer} */
   Forbidden: 403,
   /** @member {integer} */
   NotFound: 404,
