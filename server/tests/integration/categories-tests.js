@@ -1,8 +1,9 @@
 const test = require('tape')
 const knex = require('../../db')
 const categories = require('../fixtures/categories.json').categories
+const admins = require('../fixtures/users.json').admins
 const STATUS = require('../../types/StatusCode')
-const { logAdmin } = require('../infrastructure/login')
+const { login } = require('../infrastructure/login')
 const {
   server,
   create,
@@ -19,12 +20,13 @@ test('setup', async (t) => {
 
 test('[clean db] As admin I should:', (t) => {
   let token
+  let admin = admins[0]
 
   t.test('setup', async (assert) => {
     await knex.migrate.latest()
     await knex.seed.run()
 
-    token = await logAdmin()
+    token = await login(admin.email, admin.password)
     assert.end()
   })
 
@@ -36,8 +38,10 @@ test('[clean db] As admin I should:', (t) => {
       status: STATUS.Created,
     })
 
+    const createdCategory = res.body
+
     assert.equal(res.status, STATUS.Created)
-    assert.equal(res.body.title, 'Books')
+    assert.equal(createdCategory.title, 'Books')
     assert.end()
   })
 
@@ -53,8 +57,10 @@ test('[clean db] As admin I should:', (t) => {
       status: STATUS.Ok,
     })
 
+    const updatedCategory = resUpdate.body
+
     assert.equal(resUpdate.status, STATUS.Ok)
-    assert.equal(resUpdate.body.title, 'Eletronics')
+    assert.equal(updatedCategory.title, 'Eletronics')
     assert.end()
   })
 
@@ -110,9 +116,10 @@ test('[clean db] As admin I should:', (t) => {
     const catCreated = resCreate.body
 
     const res = await getOne(catCreated.id, { token, status: STATUS.Ok })
+    const retrievedCategory = res.body
 
     assert.equal(res.status, STATUS.Ok)
-    assert.equal(res.body.title, 'Cars', 'equal name')
+    assert.equal(retrievedCategory.title, 'Cars', 'equal name')
     assert.end()
   })
 
@@ -126,12 +133,13 @@ test('[clean db] As admin I should:', (t) => {
 
 test('[seeded db] As admin I should', (t) => {
   let token
+  let admin = admins[0]
 
   t.test('setup', async (assert) => {
     await knex.migrate.latest()
     await knex.seed.run({ directory: 'tests/seeds' })
 
-    token = await logAdmin()
+    token = await login(admin.email, admin.password)
     assert.end()
   })
 
@@ -147,9 +155,10 @@ test('[seeded db] As admin I should', (t) => {
   t.test('be able to retrieve a category', async (assert) => {
     const category = categories[1]
     const res = await getOne(category.id, { token, status: STATUS.Ok })
+    const retrievedCategory = res.body
 
     assert.equal(res.status, STATUS.Ok)
-    assert.equal(res.body.title, 'Eletronics', 'equal name')
+    assert.equal(retrievedCategory.title, 'Eletronics', 'equal name')
     assert.end()
   })
 
