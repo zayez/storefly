@@ -2,8 +2,9 @@ const test = require('tape')
 const { faker } = require('@faker-js/faker')
 const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
-const { logEditor } = require('../infrastructure/login')
+const { login } = require('../infrastructure/login')
 const products = require('../fixtures/products.json').products
+const editors = require('../fixtures/users.json').editors
 const productTitle = () => {
   const title = `${faker.commerce.productAdjective()} ${faker.commerce.productName()}`
   return title
@@ -21,13 +22,14 @@ test('setup', async (t) => {
   t.end()
 })
 
-test('[clean db] As editor I should:', (t) => {
+test('As editor I should:', (t) => {
   let token
+  let editor = editors[0]
 
   t.test('setup', async (assert) => {
     await knex.migrate.latest()
     await knex.seed.run({ directory: 'tests/seeds' })
-    token = await logEditor()
+    token = await login(editor.email, editor.password)
     assert.end()
   })
 
@@ -36,10 +38,11 @@ test('[clean db] As editor I should:', (t) => {
     delete product.id
     product.title = productTitle()
     const res = await create(product, { token, status: STATUS.Created })
+    const createdProduct = res.body
 
     assert.equal(res.status, STATUS.Created)
-    assert.equal(res.body.title, product.title)
-    assert.ok(Number.isInteger(res.body.id))
+    assert.equal(createdProduct.title, product.title)
+    assert.ok(Number.isInteger(createdProduct.id))
     assert.end()
   })
 
@@ -61,9 +64,10 @@ test('[clean db] As editor I should:', (t) => {
       token,
       status: STATUS.Ok,
     })
+    const updatedProduct = res.body
 
     assert.equal(res.status, STATUS.Ok)
-    assert.equal(res.body.title, productUpdate.title)
+    assert.equal(updatedProduct.title, productUpdate.title)
     assert.end()
   })
 
@@ -89,10 +93,16 @@ test('[clean db] As editor I should:', (t) => {
     delete product.id
 
     const resCreate = await create(product, { token, status: STATUS.Created })
-    const resProd = resCreate.body
-    const res = await destroy(resProd.id, { token, status: STATUS.Ok })
+    const createdProduct = resCreate.body
+    const res = await destroy(createdProduct.id, { token, status: STATUS.Ok })
+    const deletedProduct = await knex('products')
+      .where({
+        id: createdProduct.id,
+      })
+      .first()
 
     assert.equal(res.status, STATUS.Ok)
+    assert.equal(deletedProduct, undefined)
     assert.end()
   })
 
@@ -102,11 +112,12 @@ test('[clean db] As editor I should:', (t) => {
     delete product.id
 
     const resCreate = await create(product, { token, status: STATUS.Created })
-    const resProd = resCreate.body
-    const res = await getOne(resProd.id, { token, status: STATUS.Ok })
+    const createdProduct = resCreate.body
+    const res = await getOne(createdProduct.id, { token, status: STATUS.Ok })
+    const retrievedProduct = res.body
 
     assert.equal(res.status, STATUS.Ok)
-    assert.equal(res.body.title, product.title, 'equal name')
+    assert.equal(retrievedProduct.title, product.title, 'equal name')
     assert.end()
   })
 

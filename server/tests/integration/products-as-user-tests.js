@@ -9,10 +9,10 @@ test('setup', async (t) => {
   t.end()
 })
 
-test('[clean db] As a user I should:', (t) => {
+test('As a visitor I should:', (t) => {
   t.test('setup', async (assert) => {
     await knex.migrate.latest()
-    await knex.seed.run()
+    await knex.seed.run({ directory: 'tests/seeds' })
 
     assert.end()
   })
@@ -27,26 +27,12 @@ test('[clean db] As a user I should:', (t) => {
     assert.end()
   })
 
-  t.test('teardown', async (assert) => {
-    await knex.seed.run()
-    assert.end()
-  })
-})
-
-test('[seeded db] As a user I should:', (t) => {
-  t.test('setup', async (assert) => {
-    await knex.migrate.latest()
-    await knex.seed.run({ directory: 'tests/seeds' })
-
-    assert.end()
-  })
-
   t.test('be able to retrieve only active products', async (assert) => {
     const res = await getAll({ status: STATUS.Ok })
     const prodsDraft = res.body.filter((p) => p.statusId == 1)
-
+    const retrievedProducts = res.body
     assert.equal(res.status, STATUS.Ok)
-    assert.ok(Array.isArray(res.body))
+    assert.ok(Array.isArray(retrievedProducts))
     assert.equal(prodsDraft.length, 0, 'only active products')
     assert.end()
   })
@@ -54,9 +40,9 @@ test('[seeded db] As a user I should:', (t) => {
   t.test('be able to retrieve an active product', async (assert) => {
     const product = await knex('products').where({ statusId: 2 }).first()
     const res = await getOne(product.id, { status: STATUS.Ok })
-
+    const retrievedProduct = res.body
     assert.equal(res.status, STATUS.Ok)
-    assert.equal(res.body.title, product.title)
+    assert.equal(retrievedProduct.title, product.title)
     assert.end()
   })
 

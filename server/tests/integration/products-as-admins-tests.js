@@ -4,9 +4,10 @@ const test = require('tape')
 const { faker } = require('@faker-js/faker')
 const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
-const { logAdmin } = require('../infrastructure/login')
+const { login } = require('../infrastructure/login')
 const { existsFile } = require('../../helpers/fsHelper')
 const products = require('../fixtures/products.json').products
+const admins = require('../fixtures/users.json').admins
 const images = require('../fixtures/images.json').images
 const productTitle = () => faker.commerce.productName()
 
@@ -28,11 +29,12 @@ test('setup', async (t) => {
 
 test('As admin I should:', (t) => {
   let token
+  let admin = admins[0]
 
   t.test('setup', async (assert) => {
     await knex.migrate.latest()
     await knex.seed.run({ directory: 'tests/seeds' })
-    token = await logAdmin()
+    token = await login(admin.email, admin.password)
     assert.end()
   })
 
@@ -41,9 +43,10 @@ test('As admin I should:', (t) => {
     delete product.id
     product.title = productTitle()
     const res = await create(product, { token, status: STATUS.Created })
+    const createdProduct = res.body
 
     assert.equal(res.status, STATUS.Created)
-    assert.equal(res.body.title, product.title)
+    assert.equal(createdProduct.title, product.title)
     assert.ok(Number.isInteger(res.body.id))
     assert.end()
   })
@@ -58,12 +61,12 @@ test('As admin I should:', (t) => {
       status: STATUS.Created,
     })
 
-    const resProduct = res.body
+    const createdProduct = res.body
 
     assert.equal(res.status, STATUS.Created)
-    assert.ok(resProduct.image.endsWith(path.basename(images[0].path)))
-    assert.ok(Number.isInteger(resProduct.id))
-    const img = `./${resProduct.image}`
+    assert.ok(createdProduct.image.endsWith(path.basename(images[0].path)))
+    assert.ok(Number.isInteger(createdProduct.id))
+    const img = `./${createdProduct.image}`
     const fileExists = await fs.stat(img)
     assert.ok(fileExists, 'file was created')
 
@@ -302,9 +305,10 @@ test('As admin I should:', (t) => {
     const resCreate = await create(product, { token, status: STATUS.Created })
     const resProd = resCreate.body
     const res = await getOne(resProd.id, { token, status: STATUS.Ok })
+    const retrievedProduct = res.body
 
     assert.equal(res.status, STATUS.Ok)
-    assert.equal(res.body.title, product.title, 'equal name')
+    assert.equal(retrievedProduct.title, product.title, 'equal name')
     assert.end()
   })
 
