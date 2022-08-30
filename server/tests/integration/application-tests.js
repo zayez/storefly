@@ -3,14 +3,15 @@ const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
 const customers = require('../fixtures/users.json').customers
 const { server, getRoot, signIn, signUp } = require('../requests/application')
+const { faker } = require('@faker-js/faker')
 
 test('setup', async (t) => {
+  await knex.seed.run({ directory: 'tests/seeds' })
   t.end()
 })
 
 test('As a visitor I should:', (t) => {
   t.test('setup', async (assert) => {
-    await knex.seed.run()
     assert.end()
   })
 
@@ -21,16 +22,12 @@ test('As a visitor I should:', (t) => {
   })
 
   t.test('be able to sign up', async (assert) => {
-    const user = {
-      firstName: customers[0].firstName,
-      lastName: customers[0].lastName,
-      email: customers[0].email,
-      password: customers[0].password,
-    }
+    const user = createRandomUser()
 
     const res = await signUp(user, { status: STATUS.Created })
     assert.equal(res.status, STATUS.Created)
     assert.ok(res.body instanceof Object && res.body.constructor === Object)
+    assert.notEqual(res.body.token, '')
     assert.end()
   })
 
@@ -39,11 +36,10 @@ test('As a visitor I should:', (t) => {
   })
 })
 
-test('[seeded db] As a customer I should:', (t) => {
+test('As a customer I should:', (t) => {
   const customer = customers[0]
 
   t.test('setup', async (assert) => {
-    await knex.seed.run({ directory: 'tests/seeds' })
     assert.end()
   })
 
@@ -65,3 +61,12 @@ test('teardown', async (t) => {
   await server.close()
   t.end()
 })
+
+function createRandomUser() {
+  return {
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    email: faker.internet.email(),
+    password: faker.internet.password(),
+  }
+}
