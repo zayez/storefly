@@ -136,11 +136,7 @@ test('As a customer I should:', (t) => {
       token,
       status: STATUS.NotFound,
     })
-    assert.equal(
-      res.status,
-      STATUS.NotFound,
-      'response returns correct status code',
-    )
+    assert.equal(res.status, STATUS.NotFound)
     assert.end()
   })
 
@@ -154,8 +150,9 @@ test('As a customer I should:', (t) => {
         status: STATUS.Ok,
       },
     )
+    const retrievedOrder = res.body
     assert.equal(res.status, STATUS.Ok, 'response returns correct status code')
-    assert.equal(res.body.id, order.id, 'is the same order')
+    assert.equal(retrievedOrder.id, order.id, 'is the same order')
     assert.end()
   })
 
@@ -173,11 +170,7 @@ test('As a customer I should:', (t) => {
           status: STATUS.NotFound,
         },
       )
-      assert.equal(
-        res.status,
-        STATUS.NotFound,
-        'response returns correct status code',
-      )
+      assert.equal(res.status, STATUS.NotFound)
       assert.end()
     },
   )
