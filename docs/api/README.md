@@ -36,7 +36,7 @@ Lists the available resources available for the REST API.
 - [Update product](resources.md#UpdateProduct)
 - [Get product](resources.md#GetProduct)
 - [Get products](resources.md#GetProducts)
-- [Place order](resources.md#PlaceOrder)
+- [Creat order](resources.md#CreateOrder)
 - [Get order](resources.md#GetOrder)
 - [Get orders](resources.md#GetOrders)
 - [Get order by user](resources.md#GetUserOrder)

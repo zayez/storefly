@@ -13,7 +13,7 @@
 - [Update product](#UpdateProduct)
 - [Get product](#GetProduct)
 - [Get products](#GetProducts)
-- [Place order](#PlaceOrder)
+- [Create order](#CreateOrder)
 - [Get order](#GetOrder)
 - [Get orders](#GetOrders)
 - [Get order by user](#GetUserOrder)
@@ -325,9 +325,9 @@ Retrieves all products.
 
 [Back to top](#top)
 
-## <a name='PlaceOrder'></a> Place an order
+## <a name='CreateOrder'></a> Create an order
 
-Places a new order. Authorized by customer role.
+Creates a new order. Any customer can create an order.
 
 | Title         | Create an order |
 | ------------- | --------------- |
@@ -359,7 +359,7 @@ Places a new order. Authorized by customer role.
 
 ## <a name='GetOrder'></a> Get order
 
-Retrieves the specified oder.
+Retrieves the specified order.
 
 | Title         | Retrieves an order |
 | ------------- | ------------------ |
