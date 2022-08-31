@@ -26,89 +26,154 @@ Authentication is done using JSON Web Tokens (JWT). Users will need to sign in t
 Lists the available resources available for the REST API.
 
 - [Sign Up](resources.md#SignUp)
-  - [Body](resources.md#SignUp-Body)
-  - [Success response](resources.md#SignUp-Success)
-  - [Error response](resources.md#SignUp-Error)
-  - [Example](resources.md#SignUp-Example)
 - [Sign In](resources.md#SignIn)
-  - [Body](resources.md#SignIn-Body)
-  - [Success response](resources.md#SignIn-Success)
-  - [Error response](resources.md#SignIn-Error)
-  - [Example](resources.md#SignIn-Example)
 - [Create category](resources.md#CreateCategory)
-  - [Body](resources.md#CreateCategory-Body)
-  - [Success response](resources.md#CreateCategory-Success)
-  - [Error response](resources.md#CreateCategory-Error)
-  - [Example](resources.md#CreateCategory-Example)
-
-### <a name='SuccessResponses'></a> Success responses
-
-#### Create category - Success response
+- [Update category](resources.md#UpdateCategory)
+- [Get category](resources.md#GetCategory)
+- [Get categories](resources.md#GetCategories)
+- [Create product](resources.md#CreateProduct)
+- [Update product](resources.md#UpdateProduct)
+- [Get product](resources.md#GetProduct)
+- [Get products](resources.md#GetProducts)
 
 [Back to top](#top)
 
-- **Code**: 201 <br/>
+## <a name='SuccessResponses'></a> Success responses
+
+- **Code**: 200 (OK)
 - **Content**:
 
-```json
-{
-  "title": "Created",
-  "message": "The request has succeeded and a new resource has been created",
-  "category": {
+  ```json
+  {
     "id": 1,
-    "title": "Cars",
+    "title": "Books",
     "createdAt": "2022-08-15 20:05:36",
     "updatedAt": "2022-08-15 20:05:36"
   }
-}
-```
-
-### <a name='#ErrorResponses'></a> Error responses
-
-#### Create category - Error response
-
-[Back to top](#top)
-
-- **Code**: 400 <br/>
-- **Content**:
-
-```json
-{
-  "_original": {
-    "title": ""
-  },
-  "details": [
-    {
-      "message": "\"title\" is not allowed to be empty",
-      "path": ["title"],
-      "type": "string.empty",
-      "context": {
-        "label": "title",
-        "value": "",
-        "key": "title"
-      }
-    }
-  ]
-}
-```
+  ```
 
 OR
 
-- **Code**: 403 <br/>
+- **Code**: 201 (CREATED)
 - **Content**:
 
-```json
-{
-  "title": "Forbidden",
-  "message": "The client does not have access rights to the content."
-}
-```
+  ```json
+  {
+    "id": 1,
+    "title": "Eletronics",
+    "createdAt": "2022-08-15 20:05:36",
+    "updatedAt": "2022-08-15 20:05:36"
+  }
+  ```
 
-### <a name='Examples'></a> Examples
+## <a name='#ErrorResponses'></a> Error responses
 
 [Back to top](#top)
 
-#### Sign in example
+- **Code**: 400 (BAD REQUEST)
+- **Content**:
+
+  ```json
+  {
+    "status": 400,
+    "title": "Bad Request",
+    "detail": "The server could not understand the request due to invalid syntax."
+  }
+  ```
+
+OR
+
+- **Code**: 401 (UNAUTHORIZED)
+- **Content**:
+
+  ```json
+  {
+    "status": 401,
+    "title": "Unauthorized",
+    "detail": "The request lacks valid authentication credentials for the requested resource."
+  }
+  ```
+
+OR
+
+- **Code**: 403 (FORBIDDEN)
+- **Content**:
+
+  ```json
+  {
+    "status": 403,
+    "title": "Forbidden",
+    "detail": "The client does not have access rights to the content."
+  }
+  ```
+
+  OR
+
+- **Code**: 404 (NOT FOUND)
+- **Content**:
+
+  ```json
+  {
+    "status": 404,
+    "title": "Not Found",
+    "detail": "The server can not find the requested resource."
+  }
+  ```
+
+  OR
+
+- **Code**: 409 (CONFLICT)
+- **Content**:
+
+  ```json
+  {
+    "status": 409,
+    "title": "Conflict",
+    "detail": "The request conflicts with the current state of the server."
+  }
+  ```
+
+  OR
+
+- **Code**: 422 (UNPROCESSABLE)
+- **Content**: application/problem+json:
+
+  ```json
+  {
+    "status": 422,
+    "title": "Unprocessable",
+    "detail": "The request was unable to process the contained entity.",
+    "invalid-params": [
+      {
+        "name": "title",
+        "reason": "Title is not allowed to be empty"
+      },
+      {
+        "name": "price",
+        "reason": "Invalid price, the price must be positive"
+      }
+    ]
+  }
+  ```
+
+  OR
+
+- **Code**: 500 (INTERNAL SERVER ERROR)
+- **Content**:
+
+  ```json
+  {
+    "status": 500,
+    "title": "Internal server error",
+    "detail": "A fatal error occured."
+  }
+  ```
+
+## <a name='Examples'></a> Examples
+
+[Back to top](#top)
+
+### Sign in example
 
 ```js
 let response = await fetch(`/signin`, {
