@@ -9,9 +9,20 @@
 - [Get category](#GetCategory)
 - [Get categories](#GetCategories)
 - [Create product](#CreateProduct)
+- [Create products](#CreateProducts)
 - [Update product](#UpdateProduct)
 - [Get product](#GetProduct)
 - [Get products](#GetProducts)
+- [Place order](#PlaceOrder)
+- [Get order](#GetOrder)
+- [Get orders](#GetOrders)
+- [Get order by user](#GetUserOrder)
+- [Get orders by user](#GetUserOrders)
+- [Create user](#CreateUser)
+- [Update user](#UpdateUser)
+- [Delete user](#DeleteUser)
+- [Get user](#GetUser)
+- [Get users](#GetUsers)
 
 ## <a name='SignUp'></a> Sign Up
 
@@ -115,7 +126,7 @@ Updates a category and responds with category contents if category was successfu
 
 | Title         | Update a category |
 | ------------- | ----------------- |
-| URL           | /categories       |
+| URL           | /categories/:id   |
 | Method        | PATCH             |
 | Authorization | admin             |
 
@@ -217,13 +228,31 @@ Creates a new product and responds with product contents if successfully created
 
 - **Code**: 400 OR 401 OR 403 OR 409 OR 422
 
-## <a name='UpdateProduct'></a> Update category
+## <a name='CreateProducts'></a> Create products
 
-Updates a category and responds with category contents if category was successfully updated. Can only be updated by users with **admin** role.
+Create products in batch.
+
+| Title         | Create a product      |
+| ------------- | --------------------- |
+| URL           | /products/collections |
+| Method        | POST                  |
+| Authorization | admin                 |
+
+### Body
+
+| Parameter | type             | Required? |
+| --------- | ---------------- | --------- |
+| products  | array of product | Yes       |
+
+- Product object is essencially the same used for the POST for a single product, except that the image parameter no longer accepts an upload and instead it treats as a url path to the image.
+
+## <a name='UpdateProduct'></a> Update product
+
+Updates a product.
 
 | Title         | Update a product |
 | ------------- | ---------------- |
-| URL           | /products        |
+| URL           | /products/:id    |
 | Method        | PATCH            |
 | Authorization | editor or admin  |
 
@@ -293,3 +322,265 @@ Retrieves all products.
 ### Error response
 
 - **Code**: 400 OR 422
+
+[Back to top](#top)
+
+## <a name='PlaceOrder'></a> Place an order
+
+Places a new order. Authorized by customer role.
+
+| Title         | Create an order |
+| ------------- | --------------- |
+| URL           | /orders         |
+| Method        | POST            |
+| Authorization | customer        |
+
+### Body
+
+| Parameter | type          | Required? |
+| --------- | ------------- | --------- |
+| items     | array of item | Yes       |
+| dateOrder | date          | No        |
+
+#### Item
+
+| Item      | type    | Required? |
+| --------- | ------- | --------- |
+| productId | integer | Yes       |
+| quantity  | integer | Yes       |
+
+### Success response
+
+- **Code**: 201
+
+### Error response
+
+- **Code**: 400 OR 401 OR 403 OR 409 OR 422
+
+## <a name='GetOrder'></a> Get order
+
+Retrieves the specified oder.
+
+| Title         | Retrieves an order |
+| ------------- | ------------------ |
+| URL           | /orders/:id        |
+| Method        | GET                |
+| Authorization | editor or admin    |
+
+### Params
+
+| Parameter | type    | Required? |
+| --------- | ------- | --------- |
+| id        | integer | Yes       |
+
+### Success response
+
+- **Code**: 200
+
+### Error response
+
+- **Code**: 400 OR 401 OR 403 OR 409 OR 422
+
+## <a name='GetOrders'></a> Get orders
+
+Retrieves all orders.
+
+| Title         | Retrieves orders |
+| ------------- | ---------------- |
+| URL           | /orders          |
+| Method        | GET              |
+| Authorization | editor or admin  |
+
+### Query
+
+| Parameter | type | Required? |
+| --------- | ---- | --------- |
+| -         | -    | -         |
+
+### Success response
+
+- **Code**: 200
+
+### Error response
+
+- **Code**: 400 OR 401 OR 403 OR 422
+
+[Back to top](#top)
+
+## <a name='GetUserOrder'></a> Get order by user
+
+Retrieves specific order by an user. Customers can only view their orders, while managers (editor or admin) can access any orders.
+
+| Title         | Retrieve user order            |
+| ------------- | ------------------------------ |
+| URL           | /users/:userId/orders/:orderId |
+| Method        | GET                            |
+| Authorization | customer, editor, admin        |
+
+### Params
+
+| Parameter | type    | Required? |
+| --------- | ------- | --------- |
+| userId    | integer | Yes       |
+| orderId   | integer | Yes       |
+
+### Success response
+
+- **Code**: 200
+
+### Error response
+
+- **Code**: 400 OR 401 OR 403 OR 409 OR 422
+
+## <a name='GetUserOrders'></a> Get orders by user
+
+Retrieves orders by user. Customers can only view their orders, while managers (editor or admin) can access any orders.
+
+| Title         | Retrieve user orders    |
+| ------------- | ----------------------- |
+| URL           | /users/:userId/orders   |
+| Method        | GET                     |
+| Authorization | customer, editor, admin |
+
+### Params
+
+| Parameter | type    | Required? |
+| --------- | ------- | --------- |
+| userId    | integer | Yes       |
+
+### Success response
+
+- **Code**: 200
+
+### Error response
+
+- **Code**: 400 OR 401 OR 403 OR 409 OR 422
+
+## <a name='CreateUser'></a> Create user
+
+Creates a new user.
+
+| Title         | Create user |
+| ------------- | ----------- |
+| URL           | /users      |
+| Method        | POST        |
+| Authorization | admin       |
+
+### Body
+
+| Parameter | type            | Required? |
+| --------- | --------------- | --------- |
+| firstName | string          | Yes       |
+| lastName  | string          | Yes       |
+| email     | string          | Yes       |
+| password  | string          | Yes       |
+| roles     | array of string | No        |
+
+- roles: Valid roles: 'customer', 'editor' and 'admin'.
+
+### Success response
+
+- **Code**: 201
+
+### Error response
+
+- **Code**: 400 OR 401 OR 403 OR 409 OR 422
+
+## <a name='UpdateUser'></a> Update user
+
+Updates the user. Users can only update themselves, not any other user.
+
+| Title         | Update a category   |
+| ------------- | ------------------- |
+| URL           | /users/:id          |
+| Method        | PATCH               |
+| Authorization | authentication only |
+
+### Body
+
+| Parameter | type   | Required? |
+| --------- | ------ | --------- |
+| firstName | string | No        |
+| lastName  | string | No        |
+| email     | string | No        |
+| password  | string | No        |
+
+### Success response
+
+- **Code**: 200
+
+### Error response
+
+- **Code**: 400 OR 401 OR 403 OR 409 OR 422
+
+## <a name='DeleteUser'></a> Delete user
+
+Delete user. Only the user himself can delete his user/account. Any other user, even admins will be refused.
+
+| Title         | Delete user         |
+| ------------- | ------------------- |
+| URL           | /users/:id          |
+| Method        | DELETE              |
+| Authorization | authentication only |
+
+### Params
+
+| Parameter | type    | Required? |
+| --------- | ------- | --------- |
+| id        | integer | Yes       |
+
+### Success response
+
+- **Code**: 200
+
+### Error response
+
+- **Code**: 400 OR 401 OR 403 OR 409 OR 422
+
+## <a name='GetUser'></a> Get user
+
+Retrieves the specified user. Customers can only access their user. Only managers (an editor or an admin) can access any user.
+
+| Title         | Retrieve a category |
+| ------------- | ------------------- |
+| URL           | /users/:id          |
+| Method        | GET                 |
+| Authorization | authentication only |
+
+### Params
+
+| Parameter | type    | Required? |
+| --------- | ------- | --------- |
+| id        | integer | Yes       |
+
+### Success response
+
+- **Code**: 200
+
+### Error response
+
+- **Code**: 400 OR 401 OR 403 OR 409 OR 422
+
+## <a name='GetUsers'></a> Get users
+
+Retrieves all users.
+
+| Title         | Retrieves users |
+| ------------- | --------------- |
+| URL           | /users          |
+| Method        | GET             |
+| Authorization | editor or admin |
+
+### Query
+
+| Parameter | type | Required? |
+| --------- | ---- | --------- |
+| -         | -    | -         |
+
+### Success response
+
+- **Code**: 200
+
+### Error response
+
+- **Code**: 400 OR 401 OR 403 OR 422
