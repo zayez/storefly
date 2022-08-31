@@ -61,23 +61,23 @@ function getResponseError(action) {
     case ActionStatus.Forbidden:
       status = STATUS.Forbidden
       title = 'Forbidden'
-      detail = 'The client does not have access rights to the content'
+      detail = 'The client does not have access rights to the content.'
       break
 
     case ActionStatus.Conflict:
       status = STATUS.Conflict
       title = 'Conflict'
-      detail = 'The request conflicts with the current state of the server'
+      detail = 'The request conflicts with the current state of the server.'
       break
     case ActionStatus.Unprocessable:
       status = STATUS.Unprocessable
       title = 'Unprocessable'
-      detail = 'The request was unable to process the contained entity'
+      detail = 'The request was unable to process the contained entity.'
       break
     case ActionStatus.Error:
       status = STATUS.Error
       title = 'Internal server error'
-      detail = 'A fatal error occured'
+      detail = 'A fatal error occured.'
       break
     case ActionStatus.CreateError:
       status = STATUS.BadRequest
