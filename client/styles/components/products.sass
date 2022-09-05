@@ -1,0 +1,35 @@
+.products-list
+  display: grid
+  gap: 1rem 1rem
+  padding: 2rem
+  @include respond-to(sm)
+    padding: 0
+    display: grid
+    gap: 1rem 1rem
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr))
+    margin-bottom: 1rem
+
+.product-item
+  border: 1px solid #ccc
+  display: flex
+  flex-flow: column
+  justify-content: space-between
+
+
+.product-description
+  align-content: flex-end
+  padding: .45rem 1rem 1rem 1rem
+
+.product-card
+  display: grid
+  margin-top: 2rem
+  gap: 2rem
+  padding: 2rem
+  @include respond-to(sm)
+    padding: 0
+    grid-template-columns: 1fr 1fr
+
+.product-card-image
+  display: flex
+  align-items: center
+  justify-content: center
