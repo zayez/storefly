@@ -6,6 +6,7 @@ coverage/
 .env*
 .env.test
 .nyc_output
+store.md
 todo.md
 server/data/*
 !/**/.gitkeep
