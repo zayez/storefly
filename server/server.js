@@ -13,9 +13,10 @@ const ordersRoutes = require('./routes/orders')
 const passportConfig = require('./config/passportConfig')
 const { authenticateOptional } = require('./middlewares/authentication')
 
-const { isProd } = require('./config')
+const { isProd, isDev } = require('./config')
 const { PORT } = require('./config').app
-const uploads = isProd ? serve('public/uploads') : serve('tests/data/uploads')
+const uploads =
+  isProd || isDev ? serve('public/uploads') : serve('tests/data/uploads')
 
 const accessLogStream = fs.createWriteStream(__dirname + '/access.log', {
   flags: 'a',
@@ -24,7 +25,7 @@ const accessLogStream = fs.createWriteStream(__dirname + '/access.log', {
 const app = new Koa()
 app
   .use(morgan('combined', { stream: accessLogStream }))
-  .use(mount('/public', uploads))
+  .use(mount('/uploads', uploads))
   .use(bodyParser())
   .use(passport.initialize())
 
