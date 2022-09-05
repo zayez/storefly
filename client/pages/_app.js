@@ -2,10 +2,11 @@
 import Layout from '../comps/Layout'
 import '../styles/index.sass'
 
+const defaultLayout = (page) => {
+  return <Layout>{page}</Layout>
+}
+
 export default function MyApp({ Component, pageProps }) {
-  return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
-  )
+  const getLayout = Component.getLayout ?? defaultLayout
+  return getLayout(<Component {...pageProps} />)
 }
