@@ -8,10 +8,9 @@
   "browserslist": "> 1%",
   "scripts": {
     "dev": "next dev",
-    "build:serve": "webpack serve --mode=development",
     "deliver:pack": "webpack",
-    "start:server": "(cd ../server && npm run start:development)",
-    "start:dev": "npm run start:server & npm run build:serve"
+    "start:server": "(cd ../server && npm run start:dev)",
+    "start:dev": "npm run start:server & npm run dev"
   },
   "keywords": [],
   "author": "",
