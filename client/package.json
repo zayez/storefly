@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "name": "storefly-client",
+  "version": "1.0.0",
+  "description": "Storefly front-end.",
+  "main": "index.js",
+  "proxy": "http://localhost:3001",
+  "browserslist": "> 1%",
+  "scripts": {
+    "dev": "next dev",
+    "build:serve": "webpack serve --mode=development",
+    "deliver:pack": "webpack",
+    "start:server": "(cd ../server && npm run start:development)",
+    "start:dev": "npm run start:server & npm run build:serve"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "next": "^12.2.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sass": "^1.54.8"
+  }
+}
