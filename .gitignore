@@ -2,6 +2,7 @@ node_modules/
 coverage/
 *.log
 .vscode
+.next
 .env*
 .env.test
 .nyc_output
