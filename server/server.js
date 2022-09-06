@@ -1,5 +1,6 @@
 const fs = require('fs')
 const Koa = require('koa')
+const cors = require('@koa/cors')
 const serve = require('koa-static')
 const mount = require('koa-mount')
 const bodyParser = require('koa-bodyparser')
@@ -27,6 +28,7 @@ app
   .use(morgan('combined', { stream: accessLogStream }))
   .use(mount('/uploads', uploads))
   .use(bodyParser())
+  .use(cors())
   .use(passport.initialize())
 
 passportConfig(passport)
