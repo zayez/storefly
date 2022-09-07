@@ -1,7 +1,7 @@
 import Header from './Header'
 import Footer from './Footer'
 
-const Layout = ({ children }) => {
+const StoreLayout = ({ children }) => {
   return (
     <div className="container">
       <Header />
@@ -11,4 +11,16 @@ const Layout = ({ children }) => {
   )
 }
 
-export default Layout
+const AdminLayout = ({ children }) => {
+  return <div className="container">{children}</div>
+}
+
+const storeLayout = (page) => {
+  return <StoreLayout>{page}</StoreLayout>
+}
+
+const adminLayout = (page) => {
+  return <AdminLayout>{page}</AdminLayout>
+}
+
+export { storeLayout, adminLayout }
