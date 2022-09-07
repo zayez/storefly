@@ -23,12 +23,17 @@ const accessLogStream = fs.createWriteStream(__dirname + '/access.log', {
   flags: 'a',
 })
 
+const corsOpts = {
+  // origin: '*',
+  credentials: true,
+}
+
 const app = new Koa()
 app
   .use(morgan('combined', { stream: accessLogStream }))
   .use(mount('/uploads', uploads))
   .use(bodyParser())
-  .use(cors())
+  .use(cors(corsOpts))
   .use(passport.initialize())
 
 passportConfig(passport)
