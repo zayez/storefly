@@ -2,8 +2,15 @@ const test = require('tape')
 const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
 const customers = require('../fixtures/users.json').customers
-const { server, getRoot, signIn, signUp } = require('../requests/application')
+const {
+  server,
+  getRoot,
+  signIn,
+  signUp,
+  getUser,
+} = require('../requests/application')
 const { faker } = require('@faker-js/faker')
+const { login, decodeToken } = require('../infrastructure/login')
 
 test('setup', async (t) => {
   await knex.seed.run({ directory: 'tests/seeds' })
@@ -59,6 +66,16 @@ test('As a customer I should:', (t) => {
     })
     assert.equal(res.status, STATUS.Ok)
     assert.notEqual(res.body.token, '', 'token is not empty')
+    assert.end()
+  })
+
+  t.test('be able to get my user', async (assert) => {
+    token = await login(customer.email, customer.password)
+    const userId = decodeToken(token)
+    const res = await getUser({ token, status: STATUS.Ok })
+    const id = res.body.id
+
+    assert.equal(id, userId, 'userId match')
     assert.end()
   })
 

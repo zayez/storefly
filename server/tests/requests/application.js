@@ -44,9 +44,21 @@ const signUp = async (user, { status }) => {
     .then((res) => res)
 }
 
+const getUser = async ({ token, status }) => {
+  const headers = setHeaders(token)
+  return await agent
+    .get(`/user`)
+    .set(headers)
+    .expect('Content-Type', /json/)
+    .expect((res) => debugStatus(res, status))
+    .expect(status)
+    .then((res) => res)
+}
+
 module.exports = {
   server,
   getRoot,
   signIn,
   signUp,
+  getUser,
 }

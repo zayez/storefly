@@ -2,6 +2,7 @@ const { setResponse } = require('../../helpers/middlewareHelpers')
 const ApplicationController = require('../../controllers/application')
 const ActionStatus = require('../../types/ActionStatus')
 const mapper = require('../../helpers/propsMapper').input
+const mapUser = require('../../helpers/propsMapper').output.mapUser
 
 const getRoot = async (ctx) => {
   try {
@@ -40,8 +41,22 @@ const signUp = async (ctx) => {
   }
 }
 
+const getUser = async (ctx) => {
+  try {
+    if (!ctx.state.user) {
+      setResponse(ctx, { action: ActionStatus.Unauthorized })
+      return
+    }
+    const user = mapUser(ctx.state.user)
+    setResponse(ctx, { action: ActionStatus.Ok, payload: user })
+  } catch (err) {
+    setResponse(ctx, { action: ActionStatus.Error })
+  }
+}
+
 module.exports = {
   getRoot,
   signIn,
   signUp,
+  getUser,
 }

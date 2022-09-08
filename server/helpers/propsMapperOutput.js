@@ -71,7 +71,15 @@ const mapProduct = ({
  * @param {datetime=} props.updatedAt updated at
  * @returns {User} user
  */
-const mapUser = ({ id, firstName, lastName, email, createdAt, updatedAt }) => {
+const mapUser = ({
+  id,
+  firstName,
+  lastName,
+  email,
+  createdAt,
+  updatedAt,
+  roles,
+}) => {
   const user = {}
   if (id) user.id = id
   if (firstName) user.firstName = firstName
@@ -79,6 +87,7 @@ const mapUser = ({ id, firstName, lastName, email, createdAt, updatedAt }) => {
   if (email) user.email = email
   if (createdAt) user.createdAt = createdAt
   if (updatedAt) user.updatedAt = updatedAt
+  if (roles) user.roles = roles
 
   return user
 }

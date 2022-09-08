@@ -3,6 +3,7 @@ const BASE_URL = ''
 const POST_SIGN_IN = `${BASE_URL}/signin`
 const POST_SIGN_UP = `${BASE_URL}/signup`
 const GET_ROOT = `${BASE_URL}/`
+const GET_USER_LOGGED = `${BASE_URL}/user`
 
 // Products
 const PRODUCTS = `${BASE_URL}/products`
@@ -45,6 +46,14 @@ const GET_USER_ORDER = `${USERS}/:userId/orders/:orderId`
  */
 const EndpointUrls = {
   /** @member {string} */
+  POST_SIGN_IN,
+  /** @member {string} */
+  POST_SIGN_UP,
+  /** @member {string} */
+  GET_ROOT,
+  /** @member {string} */
+  GET_USER_LOGGED,
+  /** @member {string} */
   PRODUCTS,
   /** @member {string} */
   CATEGORIES,
@@ -52,12 +61,6 @@ const EndpointUrls = {
   USERS,
   /** @member {string} */
   ORDERS,
-  /** @member {string} */
-  POST_SIGN_IN,
-  /** @member {string} */
-  POST_SIGN_UP,
-  /** @member {string} */
-  GET_ROOT,
   /** @member {string} */
   POST_PRODUCT,
   /** @member {string} */
