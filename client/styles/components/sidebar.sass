@@ -1,0 +1,53 @@
+$sidebar-color:  palette(blue, dark)
+$sidebar-hover-color:  palette(blue, base)
+$nav-link-color: palette(grey, dark)
+$nav-link-hover-color: palette(white)
+
+.sidebar
+  padding-top: 2rem
+  width: 4rem
+  height: 100vh
+  position: fixed
+  top: 0
+  background-color: $sidebar-color
+  transition: width 200ms ease
+
+  &:hover
+    width: 14rem
+
+  &:hover .link-text
+    display: block
+
+  .sidebar-nav
+    list-style: none
+    padding: 0
+    margin: 0
+    display: flex
+    flex-direction: column
+    align-items: center
+
+    .sidebar-nav-item
+      width: 100%
+
+      &:last-child
+        margin-top: auto
+
+  .nav-link
+    display: flex
+    align-items: center
+    height: 5rem
+
+    color: $nav-link-color
+    text-decoration: none
+
+    &:hover
+      color: $nav-link-hover-color
+
+    & svg
+      min-width: 2rem
+      margin-left: 1rem
+      margin-right: 1rem
+
+  .link-text
+    display: none
+

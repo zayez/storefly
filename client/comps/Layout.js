@@ -1,5 +1,6 @@
 import Header from './Header'
 import Footer from './Footer'
+import Sidebar from './Sidebar'
 
 const StoreLayout = ({ children }) => {
   return (
@@ -12,7 +13,12 @@ const StoreLayout = ({ children }) => {
 }
 
 const AdminLayout = ({ children }) => {
-  return <div className="container">{children}</div>
+  return (
+    <div>
+      <Sidebar />
+      <div className="container-fluid">{children}</div>
+    </div>
+  )
 }
 
 const storeLayout = (page) => {

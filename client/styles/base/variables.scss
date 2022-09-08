@@ -23,3 +23,33 @@ $container-max-widths: (
   xl: 1140px,
   xxl: 1320px,
 ) !default;
+
+// Base colors
+$color-base-grey: rgb(229, 231, 234);
+$color-base-black: hsl(242, 80%, 5%);
+$color-base-white: hsl(342, 70%, 100%);
+$color-base-blue: hsl(252, 100%, 25%);
+
+// Color palettes
+$palettes: (
+  blue: (
+    base: $color-base-blue,
+    light: lighten($color-base-blue, 15%),
+    mid-light: lighten($color-base-blue, 5%),
+    dark: darken($color-base-blue, 15%),
+    x-light: lighten($color-base-blue, 25%),
+    light-45: lighten($color-base-blue, 45%),
+  ),
+  white: (
+    base: $color-base-white,
+  ),
+  black: (
+    base: $color-base-black,
+    light: lighten($color-base-black, 15%),
+  ),
+  grey: (
+    base: $color-base-grey,
+    light: lighten($color-base-grey, 2%),
+    dark: darken($color-base-grey, 25%),
+  ),
+);
