@@ -1,16 +1,7 @@
 import Head from 'next/head'
-import Products from '../comps/Products'
+import ProductsView from '../views/ProductsView'
 
-export const getStaticProps = async () => {
-  const url = `http://localhost:2222/products`
-  const res = await fetch(url)
-  const data = await res.json()
-  return {
-    props: { products: data },
-  }
-}
-
-const Index = ({ products }) => {
+const Index = () => {
   return (
     <>
       <Head>
@@ -18,7 +9,7 @@ const Index = ({ products }) => {
       </Head>
       <div>
         <h1>Home</h1>
-        <Products products={products} />
+        <ProductsView />
       </div>
     </>
   )
