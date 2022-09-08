@@ -6,7 +6,7 @@ const Navbar = () => {
 
 const NavbarLeft = () => {
   return (
-    <nav className="nav nav-left">
+    <nav className="navbar nav nav-left">
       <ul>
         <li>
           <Link href="/">
@@ -30,7 +30,7 @@ const NavbarLeft = () => {
 
 const NavbarRight = () => {
   return (
-    <nav className="nav nav-right">
+    <nav className="navbar nav nav-right">
       <ul>
         <li>
           <Link href="/search">
