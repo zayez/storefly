@@ -17,7 +17,10 @@ const signIn = async (ctx) => {
   try {
     const user = ctx.state.user
     const { action, payload } = await ApplicationController.signIn(user)
-    setResponse(ctx, { action, payload })
+    setResponse(ctx, {
+      action,
+      payload: { user: mapUser(user), token: payload.token },
+    })
     const cookieOpts = {
       httpOnly: true,
       sameSite: true,
