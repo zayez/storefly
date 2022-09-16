@@ -1,10 +1,12 @@
 import Link from 'next/link'
+import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { selectAuth } from '../store/slices/authSlice'
 
 const Navbar = () => {
-  return <div></div>
-}
+  const auth = useSelector(selectAuth)
 
-const NavbarLeft = () => {
+  useEffect(() => {}, [])
   return (
     <nav className="navbar nav nav-left">
       <ul>
@@ -18,38 +20,22 @@ const NavbarLeft = () => {
             <a>About</a>
           </Link>
         </li>
-        <li>
-          <Link href="/signin">
-            <a>Sign in</a>
-          </Link>
-        </li>
+        {isManager(auth.user) ? (
+          <li>
+            <Link href="/admin">
+              <a>Admin</a>
+            </Link>
+          </li>
+        ) : null}
       </ul>
     </nav>
   )
 }
 
-const NavbarRight = () => {
-  return (
-    <nav className="navbar nav nav-right">
-      <ul>
-        <li>
-          <Link href="/search">
-            <a>Search</a>
-          </Link>
-        </li>
-        <li>
-          <Link href="/profile">
-            <a>Profile</a>
-          </Link>
-        </li>
-        <li>
-          <Link href="/cart">
-            <a>Cart</a>
-          </Link>
-        </li>
-      </ul>
-    </nav>
-  )
+const isManager = (user) => {
+  if (!user) return false
+  const userRoles = user.roles
+  return ['admin', 'editor'].some((role) => userRoles.includes(role))
 }
 
-export { NavbarLeft, NavbarRight }
+export default Navbar
