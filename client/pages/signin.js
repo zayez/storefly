@@ -1,29 +1,30 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectAuth, signIn } from '../store/slices/authSlice'
+import Toasty from '../comps/Toasty'
 const SignIn = () => {
   const router = useRouter()
   const baseUrl = `/api`
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const dispatch = useDispatch()
+  const auth = useSelector(selectAuth)
+
+  useEffect(() => {
+    if (auth.success) {
+      router.push('/')
+    }
+  }, [auth.success, auth.user, auth.error])
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    const url = `${baseUrl}/signin`
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    }
-    const res = await fetch(url, requestOptions)
-    if (res.status === 200) {
-      router.push('/')
-    } else {
-      console.log('Failed to signin.')
-    }
+    dispatch(signIn({ email, password }))
   }
 
   return (
     <div className="container">
+      <Toasty message={auth.error} />
       <div className="login">
         <h1>Sign in</h1>
         <form onSubmit={handleSubmit} className="form">

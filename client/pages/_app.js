@@ -6,10 +6,8 @@ import '../styles/index.sass'
 
 const MyApp = ({ Component, pageProps }) => {
   const getLayout = Component.getLayout ?? storeLayout
-  return getLayout(
-    <Provider store={store}>
-      <Component {...pageProps} />
-    </Provider>,
+  return (
+    <Provider store={store}>{getLayout(<Component {...pageProps} />)}</Provider>
   )
 }
 
