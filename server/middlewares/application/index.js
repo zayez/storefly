@@ -18,11 +18,14 @@ const signUp = compose([
   ApplicationMiddleware.signUp,
 ])
 
+const signOut = compose([ApplicationMiddleware.signOut])
+
 const getUser = compose([ApplicationMiddleware.getUser])
 
 module.exports = {
   getRoot,
   signIn,
   signUp,
+  signOut,
   getUser,
 }

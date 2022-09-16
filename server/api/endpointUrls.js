@@ -2,6 +2,7 @@ const BASE_URL = ''
 
 const POST_SIGN_IN = `${BASE_URL}/signin`
 const POST_SIGN_UP = `${BASE_URL}/signup`
+const GET_SIGN_OUT = `${BASE_URL}/signout`
 const GET_ROOT = `${BASE_URL}/`
 const GET_USER_LOGGED = `${BASE_URL}/user`
 
@@ -49,6 +50,8 @@ const EndpointUrls = {
   POST_SIGN_IN,
   /** @member {string} */
   POST_SIGN_UP,
+  /** @member {string} */
+  GET_SIGN_OUT,
   /** @member {string} */
   GET_ROOT,
   /** @member {string} */

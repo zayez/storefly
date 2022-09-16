@@ -44,6 +44,18 @@ const signUp = async (ctx) => {
   }
 }
 
+const signOut = async (ctx) => {
+  try {
+    setResponse(ctx, {
+      action: ActionStatus.Ok,
+      payload: null,
+    })
+    ctx.cookies.set('token', null)
+  } catch (err) {
+    setResponse(ctx, { action: ActionStatus.Error })
+  }
+}
+
 const getUser = async (ctx) => {
   try {
     if (!ctx.state.user) {
@@ -61,5 +73,6 @@ module.exports = {
   getRoot,
   signIn,
   signUp,
+  signOut,
   getUser,
 }
