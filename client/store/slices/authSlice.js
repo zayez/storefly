@@ -32,6 +32,11 @@ export const signIn = createAsyncThunk(
   },
 )
 
+export const signOut = createAsyncThunk('auth/signOut', async () => {
+  const url = `${baseUrl}/signout`
+  return fetch(url).then((res) => res.status)
+})
+
 export const signUser = createAsyncThunk(
   'auth/signUser',
   async (_, { rejectWithValue }) => {
@@ -59,7 +64,6 @@ const authSlice = createSlice({
       state.loading = true
     })
     builder.addCase(signIn.fulfilled, (state, action) => {
-      console.log(action.payload)
       state.loading = false
       state.user = action.payload.user
       state.success = true
@@ -98,6 +102,22 @@ const authSlice = createSlice({
           state.error = ''
           break
       }
+    })
+
+    builder.addCase(signOut.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(signOut.fulfilled, (state, action) => {
+      state.loading = false
+      state.user = null
+      state.success = false
+      state.error = ''
+    })
+    builder.addCase(signOut.rejected, (state, action) => {
+      state.loading = false
+      state.user = null
+      state.success = false
+      state.error = 'Whoa. Something has gone wrong.'
     })
   },
 })

@@ -12,18 +12,18 @@ const Navbar = () => {
       <ul>
         <li>
           <Link href="/">
-            <a>Home</a>
+            <a className="navbar-item">Home</a>
           </Link>
         </li>
         <li>
           <Link href="/about">
-            <a>About</a>
+            <a className="navbar-item">About</a>
           </Link>
         </li>
         {isManager(auth.user) ? (
           <li>
             <Link href="/admin">
-              <a>Admin</a>
+              <a className="navbar-item">Admin</a>
             </Link>
           </li>
         ) : null}
