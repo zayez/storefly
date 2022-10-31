@@ -1,8 +1,22 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import storage from 'redux-persist/lib/storage'
+import { persistReducer, persistStore } from 'redux-persist'
 import users from './slices/usersSlice'
 import products from './slices/productsSlice'
 import auth from './slices/authSlice'
 
+const persistConfig = {
+  key: 'root',
+  storage,
+}
+
 const combineReducer = combineReducers({ users, products, auth })
 
-export default configureStore({ reducer: combineReducer })
+const persistedReducer = persistReducer(persistConfig, combineReducer)
+
+export const store = configureStore({
+  reducer: persistedReducer,
+  devTools: process.env.NODE_ENV !== 'production',
+})
+
+export const persistor = persistStore(store)

@@ -1,13 +1,21 @@
 // index.html
+import React from 'react'
 import { storeLayout } from '../comps/Layout'
 import { Provider } from 'react-redux'
-import store from '../store'
+import { PersistGate } from 'redux-persist/integration/react'
+import { store, persistor } from '../store'
 import '../styles/index.sass'
 
 const MyApp = ({ Component, pageProps }) => {
   const getLayout = Component.getLayout ?? storeLayout
   return (
-    <Provider store={store}>{getLayout(<Component {...pageProps} />)}</Provider>
+    <React.StrictMode>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          {getLayout(<Component {...pageProps} />)}
+        </PersistGate>
+      </Provider>
+    </React.StrictMode>
   )
 }
 
