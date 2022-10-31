@@ -10,6 +10,24 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
   return fetch(`/api/users`).then((res) => res.json())
 })
 
+export const update = createAsyncThunk(
+  'users/update',
+  async ({ id, firstName, lastName, email }) => {
+    const user = {}
+    if (firstName) user.firstName = firstName
+    if (lastName) user.lastName = lastName
+    if (email) user.email = email
+    const reqOpts = {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user),
+    }
+
+    const url = `/api/users/${id}`
+    return fetch(url, reqOpts)
+  },
+)
+
 const usersSlice = createSlice({
   name: 'users',
   initialState,
@@ -25,6 +43,18 @@ const usersSlice = createSlice({
     builder.addCase(fetchUsers.rejected, (state, action) => {
       state.loading = false
       state.users = []
+      state.error = action.error.message
+    })
+
+    builder.addCase(update.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(update.fulfilled, (state, action) => {
+      state.loading = false
+      state.error = ''
+    })
+    builder.addCase(update.rejected, (state, action) => {
+      state.loading = false
       state.error = action.error.message
     })
   },

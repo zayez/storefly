@@ -82,6 +82,10 @@ export const signUp = createAsyncThunk(
   },
 )
 
+export const fetchUser = createAsyncThunk('auth/fetchUser', async ({ id }) => {
+  return fetch(`/api/users/${id}`).then((res) => res.json())
+})
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -160,6 +164,22 @@ const authSlice = createSlice({
       state.user = null
       state.success = false
       state.error = action.payload.detail
+    })
+
+    builder.addCase(fetchUser.pending, (state) => {
+      state.loading = false
+    })
+    builder.addCase(fetchUser.fulfilled, (state, action) => {
+      state.loading = false
+      state.user = action.payload
+      state.success = true
+      state.error = ''
+    })
+    builder.addCase(fetchUser.rejected, (state, action) => {
+      state.loading = false
+      state.user = null
+      state.success = false
+      state.error = action.payload?.detail
     })
   },
 })
