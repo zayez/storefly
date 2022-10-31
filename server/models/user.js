@@ -72,6 +72,8 @@ async function create(user, roles = ['customer']) {
     await knex('userRoles').insert([{ userId, roleId: role.id }])
   }
 
+  const createdUserRoles = await getUserRoles(createdUser.id)
+  createdUser.roles = createdUserRoles.map((r) => r.name)
   return createdUser
 }
 

@@ -38,7 +38,18 @@ const signUp = async (ctx) => {
   try {
     const user = mapper.mapUser(ctx.request.body)
     const { action, payload } = await ApplicationController.signUp(user)
-    setResponse(ctx, { action, payload })
+    setResponse(ctx, {
+      action,
+      payload: { user: mapUser(payload.user), token: payload.token },
+    })
+    const cookieOpts = {
+      httpOnly: true,
+      sameSite: true,
+      path: '/',
+      secure: false,
+      signed: false,
+    }
+    ctx.cookies.set('token', payload.token, cookieOpts)
   } catch (err) {
     setResponse(ctx, { action: ActionStatus.Error })
   }

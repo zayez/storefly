@@ -1,5 +1,5 @@
 const compose = require('koa-compose')
-const { authenticateLocal } = require('../authentication')
+const { authenticate, authenticateLocal } = require('../authentication')
 const ApplicationMiddleware = require('./applicationMiddleware')
 const { isValidSignIn, isValidSignUp } = require('./applicationValidation')
 const { entityExists, disallowDuplicate, userExists } = require('../verify')
@@ -20,7 +20,7 @@ const signUp = compose([
 
 const signOut = compose([ApplicationMiddleware.signOut])
 
-const getUser = compose([ApplicationMiddleware.getUser])
+const getUser = compose([authenticate, ApplicationMiddleware.getUser])
 
 module.exports = {
   getRoot,

@@ -15,10 +15,10 @@ async function signUp(user) {
     const savedUser = await User.create(user, roles)
 
     if (savedUser) {
-      const token = signToken(savedUser)
+      const token = signToken(savedUser.id)
       return {
         action: ActionStatus.Created,
-        payload: { token },
+        payload: { token, user: savedUser },
       }
     }
     return {
