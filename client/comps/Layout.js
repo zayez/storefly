@@ -27,8 +27,10 @@ const AdminLayout = ({ children }) => {
   const auth = useSelector(selectAuth)
 
   useEffect(() => {
-    if (!auth.user) router.push('/')
-  }, [])
+    if (!auth.user) {
+      router.push('/signin')
+    }
+  }, [auth])
   return (
     <div>
       <Sidebar />
