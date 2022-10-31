@@ -1,8 +1,8 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import user from './slices/userSlice'
-import product from './slices/productSlice'
+import users from './slices/usersSlice'
+import products from './slices/productsSlice'
 import auth from './slices/authSlice'
 
-const combineReducer = combineReducers({ user, product, auth })
+const combineReducer = combineReducers({ users, products, auth })
 
 export default configureStore({ reducer: combineReducer })

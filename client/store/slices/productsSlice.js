@@ -8,21 +8,21 @@ const initialState = {
 }
 
 export const fetchProducts = createAsyncThunk(
-  'product/fetchProducts',
+  'products/fetchProducts',
   async () => {
     return fetch(`/api/products`).then((res) => res.json())
   },
 )
 
 export const fetchProduct = createAsyncThunk(
-  'product/fetchProduct',
+  'products/fetchProduct',
   async (id) => {
     return fetch(`/api/products/${id}`).then((res) => res.json())
   },
 )
 
-const productSlice = createSlice({
-  name: 'product',
+const productsSlice = createSlice({
+  name: 'products',
   initialState,
   extraReducers: (builder) => {
     builder.addCase(fetchProducts.pending, (state) => {
@@ -54,8 +54,8 @@ const productSlice = createSlice({
   },
 })
 
-export const selectProduct = (state) => state.product
-export const selectCurrentProduct = (state) => state.product.currentProduct
-export const selectProducts = (state) => state.product.products
+export const selectProduct = (state) => state.products
+export const selectCurrentProduct = (state) => state.products.currentProduct
+export const selectProducts = (state) => state.products.products
 
-export default productSlice.reducer
+export default productsSlice.reducer

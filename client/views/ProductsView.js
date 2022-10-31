@@ -5,7 +5,7 @@ import {
   fetchProducts,
   selectProduct,
   selectProducts,
-} from '../store/slices/productSlice'
+} from '../store/slices/productsSlice'
 const ProductsView = ({}) => {
   const product = useSelector(selectProduct)
   const products = useSelector(selectProducts)

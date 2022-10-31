@@ -6,12 +6,12 @@ const initialState = {
   error: '',
 }
 
-export const fetchUsers = createAsyncThunk('user/fetchUsers', async () => {
+export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
   return fetch(`/api/users`).then((res) => res.json())
 })
 
-const userSlice = createSlice({
-  name: 'user',
+const usersSlice = createSlice({
+  name: 'users',
   initialState,
   extraReducers: (builder) => {
     builder.addCase(fetchUsers.pending, (state) => {
@@ -30,7 +30,7 @@ const userSlice = createSlice({
   },
 })
 
-export const selectUser = (state) => state.user
-export const selectUsers = (state) => state.user.users
+export const selectUser = (state) => state.users
+export const selectUsers = (state) => state.users.users
 
-export default userSlice.reducer
+export default usersSlice.reducer

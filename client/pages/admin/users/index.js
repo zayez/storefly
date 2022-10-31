@@ -7,7 +7,7 @@ import {
   fetchUsers,
   selectUser,
   selectUsers,
-} from '../../../store/slices/userSlice'
+} from '../../../store/slices/usersSlice'
 
 const Users = ({}) => {
   const user = useSelector(selectUser)

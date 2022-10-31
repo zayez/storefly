@@ -4,7 +4,7 @@ import {
   fetchProduct,
   selectCurrentProduct,
   selectProduct,
-} from '../store/slices/productSlice'
+} from '../store/slices/productsSlice'
 import Product from '../comps/Product'
 
 const ProductView = ({ id }) => {
