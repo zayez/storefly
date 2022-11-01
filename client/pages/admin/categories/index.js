@@ -6,7 +6,7 @@ import {
   fetchCategories,
   selectCategories,
 } from '../../../store/slices/categoriesSlice'
-import CategoriesList from '../../../comps/CategoriesList'
+import CategoriesList from '../../../comps/admin/CategoriesList'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
