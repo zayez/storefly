@@ -9,7 +9,7 @@ import {
 } from '../../store/slices/categoriesSlice'
 import { ToastyError } from '../../comps/Toasty'
 
-const CategoryView = ({ id }) => {
+const CategoryEditView = ({ id }) => {
   const dispatch = useDispatch()
   const router = useRouter()
   const [title, setTitle] = useState('')
@@ -55,4 +55,4 @@ const CategoryView = ({ id }) => {
   )
 }
 
-export default CategoryView
+export default CategoryEditView

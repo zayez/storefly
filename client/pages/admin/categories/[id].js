@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import CategoryView from '../../../views/admin/CategoryView'
+import CategoryEditView from '../../../views/admin/CategoryEditView'
 
 const CategoryDetails = () => {
   const router = useRouter()
@@ -11,7 +11,7 @@ const CategoryDetails = () => {
         <title>Storefly dashboard | Category </title>
       </Head>
       <div>
-        <CategoryView id={id} />
+        <CategoryEditView id={id} />
       </div>
     </>
   )
