@@ -7,13 +7,26 @@ $nav-link-hover-color: palette(white)
   padding-top: 2rem
   width: 4rem
   height: 100vh
-  position: fixed
+  // position: fixed
   top: 0
   background-color: $sidebar-color
   transition: width 200ms ease
 
+  @include respond-to(sm)
+    width: 16rem
+
+  @include respond-to(md)
+    width: 20rem
+
   &:hover
-    width: 14rem
+    width: 16rem
+
+    @include respond-to(sm)
+      width: 16rem
+
+    @include respond-to(md)
+      width: 20rem
+
 
   &:hover .link-text
     display: block
@@ -38,6 +51,7 @@ $nav-link-hover-color: palette(white)
     height: 5rem
 
     color: $nav-link-color
+    color: $nav-link-hover-color
     text-decoration: none
 
     &:hover
@@ -49,5 +63,5 @@ $nav-link-hover-color: palette(white)
       margin-right: 1rem
 
   .link-text
-    display: none
+    // display: none
 

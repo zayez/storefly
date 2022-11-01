@@ -32,9 +32,11 @@ const AdminLayout = ({ children }) => {
     }
   }, [auth])
   return (
-    <div>
-      <Sidebar />
-      <div className="container-fluid">{children}</div>
+    <div className="container-fluid">
+      <div className="flex">
+        <Sidebar />
+        <div className="content-main">{children}</div>
+      </div>
     </div>
   )
 }
