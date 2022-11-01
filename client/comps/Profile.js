@@ -16,7 +16,7 @@ const Profile = ({ firstName, lastName, email }) => {
     if (auth.user) {
       dispatch(fetchUser({ id: auth.user.id }))
     }
-  }, [auth.user])
+  }, [])
 
   const handleSubmit = async (event) => {
     if (!auth.user) router.push('/signin')

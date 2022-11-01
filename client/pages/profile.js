@@ -13,7 +13,7 @@ const ProfileView = () => {
     if (!auth.user) {
       dispatch(signUser())
     }
-  })
+  }, [])
 
   if (!auth.user) return
   const { firstName, lastName, email } = auth.user
