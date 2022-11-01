@@ -17,11 +17,16 @@ const CategoryView = ({ id }) => {
   const categories = useSelector(selectCategories)
   const currentCategory = categories.category
   useEffect(() => {
-    if (id) dispatch(fetchCategory(id))
+    if (id) {
+      dispatch(fetchCategory(id))
+    }
+  }, [])
+
+  useEffect(() => {
     if (currentCategory) {
       setTitle(currentCategory.title)
     }
-  }, [])
+  }, [categories.category])
 
   const handleSubmit = (e) => {
     e.preventDefault()
