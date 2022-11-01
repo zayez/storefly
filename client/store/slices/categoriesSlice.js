@@ -5,7 +5,6 @@ const initialState = {
   loading: false,
   categories: [],
   category: null,
-  currentCategory: null,
   error: '',
   errors: [],
 }
@@ -36,6 +35,34 @@ export const update = createAsyncThunk(
     }
 
     const url = `/api/categories/${id}`
+    return fetch(url, reqOpts).then(async (res) => {
+      switch (res.status) {
+        case 200:
+          return res.json()
+        case 400:
+          return res.json()
+        case 422:
+          return rejectWithValue(await res.json())
+        default:
+          return rejectWithValue(ActionStatus.Error)
+      }
+    })
+  },
+)
+
+export const create = createAsyncThunk(
+  'categories/create',
+  async ({ title }, { rejectWithValue }) => {
+    const category = {}
+    if (title) category.title = title
+
+    const reqOpts = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(category),
+    }
+
+    const url = `/api/categories`
     return fetch(url, reqOpts).then(async (res) => {
       switch (res.status) {
         case 200:
@@ -106,8 +133,31 @@ const categoriesSlice = createSlice({
           state.error = action.payload.detail
           break
       }
+    })
 
-      console.log(state.errors)
+    builder.addCase(create.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(create.fulfilled, (state, action) => {
+      console.log(action.payload)
+      state.loading = false
+      state.category = action.payload
+      state.error = ''
+    })
+    builder.addCase(create.rejected, (state, action) => {
+      state.loading = false
+      switch (action.payload.status) {
+        case 422:
+          state.error = 'There are errors on the form.'
+          state.errors = []
+          action.payload['invalid-params'].forEach((param) => {
+            state.errors.push(param.reason)
+          })
+          break
+        default:
+          state.error = action.payload.detail
+          break
+      }
     })
   },
 })

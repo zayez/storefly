@@ -8,13 +8,20 @@ import {
 } from '../../../store/slices/categoriesSlice'
 import CategoriesList from '../../../comps/CategoriesList'
 import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 const Categories = () => {
+  const router = useRouter()
   const categories = useSelector(selectCategories)
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(fetchCategories())
   }, [])
+
+  const handleAddCategory = (e) => {
+    e.preventDefault()
+    router.push('/admin/categories/new')
+  }
   return (
     <>
       <Head>
@@ -22,7 +29,12 @@ const Categories = () => {
       </Head>
       <div className="container">
         <h1 className="heading">
-          <ICategories /> <span>Categories</span>
+          <div className="h">
+            <ICategories /> <span>Categories</span>
+          </div>
+          <button className="btn btn-primary" onClick={handleAddCategory}>
+            Add category
+          </button>
         </h1>
         <hr />
         {categories.loading && <div>Loading...</div>}
