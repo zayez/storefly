@@ -14,16 +14,18 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist'
-import users from './slices/usersSlice'
-import products from './slices/productsSlice'
+
 import auth from './slices/authSlice'
+import categories from './slices/categoriesSlice'
+import products from './slices/productsSlice'
+import users from './slices/usersSlice'
 
 const persistConfig = {
   key: 'root',
   storage,
 }
 
-const rootReducer = combineReducers({ users, products, auth })
+const rootReducer = combineReducers({ auth, categories, products, users })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
