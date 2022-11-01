@@ -1,6 +1,13 @@
-const CategoryItem = ({ category }) => {
+import { useRouter } from 'next/router'
+
+const CategoryItem = ({ category, id }) => {
+  const router = useRouter()
+  const handleClick = (e) => {
+    e.preventDefault()
+    router.push(`/admin/categories/${id}`)
+  }
   return (
-    <tr>
+    <tr onClick={handleClick}>
       <td>{category.id}</td>
       <td>{category.title}</td>
     </tr>
@@ -19,7 +26,11 @@ const CategoriesList = ({ categories }) => {
         </thead>
         <tbody>
           {categories.map((category) => (
-            <CategoryItem category={category} key={category.id} />
+            <CategoryItem
+              category={category}
+              key={category.id}
+              id={category.id}
+            />
           ))}
         </tbody>
       </table>
