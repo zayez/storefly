@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import IClose from '../node_modules/feather-icons/dist/icons/x.svg'
 
 const getType = (type) => {
@@ -9,8 +10,17 @@ const getType = (type) => {
   }
 }
 
-const Modal = ({ title, message, type, show, actionName, onExit }) => {
+const Modal = ({
+  title,
+  message,
+  type,
+  show,
+  actionName,
+  onConfirm,
+  onExit,
+}) => {
   const modalVisibility = show === null ? '' : show ? 'show' : 'hide'
+  const [confirmLabel, setConfirmLabel] = useState(actionName)
   const btnStyle = getType(type)
   const handleClose = (e) => {
     e.preventDefault()
@@ -21,6 +31,13 @@ const Modal = ({ title, message, type, show, actionName, onExit }) => {
     e.preventDefault()
     if (e.target.id !== 'modal') return
 
+    onExit()
+  }
+
+  const handleConfirm = async () => {
+    setConfirmLabel('Loading...')
+    await onConfirm()
+    setConfirmLabel('Delete')
     onExit()
   }
   return (
@@ -44,7 +61,9 @@ const Modal = ({ title, message, type, show, actionName, onExit }) => {
             <button className="btn btn-secondary" onClick={handleClose}>
               Cancel
             </button>
-            <button className={`btn ${btnStyle}`}>{actionName}</button>
+            <button className={`btn ${btnStyle}`} onClick={handleConfirm}>
+              {confirmLabel}
+            </button>
           </div>
         </div>
       </div>

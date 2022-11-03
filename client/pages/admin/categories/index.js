@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import ICategories from '../../../node_modules/feather-icons/dist/icons/grid.svg'
 import { adminLayout } from '../../../comps/Layout'
 import {
+  destroy,
   fetchCategories,
   selectCategories,
 } from '../../../store/slices/categoriesSlice'
@@ -14,14 +15,20 @@ import Modal from '../../../comps/Modal'
 const Categories = () => {
   const router = useRouter()
   const [showModal, setShowModal] = useState(null)
+  const [selectedId, setSelectedId] = useState(0)
   const categories = useSelector(selectCategories)
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(fetchCategories())
   }, [])
 
-  const handleModalEnter = () => {
+  const handleModalEnter = (id) => {
+    setSelectedId(id)
     setShowModal(true)
+  }
+
+  const handleDelete = async () => {
+    dispatch(destroy(selectedId))
   }
 
   const handleModalExit = () => {
@@ -63,6 +70,7 @@ const Categories = () => {
           type="danger"
           actionName={`Delete`}
           onExit={handleModalExit}
+          onConfirm={handleDelete}
           show={showModal}
         />
       </div>

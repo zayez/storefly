@@ -12,7 +12,7 @@ const CategoryItem = ({ category, id, onDelete }) => {
     <tr>
       <td onClick={handleClick}>{category.id}</td>
       <td onClick={handleClick}>{category.title}</td>
-      <td onClick={onDelete}>
+      <td onClick={() => onDelete(id)}>
         <button className="btn-svg">
           <IDelete />
         </button>

@@ -68,7 +68,31 @@ export const create = createAsyncThunk(
         case 200:
           return res.json()
         case 400:
-          return res.json()
+          rejectWithValue(ActionStatus.Error)
+        case 422:
+          return rejectWithValue(await res.json())
+        default:
+          return rejectWithValue(ActionStatus.Error)
+      }
+    })
+  },
+)
+
+export const destroy = createAsyncThunk(
+  'categories/destroy',
+  async (id, { rejectWithValue }) => {
+    const reqOpts = {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    }
+
+    const url = `/api/categories/${id}`
+    return fetch(url, reqOpts).then(async (res) => {
+      switch (res.status) {
+        case 200:
+          return { id, data: await res.json() }
+        case 400:
+          return rejectWithValue(ActionStatus.Error)
         case 422:
           return rejectWithValue(await res.json())
         default:
@@ -158,6 +182,21 @@ const categoriesSlice = createSlice({
           state.error = action.payload.detail
           break
       }
+    })
+
+    builder.addCase(destroy.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(destroy.fulfilled, (state, action) => {
+      state.loading = false
+      state.categories = state.categories.filter(
+        (c) => c.id !== action.payload.id,
+      )
+      state.error = ''
+    })
+    builder.addCase(destroy.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message
     })
   },
 })
