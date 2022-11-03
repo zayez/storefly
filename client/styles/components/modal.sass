@@ -1,0 +1,57 @@
+.modal
+  opacity: 0
+  background: rgba(0,0,0,.8)
+  background-color: rgba(0, 0, 0, 0.8)
+  background-image: none
+  position: fixed
+  overflow: hidden
+  left: 0
+  top: 0
+  width: 100%
+  height: 100%
+  visibility: hidden
+
+.modal.hide
+  animation: fadeOut .7s forwards
+
+.modal.show
+  animation: fadeIn .7s forwards
+
+.modal-dialog
+  max-width: 500px
+  margin: 0 auto
+  transition: transform .3s ease-out
+  transform: translate(0,-50px)
+  position: relative
+  top: 50%
+  background: white
+
+.modal-content
+  display: flex
+  flex-flow: column
+  justify-items: flex-start
+  align-items: flex-start
+  margin: 0 auto
+  width: 100%
+
+
+.modal-header
+  display: flex
+  justify-content: space-between
+  padding: 0 1rem
+  width: 100%
+
+.modal-body
+  border-top: 1px solid #ccc
+  border-bottom: 1px solid #ccc
+  padding: 0 1rem
+  flex: 1 1 auto
+  width: 100%
+
+.modal-footer
+  padding: 1rem 1rem
+  gap: 1rem
+  width: 100%
+  display: flex
+  justify-content: flex-end
+

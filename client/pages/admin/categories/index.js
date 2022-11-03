@@ -7,16 +7,26 @@ import {
   selectCategories,
 } from '../../../store/slices/categoriesSlice'
 import CategoriesList from '../../../comps/admin/CategoriesList'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import Modal from '../../../comps/Modal'
 
 const Categories = () => {
   const router = useRouter()
+  const [showModal, setShowModal] = useState(null)
   const categories = useSelector(selectCategories)
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(fetchCategories())
   }, [])
+
+  const handleModalEnter = () => {
+    setShowModal(true)
+  }
+
+  const handleModalExit = () => {
+    setShowModal(false)
+  }
 
   const handleAddCategory = (e) => {
     e.preventDefault()
@@ -42,8 +52,19 @@ const Categories = () => {
           <div>Error: {categories.error}</div>
         ) : null}
         {!categories.loading && categories.categories.length ? (
-          <CategoriesList categories={categories.categories} />
+          <CategoriesList
+            categories={categories.categories}
+            onDelete={handleModalEnter}
+          />
         ) : null}
+        <Modal
+          title={`Remove product`}
+          message={`This can't be undone.`}
+          type="danger"
+          actionName={`Delete`}
+          onExit={handleModalExit}
+          show={showModal}
+        />
       </div>
     </>
   )
