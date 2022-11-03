@@ -46,7 +46,7 @@ const SignIn = () => {
             </div>
             <div className="field-body">
               <input
-                type="text"
+                type="password"
                 value={password}
                 onChange={({ target }) => setPassword(target?.value)}
               />

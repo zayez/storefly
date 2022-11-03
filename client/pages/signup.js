@@ -57,7 +57,7 @@ const SignUp = () => {
         <div className="field">
           <label htmlFor="E-mail">Password</label>
           <input
-            type="text"
+            type="password"
             value={password}
             onChange={({ target }) => setPassword(target?.value)}
           />
