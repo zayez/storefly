@@ -7,7 +7,7 @@ import {
   selectCategories,
   update,
 } from '../../store/slices/categoriesSlice'
-import { ToastyError } from '../../comps/Toasty'
+import { CalloutError } from '../../comps/Callout'
 
 const CategoryEditView = ({ id }) => {
   const dispatch = useDispatch()
@@ -40,7 +40,7 @@ const CategoryEditView = ({ id }) => {
     <>
       {categories.loading && <div>Loading...</div>}
       {!categories.loading && categories.error ? (
-        <ToastyError error={categories.error} errors={categories.errors} />
+        <CalloutError error={categories.error} errors={categories.errors} />
       ) : null}
       {!categories.loading ? (
         <CategoryForm

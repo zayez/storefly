@@ -1,5 +1,5 @@
-const Toasty = ({ message }) => {
-  if (message) return <div className="toasty">{message}</div>
+const Callout = ({ message }) => {
+  if (message) return <div className="callout">{message}</div>
   return <></>
 }
 
@@ -16,14 +16,14 @@ const ErrorsList = ({ errors }) => {
   )
 }
 
-export const ToastyError = ({ error, errors }) => {
+export const CalloutError = ({ error, errors }) => {
   return (
-    <div className="toasty toasty-error">
-      <div className="toasty-error-title">{error}</div>
+    <div className="callout callout-error">
+      <div className="callout-error-title">{error}</div>
 
       {errors ? <ErrorsList errors={errors} /> : null}
     </div>
   )
 }
 
-export default Toasty
+export default Callout

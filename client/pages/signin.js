@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAuth, signIn } from '../store/slices/authSlice'
-import Toasty from '../comps/Toasty'
+import Callout from '../comps/Callout'
 const SignIn = () => {
   const router = useRouter()
   const baseUrl = `/api`
@@ -24,7 +24,7 @@ const SignIn = () => {
 
   return (
     <div className="container">
-      <Toasty message={auth.error} />
+      <Callout message={auth.error} />
       <div className="login">
         <h1>Sign in</h1>
         <form onSubmit={handleSubmit} className="form">

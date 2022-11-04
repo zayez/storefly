@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import Toasty from '../comps/Toasty'
+import Callout from '../comps/Callout'
 import { selectAuth, signUp } from '../store/slices/authSlice'
 
 const SignUp = () => {
@@ -25,7 +25,7 @@ const SignUp = () => {
   }
   return (
     <div className="container">
-      <Toasty message={auth.error} />
+      <Callout message={auth.error} />
       <form onSubmit={handleSubmit} className="form">
         <div className="field">
           <label htmlFor="E-mail">First name</label>

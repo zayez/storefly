@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import CategoryForm from '../../comps/admin/CategoryForm'
-import { ToastyError } from '../../comps/Toasty'
+import { CalloutError } from '../../comps/Callout'
 import { create, selectCategories } from '../../store/slices/categoriesSlice'
 
 const CategoryNewView = () => {
@@ -25,7 +25,7 @@ const CategoryNewView = () => {
     <>
       {categories.loading && <div>Loading...</div>}
       {!categories.loading && categories.error ? (
-        <ToastyError error={categories.error} errors={categories.errors} />
+        <CalloutError error={categories.error} errors={categories.errors} />
       ) : null}
       {!categories.loading ? (
         <CategoryForm
