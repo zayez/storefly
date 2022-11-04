@@ -1,5 +1,20 @@
-const Callout = ({ message }) => {
-  if (message) return <div className="callout">{message}</div>
+const getType = (type) => {
+  switch (type) {
+    case 'info':
+      return 'info'
+    case 'error':
+      return 'danger'
+    case `warning`:
+      return 'warning'
+    default:
+      return 'info'
+  }
+}
+
+const Callout = ({ message, type = 'info' }) => {
+  const style = getType(type)
+  if (message)
+    return <div className={`callout callout-${style}`}>{message}</div>
   return <></>
 }
 
@@ -18,8 +33,8 @@ const ErrorsList = ({ errors }) => {
 
 export const CalloutError = ({ error, errors }) => {
   return (
-    <div className="callout callout-error">
-      <div className="callout-error-title">{error}</div>
+    <div className="callout callout-danger">
+      <div className="callout-danger-title">{error}</div>
 
       {errors ? <ErrorsList errors={errors} /> : null}
     </div>

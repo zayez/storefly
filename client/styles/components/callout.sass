@@ -1,17 +1,27 @@
 .callout
-  border: 1px solid black
-  background: #ccc
+  border-style: solid
+  border-width: 1px
   padding: 1rem
+  margin-bottom: 1rem
 
-
-.callout-error
-  background: hsl(0, 60%, 90%)
-  border: 2px solid hsl(0, 60%, 50%)
-  color: hsl(0, 60%, 40%)
-
-  ul
+  & ul
     margin: 0
     margin-top: 1rem
 
-.callout-error-title
+.callout-info
+  background: $callout-info-background
+  border-color: $callout-info-border-color
+  color: $callout-info-color
+
+.callout-warning
+  background: $callout-warning-background
+  border-color: $callout-warning-border-color
+  color: $callout-warning-color
+
+.callout-danger
+  background: $callout-danger-background
+  border-color: $callout-danger-border-color
+  color: $callout-danger-color
+
+.callout-danger-title
   font-weight: bold

@@ -55,6 +55,9 @@ const Categories = () => {
           </button>
         </h1>
         <hr />
+        {!categories.loading && categories.message ? (
+          <Callout message={message} />
+        ) : null}
         {categories.loading && <div>Loading...</div>}
         {!categories.loading && categories.error ? (
           <div>Error: {categories.error}</div>
@@ -65,7 +68,6 @@ const Categories = () => {
             onDelete={handleModalEnter}
           />
         ) : null}
-        {!categories.loading && categories.message ? <Callout /> : null}
         <Modal
           title={`Delete category`}
           message={`This can't be undone.`}

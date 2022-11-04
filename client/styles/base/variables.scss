@@ -30,9 +30,27 @@ $color-base-black: hsl(0, 0%, 5%);
 $color-base-white: hsl(342, 70%, 100%);
 $color-base-blue: hsl(252, 100%, 25%);
 $color-base-red: hsl(0, 100%, 50%);
+$color-base-green: hsl(150, 100%, 50%);
+$color-base-yellow: hsl(50, 100%, 50%);
 
 // Color palettes
 $palettes: (
+  green: (
+    base: $color-base-green,
+    light: lighten($color-base-green, 15%),
+    mid-light: lighten($color-base-green, 5%),
+    dark: darken($color-base-green, 15%),
+    x-light: lighten($color-base-green, 25%),
+    light-45: lighten($color-base-green, 45%),
+  ),
+  yellow: (
+    base: $color-base-yellow,
+    light: lighten($color-base-yellow, 15%),
+    mid-light: lighten($color-base-yellow, 5%),
+    dark: darken($color-base-yellow, 15%),
+    x-light: lighten($color-base-yellow, 25%),
+    light-45: lighten($color-base-yellow, 45%),
+  ),
   blue: (
     base: $color-base-blue,
     light: lighten($color-base-blue, 15%),
@@ -90,3 +108,15 @@ $btn-danger-hover-border-color: palette(red, dark);
 
 $btn-close-color: palette(gray);
 $btn-close-hover-color: palette(gray, dark);
+
+$callout-info-background: palette(green, light-45);
+$callout-info-color: palette(black, dark);
+$callout-info-border-color: palette(green, light);
+
+$callout-warning-background: palette(yellow, light-45);
+$callout-warning-color: palette(black, dark);
+$callout-warning-border-color: palette(yellow, light);
+
+$callout-danger-background: palette(red, light-45);
+$callout-danger-color: palette(black, dark);
+$callout-danger-border-color: palette(red, light);
