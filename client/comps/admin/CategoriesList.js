@@ -29,7 +29,7 @@ const CategoriesList = ({ categories, onDelete }) => {
           <tr>
             <th>ID</th>
             <th>Title</th>
-            <th className="delete-item">Remove</th>
+            <th className="delete-item">Delete</th>
           </tr>
         </thead>
         <tbody>

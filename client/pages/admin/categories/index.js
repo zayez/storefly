@@ -65,7 +65,7 @@ const Categories = () => {
           />
         ) : null}
         <Modal
-          title={`Remove product`}
+          title={`Delete category`}
           message={`This can't be undone.`}
           type="danger"
           actionName={`Delete`}
