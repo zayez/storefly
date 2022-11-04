@@ -2,6 +2,7 @@ const CategoryForm = ({
   id,
   title,
   setTitle,
+  submitText = `Save`,
   handleSubmit,
   handleBackClick,
 }) => {
@@ -14,7 +15,7 @@ const CategoryForm = ({
               <label htmlFor="id">ID</label>
             </div>
 
-            <div className="field-body">
+            <div className="field-control">
               <input
                 type="text"
                 defaultValue={id}
@@ -35,12 +36,14 @@ const CategoryForm = ({
               />
             </div>
           </div>
-          <button className="btn" onClick={handleSubmit}>
-            Save
-          </button>
-          <button className="btn" onClick={handleBackClick}>
-            Back
-          </button>
+          <div className="buttons">
+            <button className="btn" onClick={handleBackClick}>
+              Back
+            </button>
+            <button className="btn btn-primary" onClick={handleSubmit}>
+              {submitText}
+            </button>
+          </div>
         </form>
       </div>
     </div>

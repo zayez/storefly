@@ -10,14 +10,13 @@ const CategoryNewView = () => {
   const router = useRouter()
   const [title, setTitle] = useState('')
   const categories = useSelector(selectCategories)
-  const currentCategory = categories.category
   useEffect(() => {}, [])
 
   const handleSubmit = (e) => {
     e.preventDefault()
     dispatch(create({ title }))
-    console.log(categories.category)
   }
+
   const handleBackClick = (e) => {
     e.preventDefault()
     router.push('/admin/categories')
@@ -33,6 +32,7 @@ const CategoryNewView = () => {
           id={''}
           title={title}
           setTitle={setTitle}
+          submitText={`Create`}
           handleSubmit={handleSubmit}
           handleBackClick={handleBackClick}
         />
