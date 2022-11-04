@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import { adminLayout } from '../../../comps/Layout'
 import CategoryNewView from '../../../views/admin/CategoryNewView'
 
 const CategoryNew = () => {
@@ -13,5 +14,7 @@ const CategoryNew = () => {
     </>
   )
 }
+
+CategoryNew.getLayout = adminLayout
 
 export default CategoryNew

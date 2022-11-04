@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { adminLayout } from '../../../comps/Layout'
 import CategoryEditView from '../../../views/admin/CategoryEditView'
 
 const CategoryDetails = () => {
@@ -16,5 +17,7 @@ const CategoryDetails = () => {
     </>
   )
 }
+
+CategoryDetails.getLayout = adminLayout
 
 export default CategoryDetails
