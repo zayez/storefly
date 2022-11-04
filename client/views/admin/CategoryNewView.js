@@ -3,12 +3,14 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import CategoryForm from '../../comps/admin/CategoryForm'
 import { CalloutError } from '../../comps/Callout'
+import Loader from '../../comps/Loader'
 import {
   create,
   removeMessage,
   resetCategory,
   selectCategories,
 } from '../../store/slices/categoriesSlice'
+import { SPINNER_TYPE } from '../../types/LoaderType'
 
 const CategoryNewView = () => {
   const dispatch = useDispatch()
@@ -40,7 +42,7 @@ const CategoryNewView = () => {
   return (
     <>
       <h1>Category – New</h1>
-      {categories.loading && <div>Loading...</div>}
+      {categories.loading && <Loader type={SPINNER_TYPE} size="small" />}
       {!categories.loading && categories.error ? (
         <CalloutError error={categories.error} errors={categories.errors} />
       ) : null}

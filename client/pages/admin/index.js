@@ -1,6 +1,8 @@
 import Head from 'next/head'
 import { adminLayout } from '../../comps/Layout'
 import IHome from '../../node_modules/feather-icons/dist/icons/home.svg'
+import Loader from '../../comps/Loader'
+import { SPINNER_TYPE } from '../../types/LoaderType'
 
 const Index = () => {
   return (

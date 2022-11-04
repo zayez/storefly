@@ -8,6 +8,8 @@ import {
   update,
 } from '../../store/slices/categoriesSlice'
 import { CalloutError } from '../../comps/Callout'
+import Loader from '../../comps/Loader'
+import { SPINNER_TYPE } from '../../types/LoaderType'
 
 const CategoryEditView = ({ id }) => {
   const dispatch = useDispatch()
@@ -39,7 +41,7 @@ const CategoryEditView = ({ id }) => {
   return (
     <>
       <h1>Category – Edit</h1>
-      {categories.loading && <div>Loading...</div>}
+      {categories.loading && <Loader type={SPINNER_TYPE} size="small" />}
       {!categories.loading && categories.error ? (
         <CalloutError error={categories.error} errors={categories.errors} />
       ) : null}
