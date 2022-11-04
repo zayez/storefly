@@ -5,6 +5,7 @@ const initialState = {
   loading: false,
   categories: [],
   category: null,
+  message: null,
   error: '',
   errors: [],
 }
@@ -65,8 +66,8 @@ export const create = createAsyncThunk(
     const url = `/api/categories`
     return fetch(url, reqOpts).then(async (res) => {
       switch (res.status) {
-        case 200:
-          return res.json()
+        case 201:
+          return await res.json()
         case 400:
           rejectWithValue(ActionStatus.Error)
         case 422:
@@ -105,6 +106,15 @@ export const destroy = createAsyncThunk(
 const categoriesSlice = createSlice({
   name: 'products',
   initialState,
+  reducers: {
+    resetCategory(state, action) {
+      state.category = null
+      state.message = null
+    },
+    removeMessage(state, action) {
+      state.message = ''
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchCategories.pending, (state) => {
       state.loading = true
@@ -112,6 +122,7 @@ const categoriesSlice = createSlice({
     builder.addCase(fetchCategories.fulfilled, (state, action) => {
       state.loading = false
       state.categories = action.payload
+      state.category = null
       state.error = ''
     })
     builder.addCase(fetchCategories.rejected, (state, action) => {
@@ -138,7 +149,6 @@ const categoriesSlice = createSlice({
       state.loading = true
     })
     builder.addCase(update.fulfilled, (state, action) => {
-      console.log(action.payload)
       state.loading = false
       state.category = action.payload
       state.error = ''
@@ -163,9 +173,9 @@ const categoriesSlice = createSlice({
       state.loading = true
     })
     builder.addCase(create.fulfilled, (state, action) => {
-      console.log(action.payload)
       state.loading = false
       state.category = action.payload
+      state.message = 'Category was successfully created.'
       state.error = ''
     })
     builder.addCase(create.rejected, (state, action) => {
@@ -203,4 +213,5 @@ const categoriesSlice = createSlice({
 
 export const selectCategories = (state) => state.categories
 
+export const { resetCategory, removeMessage } = categoriesSlice.actions
 export default categoriesSlice.reducer

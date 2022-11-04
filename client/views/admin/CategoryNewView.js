@@ -3,14 +3,30 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import CategoryForm from '../../comps/admin/CategoryForm'
 import { CalloutError } from '../../comps/Callout'
-import { create, selectCategories } from '../../store/slices/categoriesSlice'
+import {
+  create,
+  removeMessage,
+  resetCategory,
+  selectCategories,
+} from '../../store/slices/categoriesSlice'
 
 const CategoryNewView = () => {
   const dispatch = useDispatch()
   const router = useRouter()
   const [title, setTitle] = useState('')
   const categories = useSelector(selectCategories)
-  useEffect(() => {}, [])
+  useEffect(() => {
+    dispatch(resetCategory())
+  }, [])
+
+  useEffect(() => {
+    if (categories.category) {
+      router.push('/admin/categories')
+      setTimeout(() => {
+        dispatch(removeMessage())
+      }, 3000)
+    }
+  }, [categories.category])
 
   const handleSubmit = (e) => {
     e.preventDefault()

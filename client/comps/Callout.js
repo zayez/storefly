@@ -12,10 +12,14 @@ const getType = (type) => {
 }
 
 const Callout = ({ message, type = 'info' }) => {
+  const calloutVisibility =
+    message == null ? '' : message === '' ? 'hide' : 'show'
   const style = getType(type)
-  if (message)
-    return <div className={`callout callout-${style}`}>{message}</div>
-  return <></>
+  return (
+    <div className={`callout callout-${style} ${calloutVisibility}`}>
+      {message}
+    </div>
+  )
 }
 
 const ErrorItem = ({ error }) => {
@@ -33,7 +37,7 @@ const ErrorsList = ({ errors }) => {
 
 export const CalloutError = ({ error, errors }) => {
   return (
-    <div className="callout callout-danger">
+    <div className="callout callout-danger show">
       <div className="callout-danger-title">{error}</div>
 
       {errors ? <ErrorsList errors={errors} /> : null}
