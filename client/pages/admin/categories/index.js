@@ -46,8 +46,8 @@ const Categories = () => {
         <title>Storefly dashboard | Categories </title>
       </Head>
       <div className="container">
-        <h1 className="heading">
-          <div className="h">
+        <h1 className="heading-spaced">
+          <div className="heading">
             <ICategories /> <span>Categories</span>
           </div>
           <button className="btn btn-primary" onClick={handleAddCategory}>
