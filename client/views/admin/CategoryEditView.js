@@ -38,6 +38,7 @@ const CategoryEditView = ({ id }) => {
   }
   return (
     <>
+      <h1>Category – Edit</h1>
       {categories.loading && <div>Loading...</div>}
       {!categories.loading && categories.error ? (
         <CalloutError error={categories.error} errors={categories.errors} />

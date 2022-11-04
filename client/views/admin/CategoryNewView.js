@@ -39,6 +39,7 @@ const CategoryNewView = () => {
   }
   return (
     <>
+      <h1>Category – New</h1>
       {categories.loading && <div>Loading...</div>}
       {!categories.loading && categories.error ? (
         <CalloutError error={categories.error} errors={categories.errors} />

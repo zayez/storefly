@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { adminLayout } from '../../../comps/Layout'
 import CategoryEditView from '../../../views/admin/CategoryEditView'
 
-const CategoryDetails = () => {
+const CategoryEdit = () => {
   const router = useRouter()
   const { id } = router.query
   return (
@@ -18,6 +18,6 @@ const CategoryDetails = () => {
   )
 }
 
-CategoryDetails.getLayout = adminLayout
+CategoryEdit.getLayout = adminLayout
 
-export default CategoryDetails
+export default CategoryEdit
