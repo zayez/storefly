@@ -18,14 +18,6 @@ const Sidebar = ({}) => {
           </Link>
         </li>
         <li className="sidebar-nav-item">
-          <Link href="/admin/users">
-            <a className="nav-link">
-              <IUsers />
-              <span className="link-text">Users</span>
-            </a>
-          </Link>
-        </li>
-        <li className="sidebar-nav-item">
           <Link href="/admin/categories">
             <a className="nav-link">
               <ICategories />
@@ -46,6 +38,14 @@ const Sidebar = ({}) => {
             <a className="nav-link">
               <IOrders />
               <span className="link-text">Orders</span>
+            </a>
+          </Link>
+        </li>
+        <li className="sidebar-nav-item">
+          <Link href="/admin/users">
+            <a className="nav-link">
+              <IUsers />
+              <span className="link-text">Users</span>
             </a>
           </Link>
         </li>
