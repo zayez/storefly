@@ -3,18 +3,22 @@
 
   & tbody
     & tr
+      &:nth-child(odd)
+        background-color: $table-basic-stripe-background
       &:hover
-        background: #ddd
+        background: $table-basic-hover-background
         cursor: pointer
 
   & tr
     padding: 1rem
-    border: 1px solid #ccc
+    border-bottom: 1px solid $table-basic-border-color
+
+  & th
+    padding: 1rem 0.5rem
 
   & td, th
     text-align: left
     padding: 0.5rem
-    border-right: 1px solid #ccc
 
 .col-delete
   display: flex

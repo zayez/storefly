@@ -61,11 +61,12 @@ $palettes: (
   ),
   red: (
     base: $color-base-red,
-    light: lighten($color-base-red, 15%),
     mid-light: lighten($color-base-red, 5%),
-    dark: darken($color-base-red, 15%),
+    light: lighten($color-base-red, 15%),
     x-light: lighten($color-base-red, 25%),
+    light-35: lighten($color-base-red, 35%),
     light-45: lighten($color-base-red, 45%),
+    dark: darken($color-base-red, 15%),
   ),
   white: (
     base: $color-base-white,
@@ -76,8 +77,11 @@ $palettes: (
   ),
   grey: (
     base: $color-base-grey,
-    light: lighten($color-base-grey, 15%),
     mid-light: lighten($color-base-grey, 5%),
+    light: lighten($color-base-grey, 15%),
+    x-light: lighten($color-base-grey, 25%),
+    light-35: lighten($color-base-grey, 35%),
+    light-45: lighten($color-base-grey, 45%),
     dark: darken($color-base-grey, 25%),
     mid-dark: darken($color-base-grey, 15%),
   ),
@@ -126,3 +130,7 @@ $callout-danger-border-color: palette(red, light);
 
 $spinner-color: palette(red);
 $spinner-border-color: palette(grey, light);
+
+$table-basic-stripe-background: palette(grey, light-45);
+$table-basic-hover-background: palette(grey, light-35);
+$table-basic-border-color: palette(grey, light-35);
