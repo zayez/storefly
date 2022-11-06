@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   fetchProduct,
   selectCurrentProduct,
-  selectProduct,
+  selectProducts,
 } from '../store/slices/productsSlice'
 import Product from '../comps/Product'
 
 const ProductView = ({ id }) => {
   const dispatch = useDispatch()
-  const product = useSelector(selectProduct)
+  const products = useSelector(selectProducts)
   const currentProduct = useSelector(selectCurrentProduct)
   useEffect(() => {
     if (id) dispatch(fetchProduct(id))
@@ -18,11 +18,11 @@ const ProductView = ({ id }) => {
   return (
     <>
       <h2>Product</h2>
-      {product.loading && <div>Loading...</div>}
-      {!product.loading && product.error ? (
-        <div>Error: {product.error}</div>
+      {products.loading && <div>Loading...</div>}
+      {!products.loading && products.error ? (
+        <div>Error: {products.error}</div>
       ) : null}
-      {!product.loading && currentProduct ? (
+      {!products.loading && currentProduct ? (
         <Product product={currentProduct} />
       ) : null}
     </>

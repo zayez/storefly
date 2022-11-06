@@ -7,7 +7,6 @@ import {
   selectProducts,
 } from '../store/slices/productsSlice'
 const ProductsView = ({}) => {
-  const product = useSelector(selectProduct)
   const products = useSelector(selectProducts)
   const dispatch = useDispatch()
   useEffect(() => {
@@ -16,12 +15,12 @@ const ProductsView = ({}) => {
   return (
     <>
       <h2>Products</h2>
-      {product.loading && <div>Loading...</div>}
-      {!product.loading && product.error ? (
-        <div>Error: {product.error}</div>
+      {products.loading && <div>Loading...</div>}
+      {!products.loading && products.error ? (
+        <div>Error: {products.error}</div>
       ) : null}
-      {!product.loading && products.length ? (
-        <ProductList products={products} />
+      {!products.loading && products.products.length ? (
+        <ProductList products={products.products} />
       ) : null}
     </>
   )
