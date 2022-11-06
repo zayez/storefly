@@ -46,14 +46,14 @@ const Categories = () => {
         <title>Storefly dashboard | Categories </title>
       </Head>
       <div className="container">
-        <h1 className="heading-spaced">
+        <div className="heading-spaced">
           <div className="heading">
-            <ICategories /> <span>Categories</span>
+            <ICategories /> <h1>Categories</h1>
           </div>
           <button className="btn btn-primary" onClick={handleAddCategory}>
             Add category
           </button>
-        </h1>
+        </div>
         <hr />
         {!categories.loading ? <Callout message={categories.message} /> : null}
         {categories.loading && <div>Loading...</div>}
