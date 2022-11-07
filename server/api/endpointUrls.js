@@ -15,6 +15,9 @@ const DELETE_PRODUCT = `${PRODUCTS}/:id`
 const GET_PRODUCT = `${PRODUCTS}/:id`
 const GET_PRODUCTS = `${PRODUCTS}`
 
+const PRODUCT_STATUSES = `${BASE_URL}/productStatuses`
+const GET_PRODUCT_STATUSES = `${PRODUCT_STATUSES}`
+
 // Categories
 const CATEGORIES = `${BASE_URL}/categories`
 const POST_CATEGORY = `${CATEGORIES}`
@@ -76,6 +79,10 @@ const EndpointUrls = {
   GET_PRODUCT,
   /** @member {string} */
   GET_PRODUCTS,
+  /** @member {string} */
+  PRODUCT_STATUSES,
+  /** @member {string} */
+  GET_PRODUCT_STATUSES,
   /** @member {string} */
   POST_CATEGORY,
   /** @member {string} */

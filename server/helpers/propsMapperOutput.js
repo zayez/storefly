@@ -61,6 +61,25 @@ const mapProduct = ({
 }
 
 /**
+ * Map props into a ProductStatus.
+ * @param {Object} props props
+ * @param {integer=} props.id the id
+ * @param {integer=} props.id the name
+ * @param {datetime=} props.createdAt created at
+ * @param {datetime=} props.updatedAt updated at
+ * @returns {ProductStatus} mapped product status
+ **/
+const mapProductStatus = ({ id, name, createdAt, updatedAt }) => {
+  const status = {}
+  if (id) status.id = id
+  if (name) status.name = name
+  if (createdAt) status.createdAt = createdAt
+  if (updatedAt) status.updatedAt = updatedAt
+
+  return status
+}
+
+/**
  * Maps props into an User.
  * @param {Object} props props
  * @param {integer=} props.id user's id
@@ -112,6 +131,7 @@ const mapOrder = ({ id, items, dateOrder }) => {
 module.exports = {
   mapCategory,
   mapProduct,
+  mapProductStatus,
   mapUser,
   mapOrder,
 }

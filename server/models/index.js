@@ -14,7 +14,7 @@
  */
 
 /**
- * @typedef {object} Product Category
+ * @typedef {object} Product product
  * @property {number=} id product id
  * @property {string=} title product title
  * @property {string=} description product description
@@ -27,6 +27,13 @@
  */
 
 /**
+ * @typedef {object} ProductStatus product status
+ * @property {number=} id the id
+ * @property {string=} name the status name
+ *
+ */
+
+/**
  * @typedef {object} Entity Entity
- * @property {(User|Category|Product)} entity entity
+ * @property {(User|Category|Product|ProductStatus)} entity entity
  */
