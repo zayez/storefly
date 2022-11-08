@@ -8,22 +8,42 @@
 
 ## Setting up tools
 
-To setup the server's environment, type:
+To setup the development environment, type:
 
 ```bash
 nix-shell shell.nix
 ```
 
-## Server
+## Development
 
-After setting up, you're ready to work with the server. Just move to the server directory:
+### Installing the **server** dependencies
 
 ```bash
 cd server
+npm install
 ```
 
-Specific instructions are available in the server directory. Check the documentation at **server/README.md**.
+### Creating the database
 
-## Client
+Inside the _server_ directory, type:
 
-To add later.
+```bash
+npm run create:db:dev
+```
+
+### Installing the **client** depedencies
+
+```bash
+cd ../client
+npm install
+```
+
+Now you're ready to start development, run the following command inside the _client_ directory:
+
+```bash
+npm run start:dev
+```
+
+## License
+
+[MIT](LICENSE)
