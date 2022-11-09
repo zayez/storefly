@@ -114,6 +114,9 @@ const categoriesSlice = createSlice({
     removeMessage(state, action) {
       state.message = ''
     },
+    resetCategories(state) {
+      state.categories = []
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCategories.pending, (state) => {
@@ -213,5 +216,6 @@ const categoriesSlice = createSlice({
 
 export const selectCategories = (state) => state.categories
 
-export const { resetCategory, removeMessage } = categoriesSlice.actions
+export const { resetCategory, resetCategories, removeMessage } =
+  categoriesSlice.actions
 export default categoriesSlice.reducer
