@@ -11,9 +11,8 @@ const getType = (type) => {
   }
 }
 
-const Callout = ({ message, type = 'info' }) => {
-  const calloutVisibility =
-    message == null ? '' : message === '' ? 'hide' : 'show'
+const Callout = ({ message, type = 'info', show }) => {
+  const calloutVisibility = show ? 'show' : 'hide'
   const style = getType(type)
   return (
     <div className={`callout callout-${style} ${calloutVisibility}`}>
