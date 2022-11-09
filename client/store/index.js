@@ -18,6 +18,7 @@ import {
 import auth from './slices/authSlice'
 import categories from './slices/categoriesSlice'
 import products from './slices/productsSlice'
+import productStatuses from './slices/productStatusesSlice'
 import users from './slices/usersSlice'
 
 const persistConfig = {
@@ -25,7 +26,13 @@ const persistConfig = {
   storage,
 }
 
-const rootReducer = combineReducers({ auth, categories, products, users })
+const rootReducer = combineReducers({
+  auth,
+  categories,
+  products,
+  productStatuses,
+  users,
+})
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 

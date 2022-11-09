@@ -4,7 +4,7 @@ import IDelete from '../../node_modules/feather-icons/dist/icons/x-circle.svg'
 const ProductItem = ({ product, id, onDelete }) => {
   const router = useRouter()
   const handleClick = (e) => {
-    router.push(`admin/products/${id}`)
+    router.push(`/admin/products/${id}`)
   }
   return (
     <tr>

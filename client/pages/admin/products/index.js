@@ -18,7 +18,6 @@ const Products = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const products = useSelector(selectProducts)
-  console.log(products)
   const [selectedId, setSelectedId] = useState(0)
 
   useEffect(() => {
