@@ -24,6 +24,8 @@ const Products = () => {
     dispatch(fetchProducts())
   }, [])
 
+  useEffect(() => {}, [products.message])
+
   const handleAddProduct = (e) => {
     router.push('/admin/products/new')
   }
@@ -48,7 +50,6 @@ const Products = () => {
         </div>
         <hr />
         {products.loading ? <Loader type={SPINNER_TYPE} /> : null}
-        {!products.loading ? <Callout message={products.message} /> : null}
         {!products.loading && products.error ? (
           <div>Error: {products.error}</div>
         ) : null}

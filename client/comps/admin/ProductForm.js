@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   create,
-  removeMessage,
   resetProduct,
   selectProducts,
   update,
@@ -44,7 +43,6 @@ const ProductForm = ({ product }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-
     if (product) {
       const id = product.id
       const patchProduct = {
@@ -55,19 +53,15 @@ const ProductForm = ({ product }) => {
         categoryId,
         statusId,
       }
-      dispatch(update({ id, product: patchProduct }))
+      dispatch(update({ id, product: patchProduct })).then((res) => {
+        if (!res.error) router.push('/admin/products')
+      })
     } else {
       dispatch(
         create({ title, description, inventory, price, categoryId, statusId }),
-      )
-
-      if (!products.error) {
-        //TODO: Fix missing message when successfully created
+      ).then((res) => {
         router.push('/admin/products')
-        setTimeout(() => {
-          dispatch(removeMessage())
-        }, 3000)
-      }
+      })
     }
   }
 
@@ -90,6 +84,7 @@ const ProductForm = ({ product }) => {
 
   useEffect(() => {
     const product = products.currentProduct
+
     if (product) {
       setTitle(product.title)
       setDescription(product.description)

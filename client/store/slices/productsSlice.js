@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { ActionStatus } from '../../types/ActionStatus'
+import { toast } from 'react-toastify'
 
 const initialState = {
   loading: false,
   products: [],
   currentProduct: null,
-  message: '',
   error: '',
   errors: [],
 }
@@ -76,10 +76,6 @@ const productsSlice = createSlice({
   reducers: {
     resetProduct(state, action) {
       state.currentProduct = null
-      state.message = null
-    },
-    removeMessage(state, action) {
-      state.message = ''
     },
   },
   extraReducers: (builder) => {
@@ -116,8 +112,8 @@ const productsSlice = createSlice({
     builder.addCase(create.fulfilled, (state, action) => {
       state.loading = false
       state.currentProduct = action.payload
-      state.message = 'Product was successfully created.'
       state.error = ''
+      toast.success('Product created successfully!', {})
     })
     builder.addCase(create.rejected, (state, action) => {
       state.loading = false
@@ -141,6 +137,7 @@ const productsSlice = createSlice({
     builder.addCase(update.fulfilled, (state, action) => {
       state.loading = false
       state.currentProduct = action.payload
+      toast.success('Product updated successfully!', {})
       state.error = ''
     })
     builder.addCase(update.rejected, (state, action) => {
@@ -164,6 +161,6 @@ const productsSlice = createSlice({
 export const selectProducts = (state) => state.products
 export const selectCurrentProduct = (state) => state.products.currentProduct
 
-export const { resetProduct, removeMessage } = productsSlice.actions
+export const { resetProduct } = productsSlice.actions
 
 export default productsSlice.reducer

@@ -6,6 +6,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { store, persistor } from '../store'
 import '../styles/index.sass'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
+import 'react-toastify/dist/ReactToastify.css'
 
 const MyApp = ({ Component, pageProps, router }) => {
   const nodeRef = React.useRef(null)
