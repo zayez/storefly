@@ -104,7 +104,7 @@ export const destroy = createAsyncThunk(
 )
 
 const categoriesSlice = createSlice({
-  name: 'products',
+  name: 'categories',
   initialState,
   reducers: {
     resetCategory(state, action) {
