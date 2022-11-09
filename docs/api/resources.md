@@ -211,8 +211,7 @@ Creates a new product and responds with product contents if successfully created
 | description | string       | No        |
 | price       | decimal      | Yes       |
 | inventory   | integer      | Yes       |
-| image       | image uplaod | No        |
-| inventory   | integer      | Yes       |
+| image       | image upload | No        |
 | statusId    | integer      | No        |
 | categoryId  | integer      | No        |
 
