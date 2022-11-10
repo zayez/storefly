@@ -60,7 +60,7 @@ const ProductForm = ({ product }) => {
       dispatch(
         create({ title, description, inventory, price, categoryId, statusId }),
       ).then((res) => {
-        router.push('/admin/products')
+        if (!res.error) router.push('/admin/products')
       })
     }
   }
