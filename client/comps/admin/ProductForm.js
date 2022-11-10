@@ -96,30 +96,32 @@ const ProductForm = ({
       <div className="container">
         <div className="product-details">
           <form onSubmit={handleSubmit} className="form">
-            <div className="field">
-              <div className="field-label">
-                <label htmlFor="id">ID</label>
+            <div className="row row-one">
+              <div className="field">
+                <div className="field-label">
+                  <label htmlFor="id">ID</label>
+                </div>
+                <div className="field-control">
+                  <input
+                    type="text"
+                    defaultValue={id ? id : ''}
+                    disabled={true}
+                    readOnly={true}
+                  />
+                </div>
               </div>
-              <div className="field-control">
-                <input
-                  type="text"
-                  defaultValue={id ? id : ''}
-                  disabled={true}
-                  readOnly={true}
-                />
-              </div>
-            </div>
 
-            <div className="field">
-              <div className="field-label">
-                <label htmlFor="title">Title</label>
-              </div>
-              <div className="field-body">
-                <input
-                  type="text"
-                  value={title}
-                  onChange={({ target }) => setTitle(target?.value)}
-                />
+              <div className="field">
+                <div className="field-label">
+                  <label htmlFor="title">Title</label>
+                </div>
+                <div className="field-body">
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={({ target }) => setTitle(target?.value)}
+                  />
+                </div>
               </div>
             </div>
 
@@ -129,87 +131,91 @@ const ProductForm = ({
               </div>
               <div className="field-body">
                 <textarea
-                  rows={5}
+                  rows={6}
                   value={description}
                   onChange={({ target }) => setDescription(target?.value)}
                 ></textarea>
               </div>
             </div>
 
-            <div className="field">
-              <div className="fiel-label">
-                <label htmlFor="price">Price</label>
+            <div className="row row-three">
+              <div className="field">
+                <div className="field-label">
+                  <label htmlFor="price">Price</label>
+                </div>
+                <div className="field-body">
+                  <IMaskInput
+                    value={`${price}`}
+                    scale={2}
+                    normalizeZeros={true}
+                    padFractionalZeros={true}
+                    mask={Number}
+                    unmask={true}
+                    radix=","
+                    mapToRadix={['.']}
+                    thousandsSeparator="."
+                    ref={priceRef}
+                    inputRef={priceInputRef}
+                    onAccept={handlePriceChange}
+                  />
+                </div>
               </div>
-              <div className="field-body">
-                <IMaskInput
-                  value={`${price}`}
-                  scale={2}
-                  normalizeZeros={true}
-                  padFractionalZeros={true}
-                  mask={Number}
-                  unmask={true}
-                  radix=","
-                  mapToRadix={['.']}
-                  thousandsSeparator="."
-                  ref={priceRef}
-                  inputRef={priceInputRef}
-                  onAccept={handlePriceChange}
-                />
+
+              <div className="field">
+                <div className="field-label">
+                  <label htmlFor='="inventory'>Inventory</label>
+                </div>
+                <div className="field-body">
+                  <IMaskInput
+                    value={`${inventory}`}
+                    mask={Number}
+                    scale={0}
+                    thousandsSeparator="."
+                    ref={inventoryRef}
+                    inputRef={inventoryInputRef}
+                    onAccept={(value, mask) => setInventory(value)}
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="field">
-              <div className="field-label">
-                <label htmlFor='="inventory'>Inventory</label>
+            <div className="row row-four">
+              <div className="field">
+                <div className="field-label">
+                  <label htmlFor="categoryId">Category</label>
+                </div>
+                <div className="field-body">
+                  <select
+                    value={categoryId}
+                    onChange={({ target }) => setCategory(target?.value)}
+                  >
+                    <option key="0" value=""></option>
+                    {categories?.categories.map((category) => (
+                      <option value={category.id} key={category.id}>
+                        {category.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-              <div className="field-body">
-                <IMaskInput
-                  value={`${inventory}`}
-                  mask={Number}
-                  scale={0}
-                  thousandsSeparator="."
-                  ref={inventoryRef}
-                  inputRef={inventoryInputRef}
-                  onAccept={(value, mask) => setInventory(value)}
-                />
-              </div>
-            </div>
 
-            <div className="field">
-              <div className="field-label">
-                <label htmlFor="categoryId">Category</label>
-              </div>
-              <div className="field-body">
-                <select
-                  value={categoryId}
-                  onChange={({ target }) => setCategory(target?.value)}
-                >
-                  <option key="0" value=""></option>
-                  {categories?.categories.map((category) => (
-                    <option value={category.id} key={category.id}>
-                      {category.title}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="field">
-              <div className="field-label">
-                <label htmlFor="statusId">Status</label>
-              </div>
-              <div className="field-body">
-                <select
-                  value={statusId}
-                  onChange={({ target }) => setStatus(target?.value)}
-                >
-                  <option key="0" value=""></option>
-                  {productStatuses?.productStatuses.map((status) => (
-                    <option value={status.id} key={status.id}>
-                      {capitalize(status.name)}
-                    </option>
-                  ))}
-                </select>
+              <div className="field">
+                <div className="field-label">
+                  <label htmlFor="statusId">Status</label>
+                </div>
+                <div className="field-body">
+                  <select
+                    value={statusId}
+                    onChange={({ target }) => setStatus(target?.value)}
+                  >
+                    <option key="0" value=""></option>
+                    {productStatuses?.productStatuses.map((status) => (
+                      <option value={status.id} key={status.id}>
+                        {capitalize(status.name)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
             <div className="buttons">

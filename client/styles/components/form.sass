@@ -23,3 +23,18 @@ input[disabled]
   width: 10px
 
 
+
+.row
+  display: flex
+  gap: 1rem
+  & > *
+    flex: 1
+
+
+.row-one
+
+  & > :first-child
+    flex: 0 auto
+  & > :last-child
+    flex: 2 auto
+
