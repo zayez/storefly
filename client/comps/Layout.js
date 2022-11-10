@@ -68,7 +68,6 @@ const AdminLayout = ({ children }) => {
         <div className="flex">
           <Sidebar />
           <div className="content-main">{children}</div>
-          <Toast />
         </div>
       </div>
     </>
