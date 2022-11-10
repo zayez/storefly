@@ -1,12 +1,7 @@
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  create,
-  resetProduct,
-  selectProducts,
-  update,
-} from '../../store/slices/productsSlice'
+import { create, resetProduct, update } from '../../store/slices/productsSlice'
 import {
   fetchCategories,
   selectCategories,
@@ -17,34 +12,49 @@ import {
 } from '../../store/slices/productStatusesSlice'
 import { useRef } from 'react'
 import { IMaskInput } from 'react-imask'
+import { toast } from 'react-toastify'
 const capitalize = require('upper-case-first').upperCaseFirst
 
-const ProductForm = ({ product }) => {
+const ProductForm = ({
+  id,
+  title,
+  setTitle,
+  description,
+  setDescription,
+  inventory,
+  setInventory,
+  price,
+  setPrice,
+  categoryId,
+  setCategory,
+  statusId,
+  setStatus,
+}) => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const products = useSelector(selectProducts)
   const categories = useSelector(selectCategories)
   const productStatuses = useSelector(selectProductStatuses)
 
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [inventory, setInventory] = useState('')
-  const [price, setPrice] = useState('')
-  const [categoryId, setCategory] = useState('')
-  const [statusId, setStatus] = useState('')
-
-  const headingText = product ? 'Edit' : 'New'
-  const submitText = product ? 'Save' : 'Create'
+  const headingText = id ? 'Edit' : 'New'
+  const submitText = id ? 'Save' : 'Create'
 
   const priceRef = useRef(null)
   const priceInputRef = useRef(null)
   const inventoryRef = useRef(null)
   const inventoryInputRef = useRef(null)
 
+  useEffect(() => {
+    dispatch(fetchCategories())
+    dispatch(fetchProductStatuses())
+
+    if (!id) {
+      resetProduct()
+    }
+  }, [])
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (product) {
-      const id = product.id
+    if (id) {
       const patchProduct = {
         title,
         description,
@@ -54,13 +64,19 @@ const ProductForm = ({ product }) => {
         statusId,
       }
       dispatch(update({ id, product: patchProduct })).then((res) => {
-        if (!res.error) router.push('/admin/products')
+        if (!res.error) {
+          router.push('/admin/products')
+          toast.success('Product successfully updated!', {})
+        }
       })
     } else {
       dispatch(
         create({ title, description, inventory, price, categoryId, statusId }),
       ).then((res) => {
-        if (!res.error) router.push('/admin/products')
+        if (!res.error) {
+          router.push('/admin/products')
+          toast.success('Product successfully created!', {})
+        }
       })
     }
   }
@@ -74,33 +90,6 @@ const ProductForm = ({ product }) => {
     setPrice(value)
   }
 
-  useEffect(() => {
-    dispatch(fetchCategories())
-    dispatch(fetchProductStatuses())
-    if (!product) {
-      dispatch(resetProduct())
-    }
-  }, [])
-
-  useEffect(() => {
-    const product = products.currentProduct
-
-    if (product) {
-      setTitle(product.title)
-      setDescription(product.description)
-      setInventory(product.inventory)
-      setPrice(product.price)
-      setCategory(product.categoryId)
-      setStatus(product.statusId)
-    } else {
-      setTitle('')
-      setDescription('')
-      setInventory('')
-      setPrice('')
-      setCategory('')
-      setStatus('')
-    }
-  }, [products.currentProduct])
   return (
     <>
       <h1>Product – {headingText}</h1>
@@ -114,7 +103,7 @@ const ProductForm = ({ product }) => {
               <div className="field-control">
                 <input
                   type="text"
-                  defaultValue={product ? product.id : ''}
+                  defaultValue={id ? id : ''}
                   disabled={true}
                   readOnly={true}
                 />

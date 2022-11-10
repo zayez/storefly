@@ -113,7 +113,6 @@ const productsSlice = createSlice({
       state.loading = false
       state.currentProduct = action.payload
       state.error = ''
-      toast.success('Product created successfully!', {})
     })
     builder.addCase(create.rejected, (state, action) => {
       state.loading = false
@@ -137,7 +136,6 @@ const productsSlice = createSlice({
     builder.addCase(update.fulfilled, (state, action) => {
       state.loading = false
       state.currentProduct = action.payload
-      toast.success('Product updated successfully!', {})
       state.error = ''
     })
     builder.addCase(update.rejected, (state, action) => {

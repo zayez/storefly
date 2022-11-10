@@ -6,9 +6,17 @@ import Loader from '../../../comps/Loader'
 import { selectProducts } from '../../../store/slices/productsSlice'
 import { SPINNER_TYPE } from '../../../types/LoaderType'
 import { CalloutError } from '../../../comps/Callout'
+import { useState } from 'react'
 
 const ProductNew = ({}) => {
   const products = useSelector(selectProducts)
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [inventory, setInventory] = useState('')
+  const [price, setPrice] = useState('')
+  const [categoryId, setCategory] = useState('')
+  const [statusId, setStatus] = useState('')
+
   return (
     <>
       <Head>
@@ -19,7 +27,22 @@ const ProductNew = ({}) => {
         {!products.loading && products.error ? (
           <CalloutError error={products.error} errors={products.errors} />
         ) : null}
-        {!products.loading ? <ProductForm /> : null}
+        {!products.loading ? (
+          <ProductForm
+            title={title}
+            setTitle={setTitle}
+            description={description}
+            setDescription={setDescription}
+            inventory={inventory}
+            setInventory={setInventory}
+            price={price}
+            setPrice={setPrice}
+            categoryId={categoryId}
+            setCategory={setCategory}
+            statusId={statusId}
+            setStatus={setStatus}
+          />
+        ) : null}
       </div>
     </>
   )
