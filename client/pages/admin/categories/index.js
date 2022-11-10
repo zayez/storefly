@@ -10,7 +10,6 @@ import {
 import CategoriesList from '../../../comps/admin/CategoriesList'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import Callout from '../../../comps/Callout'
 import Modal from '../../../comps/Modal'
 
 const Categories = () => {
