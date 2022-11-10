@@ -55,11 +55,7 @@ const Categories = () => {
           </button>
         </div>
         <hr />
-        {!categories.loading ? <Callout message={categories.message} /> : null}
         {categories.loading && <div>Loading...</div>}
-        {!categories.loading && categories.error ? (
-          <div>Error: {categories.error}</div>
-        ) : null}
         {!categories.loading && categories.categories.length ? (
           <CategoriesList
             categories={categories.categories}
