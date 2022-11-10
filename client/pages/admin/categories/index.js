@@ -14,31 +14,33 @@ import Modal from '../../../comps/Modal'
 
 const Categories = () => {
   const router = useRouter()
+  const dispatch = useDispatch()
   const [showModal, setShowModal] = useState(null)
   const [selectedId, setSelectedId] = useState(0)
   const categories = useSelector(selectCategories)
-  const dispatch = useDispatch()
+
   useEffect(() => {
     dispatch(fetchCategories())
   }, [])
 
-  const handleModalEnter = (id) => {
-    setSelectedId(id)
-    setShowModal(true)
+  const handleAddCategory = (e) => {
+    e.preventDefault()
+    router.push('/admin/categories/new')
   }
 
   const handleDelete = async () => {
     dispatch(destroy(selectedId))
   }
 
+  const handleModalEnter = (id) => {
+    setSelectedId(id)
+    setShowModal(true)
+  }
+
   const handleModalExit = () => {
     setShowModal(false)
   }
 
-  const handleAddCategory = (e) => {
-    e.preventDefault()
-    router.push('/admin/categories/new')
-  }
   return (
     <>
       <Head>

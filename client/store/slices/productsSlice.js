@@ -70,6 +70,28 @@ export const update = createAsyncThunk(
   },
 )
 
+export const destroy = createAsyncThunk(
+  'products/destroy',
+  async (id, { rejectWithValue }) => {
+    const reqOpts = {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    }
+    const url = `/api/products/${id}`
+    return fetch(url, reqOpts).then(async (res) => {
+      switch (res.status) {
+        case 200:
+          return { id, data: await res.json() }
+        case 422:
+          return rejectWithValue(await res.json())
+        case 400:
+        default:
+          return rejectWithValue(ActionStatus.Error)
+      }
+    })
+  },
+)
+
 const productsSlice = createSlice({
   name: 'products',
   initialState,
@@ -152,6 +174,19 @@ const productsSlice = createSlice({
           state.error = action.payload.detail
           break
       }
+    })
+
+    builder.addCase(destroy.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(destroy.fulfilled, (state, action) => {
+      state.loading = false
+      state.products = state.products.filter((x) => x.id !== action.payload.id)
+      state.error = ''
+    })
+    builder.addCase(destroy.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message
     })
   },
 })

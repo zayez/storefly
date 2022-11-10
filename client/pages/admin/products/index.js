@@ -6,6 +6,7 @@ import Callout from '../../../comps/Callout'
 import { adminLayout } from '../../../comps/Layout'
 import IProducts from '../../../node_modules/feather-icons/dist/icons/package.svg'
 import {
+  destroy,
   fetchProducts,
   selectProducts,
 } from '../../../store/slices/productsSlice'
@@ -13,12 +14,14 @@ import {
 import Loader from '../../../comps/Loader'
 import { SPINNER_TYPE } from '../../../types/LoaderType'
 import ProductList from '../../../comps/admin/ProductList'
+import Modal from '../../../comps/Modal'
 
 const Products = () => {
   const router = useRouter()
   const dispatch = useDispatch()
-  const products = useSelector(selectProducts)
+  const [showModal, setShowModal] = useState(null)
   const [selectedId, setSelectedId] = useState(0)
+  const products = useSelector(selectProducts)
 
   useEffect(() => {
     dispatch(fetchProducts())
@@ -30,9 +33,19 @@ const Products = () => {
     router.push('/admin/products/new')
   }
 
-  const handleModalEnter = () => {
-    console.log('hello there')
+  const handleDelete = async () => {
+    dispatch(destroy(selectedId))
   }
+
+  const handleModalEnter = (id) => {
+    setSelectedId(id)
+    setShowModal(true)
+  }
+
+  const handleModalExit = () => {
+    setShowModal(false)
+  }
+
   return (
     <>
       <Head>
@@ -59,6 +72,15 @@ const Products = () => {
             onDelete={handleModalEnter}
           />
         ) : null}
+        <Modal
+          title={`Delete product`}
+          message={`This can't be undone.`}
+          type="danger"
+          actionName={`Delete`}
+          onExit={handleModalExit}
+          onConfirm={handleDelete}
+          show={showModal}
+        />
       </div>
     </>
   )
