@@ -46,4 +46,4 @@ npm run start:dev
 
 ## License
 
-[MIT](LICENSE).
+[MIT](LICENSE).  
