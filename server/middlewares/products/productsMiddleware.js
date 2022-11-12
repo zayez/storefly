@@ -36,7 +36,9 @@ const update = async (ctx) => {
     const { id } = ctx.params
     const props = mapper.mapProduct(ctx.request.body)
     if (ctx.request.file) {
-      props.image = ctx.request.file.path
+      const filename = ctx.request.file.filename
+      const filepath = `uploads`
+      props.image = `${filepath}/${filename}`
     }
     const { action, payload } = await ProductsController.update(id, props)
     setResponse(ctx, { action, payload })
