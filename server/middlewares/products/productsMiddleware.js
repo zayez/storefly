@@ -8,7 +8,9 @@ const create = async (ctx) => {
   try {
     const product = mapper.mapProduct(ctx.request.body)
     if (ctx.request.file) {
-      product.image = ctx.request.file.path
+      const filename = ctx.request.file.filename
+      const filepath = `uploads`
+      product.image = `${filepath}/${filename}`
     }
     const { action, payload } = await ProductsController.create(product)
     setResponse(ctx, { action, payload })
