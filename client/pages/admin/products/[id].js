@@ -23,6 +23,7 @@ const ProductEdit = ({}) => {
   const [price, setPrice] = useState('')
   const [categoryId, setCategory] = useState('')
   const [statusId, setStatus] = useState('')
+  const [image, setImage] = useState('')
   const { id } = router.query
   const product = products.currentProduct
   useEffect(() => {
@@ -39,6 +40,7 @@ const ProductEdit = ({}) => {
       setPrice(product.price)
       setCategory(product.categoryId)
       setStatus(product.statusId)
+      setImage(product.image)
     }
   }, [products.currentProduct])
 
@@ -67,6 +69,8 @@ const ProductEdit = ({}) => {
             setCategory={setCategory}
             statusId={statusId}
             setStatus={setStatus}
+            image={image}
+            setImage={setImage}
           />
         ) : null}
       </div>

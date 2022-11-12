@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { create, resetProduct, update } from '../../store/slices/productsSlice'
 import {
   fetchCategories,
@@ -13,6 +14,7 @@ import {
 import { useRef } from 'react'
 import { IMaskInput } from 'react-imask'
 import { toast } from 'react-toastify'
+import Upload from '../Upload'
 const capitalize = require('upper-case-first').upperCaseFirst
 
 const ProductForm = ({
@@ -29,11 +31,15 @@ const ProductForm = ({
   setCategory,
   statusId,
   setStatus,
+  image,
+  setImage,
 }) => {
   const dispatch = useDispatch()
   const router = useRouter()
   const categories = useSelector(selectCategories)
   const productStatuses = useSelector(selectProductStatuses)
+  const [imageSource, setImageSource] = useState(null)
+  const [imageData, setImageData] = useState(null)
 
   const headingText = id ? 'Edit' : 'New'
   const submitText = id ? 'Save' : 'Create'
@@ -53,32 +59,39 @@ const ProductForm = ({
   }, [])
 
   const handleSubmit = (e) => {
+    const formData = new FormData()
+    if (title) formData.append('title', title)
+    if (description) formData.append('description', description)
+    if (inventory) formData.append('inventory', inventory)
+    if (price) formData.append('price', price)
+    if (categoryId) formData.append('categoryId', categoryId)
+    if (statusId) formData.append('statusId', statusId)
+    if (imageData !== null) {
+      formData.append('image', imageData)
+    }
+
     e.preventDefault()
     if (id) {
-      const patchProduct = {
-        title,
-        description,
-        inventory,
-        price,
-        categoryId,
-        statusId,
-      }
-      dispatch(update({ id, product: patchProduct })).then((res) => {
+      dispatch(update({ id, formData })).then((res) => {
         if (!res.error) {
           router.push('/admin/products')
           toast.success('Product successfully updated!', {})
         }
       })
     } else {
-      dispatch(
-        create({ title, description, inventory, price, categoryId, statusId }),
-      ).then((res) => {
+      dispatch(create(formData)).then((res) => {
         if (!res.error) {
           router.push('/admin/products')
           toast.success('Product successfully created!', {})
         }
       })
     }
+  }
+
+  const handleRemoveImage = (e) => {
+    e.preventDefault()
+    setImage(null)
+    setImageSource(null)
   }
 
   const handleBackClick = (e) => {
@@ -218,6 +231,41 @@ const ProductForm = ({
                 </div>
               </div>
             </div>
+            {image ? (
+              <div className="line">
+                <div className="row">
+                  <div className="field">
+                    <img
+                      className="product-image-form"
+                      src={`http://localhost:2222/${image}`}
+                    />
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="field">
+                    <button type="button" onClick={handleRemoveImage}>
+                      Remove image
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : imageSource ? (
+              <div className="row">
+                <div className="image-source">
+                  <img src={imageSource} />
+                </div>
+              </div>
+            ) : (
+              <div className="dropzone-container">
+                <div className="row">
+                  <Upload
+                    setImageSource={setImageSource}
+                    setImageData={setImageData}
+                  />
+                </div>
+              </div>
+            )}
+
             <div className="buttons">
               <button className="btn" onClick={handleBackClick}>
                 Back

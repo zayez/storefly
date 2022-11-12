@@ -26,11 +26,10 @@ export const fetchProduct = createAsyncThunk(
 
 export const create = createAsyncThunk(
   'products/create',
-  async (product, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     const reqOpts = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(product),
+      body: formData,
     }
     return fetch(`/api/products`, reqOpts).then(async (res) => {
       switch (res.status) {
@@ -47,11 +46,10 @@ export const create = createAsyncThunk(
 
 export const update = createAsyncThunk(
   'products/update',
-  async ({ id, product }, { rejectWithValue }) => {
+  async ({ id, formData }, { rejectWithValue }) => {
     const reqOpts = {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(product),
+      body: formData,
     }
 
     const url = `/api/products/${id}`
