@@ -21,13 +21,13 @@ const CategoryItem = ({ category, id, onDelete }) => {
   )
 }
 
-const CategoriesList = ({ categories, onDelete }) => {
+const CategoryList = ({ categories, onDelete }) => {
   return (
     <div className="categories-list">
       <table className="table-basic">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>#</th>
             <th>Title</th>
             <th className="delete-item">Delete</th>
           </tr>
@@ -47,4 +47,4 @@ const CategoriesList = ({ categories, onDelete }) => {
   )
 }
 
-export default CategoriesList
+export default CategoryList

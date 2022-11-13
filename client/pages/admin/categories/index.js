@@ -7,7 +7,7 @@ import {
   fetchCategories,
   selectCategories,
 } from '../../../store/slices/categoriesSlice'
-import CategoriesList from '../../../comps/admin/CategoriesList'
+import CategoryList from '../../../comps/admin/CategoryList'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Modal from '../../../comps/Modal'
@@ -58,7 +58,7 @@ const Categories = () => {
         <hr />
         {categories.loading && <div>Loading...</div>}
         {!categories.loading && categories.categories.length ? (
-          <CategoriesList
+          <CategoryList
             categories={categories.categories}
             onDelete={handleModalEnter}
           />
