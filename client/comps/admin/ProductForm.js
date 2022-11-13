@@ -55,7 +55,7 @@ const ProductForm = ({
     dispatch(fetchProductStatuses())
 
     if (!id) {
-      resetProduct()
+      dispatch(resetProduct())
     }
   }, [])
 
@@ -101,6 +101,9 @@ const ProductForm = ({
   const handleBackClick = (e) => {
     e.preventDefault()
     router.push('/admin/products')
+    setTimeout(() => {
+      dispatch(resetProduct())
+    }, 1000)
   }
 
   const handlePriceChange = (value, mask) => {
