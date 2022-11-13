@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import IUsers from '../../../node_modules/feather-icons/dist/icons/users.svg'
 import { adminLayout } from '../../../comps/Layout'
-import UsersList from '../../../comps/UsersList'
+import UserList from '../../../comps/admin/UserList'
 import {
   fetchUsers,
   selectUser,
@@ -30,7 +30,7 @@ const Users = ({}) => {
 
         {user.loading && <div>Loading...</div>}
         {!user.loading && user.error ? <div>Error: {user.error}</div> : null}
-        {!user.loading && users.length ? <UsersList users={users} /> : null}
+        {!user.loading && users.length ? <UserList users={users} /> : null}
       </div>
     </>
   )

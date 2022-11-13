@@ -1,6 +1,13 @@
+import { useRouter } from 'next/router'
+
 const UserItem = ({ user }) => {
+  const router = useRouter()
+  const handleItemClick = (e) => {
+    e.preventDefault()
+    router.push(`/admin/users/${user.id}`)
+  }
   return (
-    <tr>
+    <tr onClick={handleItemClick}>
       <td>{user.id}</td>
       <td>
         {user.firstName} {user.lastName}
@@ -10,13 +17,13 @@ const UserItem = ({ user }) => {
   )
 }
 
-const UsersList = ({ users }) => {
+const UserList = ({ users }) => {
   return (
     <div className="users-list">
       <table className="table-basic">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>#</th>
             <th>Name</th>
             <th>E-mail</th>
           </tr>
@@ -31,4 +38,4 @@ const UsersList = ({ users }) => {
   )
 }
 
-export default UsersList
+export default UserList
