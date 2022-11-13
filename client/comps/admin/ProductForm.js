@@ -40,6 +40,7 @@ const ProductForm = ({
   const productStatuses = useSelector(selectProductStatuses)
   const [imageSource, setImageSource] = useState(null)
   const [imageData, setImageData] = useState(null)
+  const [imageRemove, setImageRemove] = useState(false)
 
   const headingText = id ? 'Edit' : 'New'
   const submitText = id ? 'Save' : 'Create'
@@ -66,9 +67,10 @@ const ProductForm = ({
     if (price) formData.append('price', price)
     if (categoryId) formData.append('categoryId', categoryId)
     if (statusId) formData.append('statusId', statusId)
-    if (imageData !== null) {
-      formData.append('image', imageData)
+    if (imageRemove) {
+      formData.append('imageRemove', true)
     }
+    if (imageData) formData.append('image', imageData)
 
     e.preventDefault()
     if (id) {
@@ -92,6 +94,8 @@ const ProductForm = ({
     e.preventDefault()
     setImage(null)
     setImageSource(null)
+    setImageData(null)
+    setImageRemove(true)
   }
 
   const handleBackClick = (e) => {
@@ -250,9 +254,18 @@ const ProductForm = ({
                 </div>
               </div>
             ) : imageSource ? (
-              <div className="row">
-                <div className="image-source">
-                  <img src={imageSource} />
+              <div className="line">
+                <div className="row">
+                  <div className="image-source">
+                    <img src={imageSource} />
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="field">
+                    <button type="button" onClick={handleRemoveImage}>
+                      Remove image
+                    </button>
+                  </div>
                 </div>
               </div>
             ) : (

@@ -35,6 +35,10 @@ const update = async (ctx) => {
   try {
     const { id } = ctx.params
     const props = mapper.mapProduct(ctx.request.body)
+    const { imageRemove } = ctx.request.body
+    if (imageRemove) {
+      props.image = ''
+    }
     if (ctx.request.file) {
       const filename = ctx.request.file.filename
       const filepath = `uploads`

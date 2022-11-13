@@ -10,9 +10,11 @@ const ProductItem = ({ product, id, onDelete }) => {
     <tr>
       <td onClick={handleClick}>{product.id}</td>
       <td>
-        <div className="image-wrapper">
-          <img src={`http://localhost:2222/${product.image}`} />{' '}
-        </div>
+        {product.image ? (
+          <div className="image-wrapper">
+            <img src={`http://localhost:2222/${product.image}`} />{' '}
+          </div>
+        ) : null}
       </td>
       <td onClick={handleClick}>{product.title}</td>
       <td>{product.inventory}</td>

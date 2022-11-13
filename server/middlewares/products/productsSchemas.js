@@ -62,6 +62,7 @@ const Update = Joi.object().keys({
   price: Joi.number().precision(2),
   inventory: Joi.number().integer(),
   image: Joi.string().trim(),
+  imageRemove: Joi.boolean(),
   statusId: Joi.number().integer(),
   categoryId: Joi.number().integer(),
 })
