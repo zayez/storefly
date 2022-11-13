@@ -2,7 +2,6 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import Callout from '../../../comps/Callout'
 import { adminLayout } from '../../../comps/Layout'
 import IProducts from '../../../node_modules/feather-icons/dist/icons/package.svg'
 import {
