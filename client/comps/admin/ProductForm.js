@@ -210,11 +210,13 @@ const ProductForm = ({
                     onChange={({ target }) => setCategory(target?.value)}
                   >
                     <option key="0" value=""></option>
-                    {categories?.categories.map((category) => (
-                      <option value={category.id} key={category.id}>
-                        {category.title}
-                      </option>
-                    ))}
+                    {categories && categories.categories.length > 0
+                      ? categories.categories.map((category) => (
+                          <option value={category.id} key={category.id}>
+                            {category.title}
+                          </option>
+                        ))
+                      : null}
                   </select>
                 </div>
               </div>
@@ -229,11 +231,14 @@ const ProductForm = ({
                     onChange={({ target }) => setStatus(target?.value)}
                   >
                     <option key="0" value=""></option>
-                    {productStatuses?.productStatuses.map((status) => (
-                      <option value={status.id} key={status.id}>
-                        {capitalize(status.name)}
-                      </option>
-                    ))}
+                    {productStatuses &&
+                    productStatuses.productStatuses.length > 0
+                      ? productStatuses.productStatuses.map((status) => (
+                          <option value={status.id} key={status.id}>
+                            {capitalize(status.name)}
+                          </option>
+                        ))
+                      : null}
                   </select>
                 </div>
               </div>
