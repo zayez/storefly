@@ -63,11 +63,15 @@ test('As admin I should:', (t) => {
 
     const createdProduct = res.body
 
-    assert.equal(res.status, STATUS.Created)
-    assert.ok(createdProduct.image.endsWith(path.basename(images[0].path)))
-    assert.ok(Number.isInteger(createdProduct.id))
-    const img = `./${createdProduct.image}`
-    const fileExists = await fs.stat(img)
+    assert.equal(res.status, STATUS.Created, 'product was created')
+    assert.ok(
+      createdProduct.image.endsWith(path.basename(images[0].path)),
+      'right name',
+    )
+    assert.ok(Number.isInteger(createdProduct.id), 'has an integer id')
+    const filepath = path.join(__dirname, '../data', createdProduct.image)
+
+    const fileExists = await fs.stat(filepath)
     assert.ok(fileExists, 'file was created')
 
     assert.end()
@@ -81,22 +85,22 @@ test('As admin I should:', (t) => {
       token,
       status: STATUS.Created,
     })
-    const newProduct = res.body
+    const createdProd = res.body
 
-    const productUpdate = {}
-    const resUpdate = await updateUpload(newProduct.id, {}, images[1], {
+    const resUpdate = await updateUpload(createdProd.id, {}, images[1], {
       token,
       status: STATUS.Ok,
     })
-    const updatedProduct = resUpdate.body
+    const updatedProd = resUpdate.body
 
-    assert.equal(resUpdate.status, STATUS.Ok)
-    assert.ok(updatedProduct.image.endsWith(path.basename(images[1].path)))
-    const oldImg = `./${newProduct.image}`
-    const newImg = `./${updatedProduct.image}`
+    assert.equal(resUpdate.status, STATUS.Ok, 'status is right')
+    assert.ok(updatedProd.image.endsWith(path.basename(images[1].path)))
 
-    assert.ok(await existsFile(newImg), 'new image was created')
-    assert.notOk(await existsFile(oldImg), 'old image was deleted')
+    const createdImg = path.join(__dirname, '../data', `./${createdProd.image}`)
+    const updatedImg = path.join(__dirname, '../data', `${updatedProd.image}`)
+
+    assert.ok(await existsFile(updatedImg), 'new image was created')
+    assert.notOk(await existsFile(createdImg), 'old image was deleted')
 
     assert.end()
   })
