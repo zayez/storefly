@@ -5,6 +5,9 @@ import { toast } from 'react-toastify'
 const IMAGE_MAX_SIZE_MB = 5
 const IMAGE_MAX_SIZE = 1024 * (1024 * IMAGE_MAX_SIZE_MB)
 
+// Aspect ratio:
+// 57 : 64
+
 const Upload = ({ setImageSource, setImageData }) => {
   const verifyFile = (file) => {
     if (file) {
