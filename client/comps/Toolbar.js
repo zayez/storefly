@@ -2,13 +2,14 @@ import Link from 'next/link'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAuth, signOut } from '../store/slices/authSlice'
+import { selectCart } from '../store/slices/cartSlice'
 import ICart from '../node_modules/feather-icons/dist/icons/shopping-cart.svg'
 import IUser from '../node_modules/feather-icons/dist/icons/user.svg'
 import ILogout from '../node_modules/feather-icons/dist/icons/log-out.svg'
 import ILogin from '../node_modules/feather-icons/dist/icons/log-in.svg'
 import ISearch from '../node_modules/feather-icons/dist/icons/search.svg'
 import ISignUp from '../node_modules/feather-icons/dist/icons/user-plus.svg'
-import Router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 
 const Profile = () => {
   return (
@@ -67,6 +68,8 @@ const SignOut = () => {
 
 const Toolbar = () => {
   const auth = useSelector(selectAuth)
+  const cart = useSelector(selectCart)
+  const totalItems = cart.items.reduce((acc, cur) => acc + cur.quantity, 0)
 
   useEffect(() => {}, [auth.user])
   return (
@@ -88,12 +91,15 @@ const Toolbar = () => {
           </li>
         ) : null}
         {auth.user ? <SignOut /> : null}
-        <li>
+        <li className="toolbar-cart-container">
           <Link href="/cart">
             <a className="toolbar-item" title="Cart">
               <ICart />
             </a>
           </Link>
+          <div className="cart-total-container">
+            <span className="cart-total-items">{totalItems}</span>
+          </div>
         </li>
       </ul>
     </nav>
