@@ -1,5 +1,7 @@
 const baseUrl = `http://localhost:2222`
 import Link from 'next/link'
+import { useDispatch } from 'react-redux'
+import { addItem } from '../store/slices/cartSlice'
 
 let dollarUS = Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -7,6 +9,12 @@ let dollarUS = Intl.NumberFormat('en-US', {
 })
 
 const ProductItem = ({ product }) => {
+  const dispatch = useDispatch()
+
+  const handleAddItem = (e) => {
+    dispatch(addItem(product))
+  }
+
   return (
     <div className="product-item" key={product.id}>
       <div className="product-image">
@@ -21,7 +29,7 @@ const ProductItem = ({ product }) => {
           <a>{product.title} </a>
         </Link>
         <div className="price">{dollarUS.format(product.price)}</div>
-        <button>Add to cart</button>
+        <button onClick={handleAddItem}>Add to cart</button>
       </div>
     </div>
   )
