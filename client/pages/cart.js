@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import CartList from '../comps/CartList'
+import IArrowLeft from '../node_modules/feather-icons/dist/icons/arrow-left.svg'
 import {
   calculateSubtotal,
   clearCart,
@@ -24,6 +25,15 @@ const Cart = () => {
       </Head>
       <div>
         <h1>Shopping Cart</h1>
+        {cart.items.length === 0 ? (
+          <div>
+            <p>Your cart is currently empty.</p>
+            <h2>
+              <IArrowLeft />
+              <a href="/">Start shopping</a>
+            </h2>
+          </div>
+        ) : null}
         {cart.loading && <div>Loading...</div>}
         {!cart.loading && cart.items.length ? (
           <>
@@ -68,10 +78,7 @@ const CartFooter = () => {
           <p>Taxes and shipping calculated at checkout</p>
           <div className="shop-group">
             <button className="btn btn-primary">Checkout</button>
-            <button
-              className="btn btn-secondary"
-              onClick={handleContinueShopping}
-            >
+            <button className="btn" onClick={handleContinueShopping}>
               Continue shopping
             </button>
           </div>
