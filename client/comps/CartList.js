@@ -36,7 +36,7 @@ const CartList = ({ items }) => {
               <CartItem
                 key={item.id}
                 id={item.id}
-                name={item.name}
+                title={item.title}
                 price={item.price}
                 quantity={item.quantity}
                 image={item.image}
@@ -49,7 +49,7 @@ const CartList = ({ items }) => {
   )
 }
 
-const CartItem = ({ id, name, image, price, quantity }) => {
+const CartItem = ({ id, title, image, price, quantity }) => {
   const dispatch = useDispatch()
 
   const handleIncreaseItem = (e) => {
@@ -76,7 +76,7 @@ const CartItem = ({ id, name, image, price, quantity }) => {
         </Link>
       </td>
       <td>
-        <div className="item-name">{name}</div>
+        <div className="item-title">{title}</div>
       </td>
       <td>
         <div className="item-price">{dollarUS.format(price)}</div>
