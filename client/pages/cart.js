@@ -7,7 +7,9 @@ import IArrowLeft from '../node_modules/feather-icons/dist/icons/arrow-left.svg'
 import {
   calculateSubtotal,
   clearCart,
+  createStripeCheckout,
   selectCart,
+  resetCheckout,
 } from '../store/slices/cartSlice'
 
 let dollarUS = Intl.NumberFormat('en-US', {
@@ -59,9 +61,30 @@ const CartFooter = () => {
     dispatch(clearCart())
   }
 
+  const handleCheckout = () => {
+    const items = cart.items.map((i) => {
+      return {
+        id: i.id,
+        quantity: i.quantity,
+      }
+    })
+    dispatch(createStripeCheckout({ items: items }))
+  }
+
   useEffect(() => {
     dispatch(calculateSubtotal())
   }, [cart.items])
+
+  useEffect(() => {
+    dispatch(resetCheckout())
+  }, [])
+
+  useEffect(() => {
+    if (cart.isCheckoutComplete) {
+      const url = cart.targetUrl
+      window.location = url
+    }
+  }, [cart.isCheckoutComplete])
 
   return (
     <>
@@ -77,7 +100,9 @@ const CartFooter = () => {
           </h3>
           <p>Taxes and shipping calculated at checkout</p>
           <div className="shop-group">
-            <button className="btn btn-primary">Checkout</button>
+            <button className="btn btn-primary" onClick={handleCheckout}>
+              Checkout
+            </button>
             <button className="btn" onClick={handleContinueShopping}>
               Continue shopping
             </button>

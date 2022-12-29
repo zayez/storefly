@@ -23,6 +23,11 @@ const findAllActive = async (pagination) => {
   return products
 }
 
+const findAllIn = async (ids) => {
+  const items = await knex(TABLE_NAME).select('*').whereIn('id', ids)
+  return items
+}
+
 const findOneActive = async (id) => {
   const statusId = (await ProductStatus.findOne({ name: PROD_ACTIVE })).id
   return await queries.findOne({ id, statusId })
@@ -50,6 +55,7 @@ module.exports = {
   fields: SELECTABLE_FIELDS,
   ...queries,
   findAllActive,
+  findAllIn,
   findOneActive,
   includesAll,
   hasInventory,

@@ -39,6 +39,10 @@ const POST_ORDER = `${ORDERS}`
 const GET_ORDER = `${ORDERS}/:id`
 const GET_ORDERS = `${ORDERS}`
 
+const STRIPE_CHECKOUT = `${BASE_URL}/stripe-checkout`
+const POST_STRIPE_CHECKOUT = `${STRIPE_CHECKOUT}`
+const GET_STRIPE_CHECKOUT = `${STRIPE_CHECKOUT}`
+
 // GET USER ORDERS
 const GET_USER_ORDERS = `${USERS}/:userId/orders`
 const GET_USER_ORDER = `${USERS}/:userId/orders/:orderId`
@@ -115,6 +119,11 @@ const EndpointUrls = {
   GET_USER_ORDERS,
   /** @member {string} */
   GET_USER_ORDER,
+
+  /** @member {string} */
+  POST_STRIPE_CHECKOUT,
+  /** @member {string} */
+  GET_STRIPE_CHECKOUT,
 }
 
 module.exports = EndpointUrls

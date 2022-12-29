@@ -1,11 +1,38 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { ActionStatus } from '../../types/ActionStatus'
 
 const initialState = {
   loading: false,
+  isCheckoutComplete: false,
   items: [],
   subtotal: 0,
   error: '',
+  targetUrl: '',
 }
+
+export const createStripeCheckout = createAsyncThunk(
+  'cart/createStripeCheckout',
+  async (items, { rejectWithValue }) => {
+    const reqOpts = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(items),
+    }
+    const url = `/api/stripe-checkout`
+    return fetch(url, reqOpts).then(async (res) => {
+      switch (res.status) {
+        case 200:
+          return res.json()
+        case 400:
+          return res.json()
+        case 422:
+          return rejectWithValue(await res.json())
+        default:
+          return rejectWithValue(ActionStatus.Error)
+      }
+    })
+  },
+)
 
 const cartSlice = createSlice({
   name: 'cart',
@@ -49,6 +76,28 @@ const cartSlice = createSlice({
 
       state.subtotal = total
     },
+    resetCheckout(state, action) {
+      state.targetUrl = ''
+      state.isCheckoutComplete = false
+    },
+  },
+
+  extraReducers: (builder) => {
+    builder.addCase(createStripeCheckout.pending, (state) => {
+      state.loading = true
+    })
+
+    builder.addCase(createStripeCheckout.fulfilled, (state, action) => {
+      state.loading = false
+      state.targetUrl = action.payload.url
+      state.isCheckoutComplete = true
+      state.error = ''
+    })
+
+    builder.addCase(createStripeCheckout.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message
+    })
   },
 })
 
@@ -59,6 +108,7 @@ export const {
   decreaseItem,
   clearCart,
   calculateSubtotal,
+  resetCheckout,
 } = cartSlice.actions
 export const selectCart = (state) => state.cart
 

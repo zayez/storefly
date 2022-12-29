@@ -11,6 +11,7 @@ require('dotenv').config({
 })
 
 const {
+  CLIENT_URL,
   APP_PORT,
   APP_ITEMS_PER_PAGE,
   APP_COLLECTIONS_MIN_SIZE,
@@ -19,10 +20,12 @@ const {
 } = process.env
 const { DB_HOST, DB_USER, DB_PASS, DB_PORT, DB_NAME } = process.env
 const { JWT_SECRET, JWT_EXPIRES_IN } = process.env
+const { STRIPE_KEY } = process.env
 
 const config = {
   isDev: env === 'dev' || env === 'development',
   isProd: env === 'production' || env === 'prod',
+  CLIENT_URL: CLIENT_URL,
   app: {
     PORT: APP_PORT || 3333,
     ITEMS_PER_PAGE: APP_ITEMS_PER_PAGE || 25,
@@ -42,6 +45,9 @@ const config = {
   jwt: {
     SECRET: JWT_SECRET || 'storefly-secret',
     TOKEN_EXPIRES_IN: JWT_EXPIRES_IN || '10min',
+  },
+  stripe: {
+    KEY: STRIPE_KEY,
   },
 }
 
