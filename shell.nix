@@ -5,5 +5,6 @@
       pkgs.fish
       pkgs.sqlite
       pkgs.entr
+      pkgs.stripe-cli
     ];
 }
