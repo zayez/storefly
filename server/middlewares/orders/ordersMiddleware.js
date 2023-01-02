@@ -1,6 +1,7 @@
 const mapper = require('../../helpers/propsMapper').input
 const OrdersController = require('../../controllers/orders')
 const { setResponse } = require('../../helpers/middlewareHelpers')
+const ActionStatus = require('../../types/ActionStatus')
 
 const get = async (ctx) => {
   try {
@@ -56,4 +57,10 @@ const getOneByUser = async (ctx) => {
   }
 }
 
-module.exports = { getAll, get, placeOrder, getAllByUser, getOneByUser }
+module.exports = {
+  getAll,
+  get,
+  placeOrder,
+  getAllByUser,
+  getOneByUser,
+}
