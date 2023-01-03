@@ -11,6 +11,7 @@ import {
   selectCart,
   resetCheckout,
 } from '../store/slices/cartSlice'
+import { selectAuth } from '../store/slices/authSlice'
 
 let dollarUS = Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -50,6 +51,8 @@ const Cart = () => {
 
 const CartFooter = () => {
   const cart = useSelector(selectCart)
+  const auth = useSelector(selectAuth)
+  const userId = auth.user.id
   const router = useRouter()
   const dispatch = useDispatch()
   const handleContinueShopping = (e) => {
@@ -68,7 +71,7 @@ const CartFooter = () => {
         quantity: i.quantity,
       }
     })
-    dispatch(createStripeCheckout({ items: items }))
+    dispatch(createStripeCheckout({ items, userId }))
   }
 
   useEffect(() => {
