@@ -18,3 +18,4 @@ server/tests/data/**/*
 !server/tests/data/images/img1.jpg
 !server/tests/data/images/img2.jpg
 !server/tests/data/images/img3.jpg
+server/vendor
