@@ -12,11 +12,12 @@ const initialState = {
 
 export const createStripeCheckout = createAsyncThunk(
   'cart/createStripeCheckout',
-  async (items, { rejectWithValue }) => {
+  async ({ items, userId }, { rejectWithValue }) => {
+    const body = { items, userId }
     const reqOpts = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(items),
+      body: JSON.stringify(body),
     }
     const url = `/api/stripe-checkout`
     return fetch(url, reqOpts).then(async (res) => {
