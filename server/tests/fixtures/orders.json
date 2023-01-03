@@ -3,10 +3,16 @@
     {
       "id": 1,
       "userId": 6,
+      "total": 100.0,
+      "subtotal": 100.0,
+
       "dateOrder": "2022-08-25",
       "items": [
         {
           "productId": 1,
+          "total": 100.0,
+          "subtotal": 100.0,
+          "price": 100.0,
           "quantity": 1
         }
       ]
@@ -14,14 +20,22 @@
     {
       "id": 2,
       "userId": 5,
+      "total": 50.0,
+      "subtotal": 50.0,
       "dateOrder": "2022-08-25",
       "items": [
         {
           "productId": 4,
+          "total": 20.0,
+          "subtotal": 20.0,
+          "price": 10.0,
           "quantity": 2
         },
         {
           "productId": 5,
+          "total": 30.0,
+          "subtotal": 30.0,
+          "price": 30.0,
           "quantity": 1
         }
       ]
@@ -29,14 +43,22 @@
     {
       "id": 2,
       "userId": 6,
+      "total": 30.0,
+      "subtotal": 30.0,
       "dateOrder": "2022-08-25",
       "items": [
         {
           "productId": 10,
+          "total": 15.0,
+          "subtotal": 15.0,
+          "price": 15.0,
           "quantity": 1
         },
         {
           "productId": 8,
+          "total": 15.0,
+          "subtotal": 15.0,
+          "price": 15.0,
           "quantity": 1
         }
       ]
@@ -44,18 +66,29 @@
     {
       "id": 2,
       "userId": 4,
+      "total": 40.0,
+      "subtotal": 40.0,
       "dateOrder": "2022-08-25",
       "items": [
         {
           "productId": 4,
-          "quantity": 4
+          "total": 10.0,
+          "subtotal": 10.0,
+          "price": 10.0,
+          "quantity": 1
         },
         {
           "productId": 5,
+          "total": 10.0,
+          "subtotal": 10.0,
+          "price": 10.0,
           "quantity": 1
         },
         {
           "productId": 6,
+          "total": 10.0,
+          "subtotal": 10.0,
+          "price": 10.0,
           "quantity": 2
         }
       ]

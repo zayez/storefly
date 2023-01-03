@@ -43,6 +43,8 @@ const STRIPE_CHECKOUT = `${BASE_URL}/stripe-checkout`
 const POST_STRIPE_CHECKOUT = `${STRIPE_CHECKOUT}`
 const GET_STRIPE_CHECKOUT = `${STRIPE_CHECKOUT}`
 
+const POST_STRIPE_WEBHOOK = `${BASE_URL}/webhook`
+
 // GET USER ORDERS
 const GET_USER_ORDERS = `${USERS}/:userId/orders`
 const GET_USER_ORDER = `${USERS}/:userId/orders/:orderId`
@@ -124,6 +126,8 @@ const EndpointUrls = {
   POST_STRIPE_CHECKOUT,
   /** @member {string} */
   GET_STRIPE_CHECKOUT,
+  /** @member {string} */
+  POST_STRIPE_WEBHOOK,
 }
 
 module.exports = EndpointUrls

@@ -35,7 +35,18 @@ test('As a customer I should:', (t) => {
   t.test('be able to place an order', async (assert) => {
     const product = await knex('products').first()
     const order = {
-      items: [{ productId: product.id, quantity: 1 }],
+      total: 10,
+      subtotal: 10,
+      paymentStatus: 'paid',
+      items: [
+        {
+          productId: product.id,
+          quantity: 1,
+          total: 10,
+          subtotal: 10,
+          price: 10,
+        },
+      ],
     }
 
     const res = await placeOrder(order, { token, status: STATUS.Created })
@@ -107,11 +118,33 @@ test('As a customer I should:', (t) => {
     const products = await knex('products')
 
     const order1 = {
-      items: [{ productId: products[1].id, quantity: 1 }],
+      total: 10,
+      subtotal: 10,
+      paymentStatus: 'paid',
+      items: [
+        {
+          productId: products[1].id,
+          quantity: 1,
+          total: 10,
+          subtotal: 10,
+          price: 10,
+        },
+      ],
       dateOrder: new Date().toISOString(),
     }
     const order2 = {
-      items: [{ productId: products[2].id, quantity: 1 }],
+      total: 10,
+      subtotal: 10,
+      paymentStatus: 'paid',
+      items: [
+        {
+          productId: products[2].id,
+          quantity: 1,
+          total: 10,
+          subtotal: 10,
+          price: 10,
+        },
+      ],
       dateOrder: new Date().toISOString(),
     }
     await placeOrder(order1, { token, status: STATUS.Created })

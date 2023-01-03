@@ -111,19 +111,24 @@ const mapUser = ({
   return user
 }
 
-const mapOrderItem = ({ id, title, quantity }) => {
+const mapOrderItem = ({ id, title, total, subtotal, price, quantity }) => {
   const item = {}
   if (id) item.id = id
   if (title) item.title = title
+  if (total) item.total = total
+  if (subtotal) item.subtotal = subtotal
+  if (price) item.price = price
   if (quantity) item.quantity = quantity
   return item
 }
 
-const mapOrder = ({ id, items, dateOrder }) => {
+const mapOrder = ({ id, total, subtotal, items, dateOrder }) => {
   const order = {}
   if (id) order.id = id
-  if (items) order.items = items.map(mapOrderItem)
   if (dateOrder) order.dateOrder = dateOrder
+  if (total) order.total = total
+  if (subtotal) order.subtotal = subtotal
+  if (items) order.items = items.map(mapOrderItem)
 
   return order
 }

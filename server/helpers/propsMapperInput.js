@@ -64,16 +64,22 @@ const mapUser = ({ firstName, lastName, email, password }) => {
   return user
 }
 
-const mapOrderItem = ({ productId, quantity }) => {
+const mapOrderItem = ({ productId, price, total, subtotal, quantity }) => {
   const item = {}
   item.productId = productId
+  if (price) item.price = price
+  if (total) item.total = total
+  if (subtotal) item.subtotal = subtotal
   item.quantity = quantity
   return item
 }
 
-const mapOrder = ({ items, dateOrder }) => {
+const mapOrder = ({ items, total, subtotal, paymentStatusId, dateOrder }) => {
   const order = {}
   if (items) order.items = items.map(mapOrderItem)
+  if (total) order.total = total
+  if (subtotal) order.subtotal = subtotal
+  if (paymentStatusId) order.paymentStatusId = paymentStatusId
   if (dateOrder) order.dateOrder = dateOrder
   return order
 }

@@ -5,8 +5,11 @@ const StripeCheckoutController = require('../../controllers/stripeCheckout')
 const create = async (ctx) => {
   try {
     const { items } = ctx.request.body
-    // console.log(ctx.request.body)
-    const { action, payload } = await StripeCheckoutController.create(items)
+    const { userId } = ctx.request.body
+    const { action, payload } = await StripeCheckoutController.create({
+      items,
+      userId,
+    })
     setResponse(ctx, { action, payload })
   } catch (err) {
     console.log(err)

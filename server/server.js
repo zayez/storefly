@@ -13,6 +13,7 @@ const productsRoutes = require('./routes/products')
 const productStatusesRoutes = require('./routes/productStatuses')
 const ordersRoutes = require('./routes/orders')
 const stripeCheckoutRoutes = require('./routes/stripeCheckout')
+const stripeWebhookRoutes = require('./routes/stripeWebhook')
 const passportConfig = require('./config/passportConfig')
 const { authenticateOptional } = require('./middlewares/authentication')
 
@@ -49,6 +50,7 @@ app
   .use(productStatusesRoutes.routes())
   .use(ordersRoutes.routes())
   .use(stripeCheckoutRoutes.routes())
+  .use(stripeWebhookRoutes.routes())
 
 const server = app.listen(PORT, () => {
   console.log(`Server listening on port: ${PORT}`)

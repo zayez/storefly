@@ -11,6 +11,7 @@ const User = require('../../models/user')
 const Category = require('../../models/category')
 const Product = require('../../models/product')
 const Order = require('../../models/order')
+const { PAYMENT_PAID } = require('../../types/PaymentStatus')
 
 exports.seed = async (knex) => {
   await knex('roles').del()
@@ -40,9 +41,10 @@ exports.seed = async (knex) => {
   await knex('orders').del()
 
   for (const order of orders) {
-    await Order.create(
-      { dateOrder: order.dateOrder, items: order.items },
-      order.userId,
-    )
+    await Order.create({
+      order,
+      userId: order.userId,
+      paymentStatus: PAYMENT_PAID,
+    })
   }
 }

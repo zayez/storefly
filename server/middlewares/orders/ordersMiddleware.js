@@ -27,7 +27,12 @@ const placeOrder = async (ctx) => {
   try {
     const userId = ctx.state.user.id
     const order = mapper.mapOrder(ctx.request.body)
-    const { action, payload } = await OrdersController.placeOrder(order, userId)
+    const { paymentStatus } = ctx.request.body
+    const { action, payload } = await OrdersController.placeOrder({
+      order,
+      userId,
+      paymentStatus,
+    })
     setResponse(ctx, { action, payload })
   } catch (err) {
     setResponse(ctx, { action: ActionStatus.Error })

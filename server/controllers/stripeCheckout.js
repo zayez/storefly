@@ -4,12 +4,20 @@ const STRIPE_KEY = require('../config').stripe.KEY
 const stripe = require('stripe')(STRIPE_KEY)
 const Product = require('../models/product')
 const isEqual = require('lodash/isEqual')
-const create = async (items) => {
+
+const create = async ({ items, userId }) => {
   try {
+    const customer = await stripe.customers.create({
+      metadata: {
+        userId,
+      },
+    })
+
     const products = await Product.findAllIn(items.map((i) => i.id))
     const productsIds = products.map((i) => i.id)
     const itemsIds = items.map((i) => i.id)
-    if (!isEqual(productsIds, itemsIds)) {
+
+    if (!isEqual(productsIds.sort(), itemsIds.sort())) {
       return { action: ActionStatus.BadRequest }
     }
 
@@ -18,7 +26,12 @@ const create = async (items) => {
       return {
         price_data: {
           currency: 'usd',
-          product_data: { name: product.title },
+          product_data: {
+            name: product.title,
+            metadata: {
+              productId: item.id,
+            },
+          },
           unit_amount: product.price * 100,
         },
         quantity: item.quantity,
@@ -28,6 +41,7 @@ const create = async (items) => {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
+      customer: customer.id,
       line_items,
       success_url: `http://${CLIENT_URL}/success?id={CHECKOUT_SESSION_ID}`,
       cancel_url: `http://${CLIENT_URL}/cart?id={CHECKOUT_SESSION_ID}`,
