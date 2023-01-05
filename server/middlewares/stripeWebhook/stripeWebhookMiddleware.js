@@ -13,12 +13,9 @@ const create = async (ctx) => {
   let event
   try {
     const sig = ctx.request.headers['stripe-signature']
+    const body = ctx.request.rawBody
 
-    event = stripe.webhooks.constructEvent(
-      ctx.request.rawBody,
-      sig,
-      endpointSecret,
-    )
+    event = stripe.webhooks.constructEvent(body, sig, endpointSecret)
 
     const session = event.data.object
     const eventType = event.type
@@ -28,22 +25,22 @@ const create = async (ctx) => {
       const PAYMENT_STATUS =
         payment_status === PAYMENT_PAID ? PAYMENT_PAID : PAYMENT_UNPAID
       const customerId = session.customer
-      // data.customer_details -> address, email, name, phone
+      const address = session.customer_details.address
+      const shippingAddress = {
+        addressLine1: address.line1,
+        addressLine2: address.line2,
+        city: address.city,
+        country: address.country,
+        state: address.state,
+        postalCode: address.postal_code,
+      }
       const { line_items } = await stripe.checkout.sessions.retrieve(
         session.id,
         {
           expand: ['line_items', 'line_items.data.price.product'],
         },
       )
-      const items = line_items.data.map((i) => {
-        return {
-          subtotal: i.amount_subtotal / 100,
-          total: i.amount_total / 100,
-          price: i.price.unit_amount / 100,
-          quantity: i.quantity,
-          productId: i.price.product.metadata.productId,
-        }
-      })
+      const items = line_items.data.map(mapLineItems)
 
       const customer = await stripe.customers.retrieve(session.customer)
       const { userId } = customer.metadata
@@ -54,6 +51,7 @@ const create = async (ctx) => {
       order.items = items
       const { action, payload } = await OrdersController.placeOrder({
         order,
+        shippingAddress,
         userId,
         paymentStatus: PAYMENT_STATUS,
       })
@@ -61,6 +59,16 @@ const create = async (ctx) => {
     }
   } catch (err) {
     setResponse(ctx, { action: ActionStatus.Error })
+  }
+}
+
+function mapLineItems(i) {
+  return {
+    subtotal: i.amount_subtotal / 100,
+    total: i.amount_total / 100,
+    price: i.price.unit_amount / 100,
+    quantity: i.quantity,
+    productId: i.price.product.metadata.productId,
   }
 }
 

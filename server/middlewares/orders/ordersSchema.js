@@ -8,7 +8,7 @@ const OrderItem = Joi.object().keys({
   subtotal: Joi.number().precision(2).positive().required(),
 })
 
-const PlaceOrder = Joi.object().keys({
+const Order = Joi.object().keys({
   items: Joi.array().items(OrderItem).required(),
   dateOrder: Joi.date(),
   total: Joi.number().precision(2).positive().required(),
@@ -16,6 +16,20 @@ const PlaceOrder = Joi.object().keys({
   paymentStatus: Joi.string()
     .valid(...['paid', 'unpaid'])
     .required(),
+})
+
+const ShippingAddress = Joi.object().keys({
+  addressLine1: Joi.string().trim().required(),
+  addressLine2: Joi.string().allow(null, ''),
+  city: Joi.string().trim().required(),
+  country: Joi.string().trim().required(),
+  state: Joi.string().trim().required(),
+  postalCode: Joi.number().integer().required(),
+})
+
+const PlaceOrder = Joi.object().keys({
+  order: Order.required(),
+  shippingAddress: ShippingAddress.required(),
 })
 
 const GetAllByUser = Joi.object().keys({

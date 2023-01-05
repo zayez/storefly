@@ -6,9 +6,19 @@ const Order = require('../models/order')
 const ActionStatus = require('../types/ActionStatus')
 const mapper = require('../helpers/propsMapper').output
 
-const placeOrder = async ({ order, userId, paymentStatus }) => {
+const placeOrder = async ({
+  order,
+  shippingAddress,
+  userId,
+  paymentStatus,
+}) => {
   try {
-    const savedOrder = await Order.create({ order, userId, paymentStatus })
+    const savedOrder = await Order.create({
+      order,
+      shippingAddress,
+      userId,
+      paymentStatus,
+    })
 
     if (savedOrder) {
       return {

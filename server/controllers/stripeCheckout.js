@@ -38,10 +38,28 @@ const create = async ({ items, userId }) => {
       }
     })
 
+    // TODO: Configure shipping options properly
+    const shippingAddressCollection = { allowed_countries: ['US', 'BR'] }
+    const shippingOptions = [
+      {
+        shipping_rate_data: {
+          type: 'fixed_amount',
+          fixed_amount: { amount: 0, currency: 'usd' },
+          display_name: 'Free shipping',
+          delivery_estimate: {
+            minimum: { unit: 'business_day', value: 5 },
+            maximum: { unit: 'business_day', value: 7 },
+          },
+        },
+      },
+    ]
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
       customer: customer.id,
+      shipping_address_collection: shippingAddressCollection,
+      shipping_options: shippingOptions,
       line_items,
       success_url: `http://${CLIENT_URL}/success?id={CHECKOUT_SESSION_ID}`,
       cancel_url: `http://${CLIENT_URL}/cart?id={CHECKOUT_SESSION_ID}`,

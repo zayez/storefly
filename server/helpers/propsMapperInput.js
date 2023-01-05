@@ -84,9 +84,28 @@ const mapOrder = ({ items, total, subtotal, paymentStatusId, dateOrder }) => {
   return order
 }
 
+const mapShippingAddress = ({
+  addressLine1,
+  addressLine2,
+  city,
+  country,
+  state,
+  postalCode,
+}) => {
+  const addr = {}
+  if (addressLine1) addr.addressLine1 = addressLine1
+  if (addressLine2) addr.addressLine2 = addressLine2
+  if (city) addr.city = city
+  if (country) addr.country = country
+  if (state) addr.state = state
+  if (postalCode) addr.postalCode = postalCode
+  return addr
+}
+
 module.exports = {
   mapCategory,
   mapProduct,
   mapUser,
   mapOrder,
+  mapShippingAddress,
 }

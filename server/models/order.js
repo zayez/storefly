@@ -6,18 +6,39 @@ const { ITEMS_PER_PAGE } = require('../config').app
 
 const queries = require('../lib/queryBuilder')(TABLE_NAME, SELECTABLE_FIELDS)
 
-const create = async ({ order, userId, paymentStatus }) => {
+const create = async ({ order, shippingAddress, userId, paymentStatus }) => {
   const { dateOrder, subtotal, total, items } = order
+
   const paymentStatusSelected = await knex('paymentStatus')
     .select('id')
     .where('name', paymentStatus.toString())
     .first()
   const paymentStatusId = paymentStatusSelected.id
 
+  const addressFound = await knex('shippingAddresses')
+    .select('id')
+    .where(shippingAddress)
+    .first()
+
+  let addressId
+
+  if (addressFound) {
+    addressId = addressFound.id
+  } else {
+    addressId = await knex('shippingAddresses').insert(shippingAddress)
+  }
+
   const dateFormat = 'yyyy-MM-dd-hh-mm-ss'
   const date = dateOrder ? dateOrder : format(new Date(), dateFormat)
 
-  const newOrder = { subtotal, total, dateOrder: date, userId, paymentStatusId }
+  const newOrder = {
+    subtotal,
+    total,
+    dateOrder: date,
+    userId,
+    paymentStatusId,
+    shippingAddressId: addressId,
+  }
 
   const id = await knex('orders').insert(newOrder)
 

@@ -9,10 +9,18 @@ exports.up = async function (knex) {
     table.timestamps(true, true, true)
   })
 
+  await knex.schema.createTable('shippingStatus', (table) => {
+    table.increments()
+    table.enu('name', ['unshipped', 'shipped', 'delivered']).notNullable()
+    table.timestamps(true, true, true)
+  })
+
   await knex.schema.createTable('orders', (table) => {
     table.increments()
     table.integer('userId').references('users.id').notNullable()
     table.integer('paymentStatusId').references('paymentStatus.id')
+    table.integer('shippingStatusId').references('shippingStatus.id')
+    table.integer('shippingAddressId').references('shippingAddress.id')
     table.datetime('dateOrder')
     table.decimal('subtotal').notNullable()
     table.decimal('total').notNullable()
@@ -39,4 +47,5 @@ exports.down = async function (knex) {
   await knex.schema.dropTable('orderItem')
   await knex.schema.dropTable('orders')
   await knex.schema.dropTable('paymentStatus')
+  await knex.schema.dropTable('shippingStatus')
 }

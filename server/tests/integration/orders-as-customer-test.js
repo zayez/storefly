@@ -3,6 +3,7 @@ const knex = require('../../db')
 const STATUS = require('../../types/StatusCode')
 const { login, decodeToken } = require('../infrastructure/login')
 const customers = require('../fixtures/users.json').customers
+const shippingAddresses = require('../fixtures/shippingAddresses.json')
 const {
   server,
   placeOrder,
@@ -49,7 +50,12 @@ test('As a customer I should:', (t) => {
       ],
     }
 
-    const res = await placeOrder(order, { token, status: STATUS.Created })
+    const addr = { ...shippingAddresses[0] }
+    delete addr.id
+    const res = await placeOrder(
+      { order, shippingAddress: addr },
+      { token, status: STATUS.Created },
+    )
     const createdOrder = res.body
 
     assert.equal(res.status, STATUS.Created)
@@ -71,10 +77,16 @@ test('As a customer I should:', (t) => {
         ],
       }
 
-      const res = await placeOrder(order, {
-        token,
-        status: STATUS.Unprocessable,
-      })
+      const addr = { ...shippingAddresses[1] }
+      delete addr.id
+
+      const res = await placeOrder(
+        { order, shippingAddress: addr },
+        {
+          token,
+          status: STATUS.Unprocessable,
+        },
+      )
 
       assert.equal(res.status, STATUS.Unprocessable)
       assert.end()
@@ -86,10 +98,16 @@ test('As a customer I should:', (t) => {
       items: [],
     }
 
-    const res = await placeOrder(order, {
-      token,
-      status: STATUS.Unprocessable,
-    })
+    const addr = { ...shippingAddresses[0] }
+    delete addr.id
+
+    const res = await placeOrder(
+      { order, shippingAddress: addr },
+      {
+        token,
+        status: STATUS.Unprocessable,
+      },
+    )
 
     assert.equal(res.status, STATUS.Unprocessable)
     assert.end()
@@ -104,10 +122,16 @@ test('As a customer I should:', (t) => {
         items: [{ productId: product.id, quantity }],
       }
 
-      const res = await placeOrder(order, {
-        token,
-        status: STATUS.Unprocessable,
-      })
+      const addr = { ...shippingAddresses[2] }
+      delete addr.id
+
+      const res = await placeOrder(
+        { order, shippingAddress: addr },
+        {
+          token,
+          status: STATUS.Unprocessable,
+        },
+      )
 
       assert.equal(res.status, STATUS.Unprocessable)
       assert.end()
@@ -147,8 +171,20 @@ test('As a customer I should:', (t) => {
       ],
       dateOrder: new Date().toISOString(),
     }
-    await placeOrder(order1, { token, status: STATUS.Created })
-    await placeOrder(order2, { token, status: STATUS.Created })
+
+    const addr1 = { ...shippingAddresses[0] }
+    delete addr1.id
+    const addr2 = { ...shippingAddresses[1] }
+    delete addr2.id
+
+    await placeOrder(
+      { order: order1, shippingAddress: addr1 },
+      { token, status: STATUS.Created },
+    )
+    await placeOrder(
+      { order: order2, shippingAddress: addr2 },
+      { token, status: STATUS.Created },
+    )
 
     const userOrders = (await knex('orders').where({ userId: customerId })).map(
       (o) => o.id,

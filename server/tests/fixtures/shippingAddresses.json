@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "addressLine1": "Factory street",
+    "addressLine2": "",
+    "city": "Laguna",
+    "state": "SC",
+    "country": "BR",
+    "postalCode": 8433284
+  },
+  {
+    "id": 2,
+    "addressLine1": "Pilsen street",
+    "addressLine2": "",
+    "city": "Porto Alegre",
+    "state": "RS",
+    "country": "BR",
+    "postalCode": 93384834
+  },
+  {
+    "id": 3,
+    "addressLine1": "Mokhov street",
+    "addressLine2": "",
+    "city": "Curitiba",
+    "state": "PR",
+    "country": "BR",
+    "postalCode": 348548234
+  }
+]

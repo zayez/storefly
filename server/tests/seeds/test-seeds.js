@@ -1,6 +1,7 @@
 const roles = require('../../db/seeds/data/roles.json').roles
 const productStatuses =
   require('../../db/seeds/data/productStatuses.json').productStatuses
+const shippingAddresses = require('../fixtures/shippingAddresses.json')
 const admins = require('../fixtures/users.json').admins
 const editors = require('../fixtures/users.json').editors
 const customers = require('../fixtures/users.json').customers
@@ -40,11 +41,30 @@ exports.seed = async (knex) => {
   await knex('orderItem').del()
   await knex('orders').del()
 
+  await knex('shippingAddresses').del()
+
+  // for (const addr of shippingAddresses) {
+  //   await knex('shippingAddresses').insert(shippingAddresses)
+  // }
+
   for (const order of orders) {
+    const addr = shippingAddresses.find((i) => i.id === order.shippingAddressId)
     await Order.create({
       order,
+      shippingAddress: mapShippingAddress(addr),
       userId: order.userId,
       paymentStatus: PAYMENT_PAID,
     })
+  }
+}
+
+function mapShippingAddress(item) {
+  return {
+    addressLine1: item.addressLine1,
+    addressLine2: item.addressLine2,
+    city: item.city,
+    country: item.country,
+    state: item.state,
+    postalCode: item.postalCode,
   }
 }
