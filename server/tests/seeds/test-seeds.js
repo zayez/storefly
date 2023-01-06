@@ -49,11 +49,11 @@ exports.seed = async (knex) => {
 
   for (const order of orders) {
     const addr = shippingAddresses.find((i) => i.id === order.shippingAddressId)
+    order.shippingAddress = mapShippingAddress(addr)
+    order.paymentStatus = PAYMENT_PAID
     await Order.create({
       order,
-      shippingAddress: mapShippingAddress(addr),
       userId: order.userId,
-      paymentStatus: PAYMENT_PAID,
     })
   }
 }

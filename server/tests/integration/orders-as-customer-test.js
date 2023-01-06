@@ -35,10 +35,14 @@ test('As a customer I should:', (t) => {
 
   t.test('be able to place an order', async (assert) => {
     const product = await knex('products').first()
+    const addr = { ...shippingAddresses[0] }
+    delete addr.id
+
     const order = {
       total: 10,
       subtotal: 10,
       paymentStatus: 'paid',
+      shippingAddress: addr,
       items: [
         {
           productId: product.id,
@@ -50,12 +54,7 @@ test('As a customer I should:', (t) => {
       ],
     }
 
-    const addr = { ...shippingAddresses[0] }
-    delete addr.id
-    const res = await placeOrder(
-      { order, shippingAddress: addr },
-      { token, status: STATUS.Created },
-    )
+    const res = await placeOrder(order, { token, status: STATUS.Created })
     const createdOrder = res.body
 
     assert.equal(res.status, STATUS.Created)
@@ -70,23 +69,24 @@ test('As a customer I should:', (t) => {
   t.test(
     'NOT be able to place order with nonexistent products',
     async (assert) => {
+      const addr = { ...shippingAddresses[1] }
+      delete addr.id
+
       const order = {
+        total: 999,
+        subtotal: 999,
+        paymentStatus: 'paid',
+        shippingAddress: addr,
         items: [
           { productId: 9992, quantity: 1 },
           { productId: 9999, quantity: 1 },
         ],
       }
 
-      const addr = { ...shippingAddresses[1] }
-      delete addr.id
-
-      const res = await placeOrder(
-        { order, shippingAddress: addr },
-        {
-          token,
-          status: STATUS.Unprocessable,
-        },
-      )
+      const res = await placeOrder(order, {
+        token,
+        status: STATUS.Unprocessable,
+      })
 
       assert.equal(res.status, STATUS.Unprocessable)
       assert.end()
@@ -94,20 +94,21 @@ test('As a customer I should:', (t) => {
   )
 
   t.test('NOT be able to place order without items', async (assert) => {
-    const order = {
-      items: [],
-    }
-
     const addr = { ...shippingAddresses[0] }
     delete addr.id
 
-    const res = await placeOrder(
-      { order, shippingAddress: addr },
-      {
-        token,
-        status: STATUS.Unprocessable,
-      },
-    )
+    const order = {
+      total: 0,
+      subtotal: 0,
+      paymentStatus: 'paid',
+      shippingAddress: addr,
+      items: [],
+    }
+
+    const res = await placeOrder(order, {
+      token,
+      status: STATUS.Unprocessable,
+    })
 
     assert.equal(res.status, STATUS.Unprocessable)
     assert.end()
@@ -118,20 +119,22 @@ test('As a customer I should:', (t) => {
     async (assert) => {
       const product = await knex('products').first()
       const quantity = product.inventory + 10
-      const order = {
-        items: [{ productId: product.id, quantity }],
-      }
 
       const addr = { ...shippingAddresses[2] }
       delete addr.id
 
-      const res = await placeOrder(
-        { order, shippingAddress: addr },
-        {
-          token,
-          status: STATUS.Unprocessable,
-        },
-      )
+      const order = {
+        total: 100,
+        subtotal: 100,
+        paymentStatus: 'paid',
+        shippingAddress: addr,
+        items: [{ productId: product.id, quantity }],
+      }
+
+      const res = await placeOrder(order, {
+        token,
+        status: STATUS.Unprocessable,
+      })
 
       assert.equal(res.status, STATUS.Unprocessable)
       assert.end()
@@ -140,11 +143,16 @@ test('As a customer I should:', (t) => {
 
   t.test('be able to get my orders', async (assert) => {
     const products = await knex('products')
+    const addr1 = { ...shippingAddresses[0] }
+    delete addr1.id
+    const addr2 = { ...shippingAddresses[1] }
+    delete addr2.id
 
     const order1 = {
       total: 10,
       subtotal: 10,
       paymentStatus: 'paid',
+      shippingAddress: addr1,
       items: [
         {
           productId: products[1].id,
@@ -156,10 +164,12 @@ test('As a customer I should:', (t) => {
       ],
       dateOrder: new Date().toISOString(),
     }
+
     const order2 = {
       total: 10,
       subtotal: 10,
       paymentStatus: 'paid',
+      shippingAddress: addr2,
       items: [
         {
           productId: products[2].id,
@@ -172,19 +182,8 @@ test('As a customer I should:', (t) => {
       dateOrder: new Date().toISOString(),
     }
 
-    const addr1 = { ...shippingAddresses[0] }
-    delete addr1.id
-    const addr2 = { ...shippingAddresses[1] }
-    delete addr2.id
-
-    await placeOrder(
-      { order: order1, shippingAddress: addr1 },
-      { token, status: STATUS.Created },
-    )
-    await placeOrder(
-      { order: order2, shippingAddress: addr2 },
-      { token, status: STATUS.Created },
-    )
+    await placeOrder(order1, { token, status: STATUS.Created })
+    await placeOrder(order2, { token, status: STATUS.Created })
 
     const userOrders = (await knex('orders').where({ userId: customerId })).map(
       (o) => o.id,

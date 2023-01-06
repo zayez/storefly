@@ -3,11 +3,11 @@ const { setHeaders, debugStatus } = require('../helpers/requestHelpers')
 const requests = require('../helpers/requestBuilder')(ORDERS)
 const agent = requests.agent
 
-const placeOrder = async ({ order, shippingAddress }, { token, status }) => {
+const placeOrder = async (order, { token, status }) => {
   const headers = setHeaders(token)
   return await agent
     .post(POST_ORDER)
-    .send({ order, shippingAddress })
+    .send(order)
     .set(headers)
     .expect('Content-Type', /json/)
     .expect((res) => debugStatus(res, status))

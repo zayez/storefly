@@ -7,7 +7,10 @@ const { SHIPPING_UNSHIPPED } = require('../types/ShippingStatus')
 
 const queries = require('../lib/queryBuilder')(TABLE_NAME, SELECTABLE_FIELDS)
 
-const create = async ({ order, shippingAddress, userId, paymentStatus }) => {
+const create = async ({ order, userId }) => {
+  const { dateOrder, subtotal, total, items, paymentStatus, shippingAddress } =
+    order
+
   const paymentStatusSelected = await knex('paymentStatus')
     .select('id')
     .where('name', paymentStatus.toString())
@@ -35,8 +38,6 @@ const create = async ({ order, shippingAddress, userId, paymentStatus }) => {
   } else {
     shippingAddressId = await knex('shippingAddresses').insert(shippingAddress)
   }
-
-  const { dateOrder, subtotal, total, items } = order
 
   const dateFormat = 'yyyy-MM-dd-hh-mm-ss'
   const date = dateOrder ? dateOrder : format(new Date(), dateFormat)

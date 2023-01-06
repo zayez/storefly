@@ -22,7 +22,7 @@ const create = async (ctx) => {
 
     if (eventType === 'checkout.session.completed') {
       const { amount_total, amount_subtotal, payment_status } = session
-      const PAYMENT_STATUS =
+      const paymentStatus =
         payment_status === PAYMENT_PAID ? PAYMENT_PAID : PAYMENT_UNPAID
       const customerId = session.customer
       const address = session.customer_details.address
@@ -47,13 +47,13 @@ const create = async (ctx) => {
       const order = {
         total: amount_total / 100,
         subtotal: amount_subtotal / 100,
+        shippingAddress,
+        paymentStatus,
       }
       order.items = items
       const { action, payload } = await OrdersController.placeOrder({
         order,
-        shippingAddress,
         userId,
-        paymentStatus: PAYMENT_STATUS,
       })
       setResponse(ctx, { action, payload })
     }

@@ -40,7 +40,7 @@ const validateGetOneByUser = async (ctx, next) => {
 
 const validateItems = async (ctx, next) => {
   try {
-    const items = ctx.request.body.order.items
+    const items = ctx.request.body.items
     const { action, payload } = await ProductsController.validateItems(items)
     if (action !== ActionStatus.Ok) {
       setResponse(ctx, { action, payload })

@@ -74,12 +74,22 @@ const mapOrderItem = ({ productId, price, total, subtotal, quantity }) => {
   return item
 }
 
-const mapOrder = ({ items, total, subtotal, paymentStatusId, dateOrder }) => {
+const mapOrder = ({
+  items,
+  total,
+  subtotal,
+  paymentStatus,
+  paymentStatusId,
+  shippingAddress,
+  dateOrder,
+}) => {
   const order = {}
   if (items) order.items = items.map(mapOrderItem)
   if (total) order.total = total
   if (subtotal) order.subtotal = subtotal
+  if (paymentStatus) order.paymentStatus = paymentStatus
   if (paymentStatusId) order.paymentStatusId = paymentStatusId
+  if (shippingAddress) order.shippingAddress = shippingAddress
   if (dateOrder) order.dateOrder = dateOrder
   return order
 }
