@@ -3,30 +3,40 @@ const knex = require('../db')
 const TABLE_NAME = 'orders'
 const SELECTABLE_FIELDS = ['id']
 const { ITEMS_PER_PAGE } = require('../config').app
+const { SHIPPING_UNSHIPPED } = require('../types/ShippingStatus')
 
 const queries = require('../lib/queryBuilder')(TABLE_NAME, SELECTABLE_FIELDS)
 
 const create = async ({ order, shippingAddress, userId, paymentStatus }) => {
-  const { dateOrder, subtotal, total, items } = order
-
   const paymentStatusSelected = await knex('paymentStatus')
     .select('id')
     .where('name', paymentStatus.toString())
     .first()
   const paymentStatusId = paymentStatusSelected.id
 
+  const shippingStatus = await knex('shippingStatus')
+    .select('id')
+    .where('name', SHIPPING_UNSHIPPED)
+    .first()
+
+  if (!shippingStatus) return null
+
+  const shippingStatusId = shippingStatus.id
+
   const addressFound = await knex('shippingAddresses')
     .select('id')
     .where(shippingAddress)
     .first()
 
-  let addressId
+  let shippingAddressId
 
   if (addressFound) {
-    addressId = addressFound.id
+    shippingAddressId = addressFound.id
   } else {
-    addressId = await knex('shippingAddresses').insert(shippingAddress)
+    shippingAddressId = await knex('shippingAddresses').insert(shippingAddress)
   }
+
+  const { dateOrder, subtotal, total, items } = order
 
   const dateFormat = 'yyyy-MM-dd-hh-mm-ss'
   const date = dateOrder ? dateOrder : format(new Date(), dateFormat)
@@ -37,7 +47,8 @@ const create = async ({ order, shippingAddress, userId, paymentStatus }) => {
     dateOrder: date,
     userId,
     paymentStatusId,
-    shippingAddressId: addressId,
+    shippingStatusId,
+    shippingAddressId,
   }
 
   const id = await knex('orders').insert(newOrder)
