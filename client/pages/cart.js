@@ -52,7 +52,7 @@ const Cart = () => {
 const CartFooter = () => {
   const cart = useSelector(selectCart)
   const auth = useSelector(selectAuth)
-  const userId = auth.user.id
+  const userId = auth.user ? auth.user.id : null
   const router = useRouter()
   const dispatch = useDispatch()
   const handleContinueShopping = (e) => {
@@ -65,6 +65,8 @@ const CartFooter = () => {
   }
 
   const handleCheckout = () => {
+    if (!auth.user) router.push('signin')
+
     const items = cart.items.map((i) => {
       return {
         id: i.id,
