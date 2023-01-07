@@ -2,12 +2,10 @@ const { setResponse } = require('../../helpers/middlewareHelpers')
 const ActionStatus = require('../../types/ActionStatus')
 const OrdersController = require('../../controllers/orders')
 const STRIPE_KEY = require('../../config').stripe.KEY
+const STRIPE_CLI_KEY = require('../../config').stripe.CLI_KEY
+
 const stripe = require('stripe')(STRIPE_KEY)
 const { PAYMENT_PAID, PAYMENT_UNPAID } = require('../../types/PaymentStatus')
-
-// This is your Stripe CLI webhook secret for testing your endpoint locally.
-const endpointSecret =
-  'whsec_9c671269f1c31afa3e3e73e1c3559d2cf2b033d568bc3cc42cb5422e6e9d1776'
 
 const create = async (ctx) => {
   let event
@@ -15,7 +13,7 @@ const create = async (ctx) => {
     const sig = ctx.request.headers['stripe-signature']
     const body = ctx.request.rawBody
 
-    event = stripe.webhooks.constructEvent(body, sig, endpointSecret)
+    event = stripe.webhooks.constructEvent(body, sig, STRIPE_CLI_KEY)
 
     const session = event.data.object
     const eventType = event.type

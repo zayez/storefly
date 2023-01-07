@@ -20,7 +20,7 @@ const {
 } = process.env
 const { DB_HOST, DB_USER, DB_PASS, DB_PORT, DB_NAME } = process.env
 const { JWT_SECRET, JWT_EXPIRES_IN } = process.env
-const { STRIPE_KEY } = process.env
+const { STRIPE_KEY, STRIPE_CLI_KEY } = process.env
 
 const config = {
   isDev: env === 'dev' || env === 'development',
@@ -48,6 +48,7 @@ const config = {
   },
   stripe: {
     KEY: STRIPE_KEY,
+    CLI_KEY: STRIPE_CLI_KEY,
   },
 }
 
