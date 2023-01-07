@@ -43,10 +43,6 @@ exports.seed = async (knex) => {
 
   await knex('shippingAddresses').del()
 
-  // for (const addr of shippingAddresses) {
-  //   await knex('shippingAddresses').insert(shippingAddresses)
-  // }
-
   for (const order of orders) {
     const addr = shippingAddresses.find((i) => i.id === order.shippingAddressId)
     order.shippingAddress = mapShippingAddress(addr)
