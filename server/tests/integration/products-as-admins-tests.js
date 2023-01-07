@@ -22,6 +22,7 @@ const {
   getOne,
   getAll,
 } = require('../requests/products')
+const StatusCode = require('../../types/StatusCode')
 
 test('setup', async (t) => {
   t.end()
@@ -211,13 +212,21 @@ test('As admin I should:', (t) => {
   })
 
   t.test('be able to update category of a product', async (assert) => {
-    const prod = products[3]
-    prod.categoryId = 3
-    delete p
-    const id = prod.id
+    // Arrange
+    const prod = { ...products[3] }
     delete prod.id
-    const res = await update(id, prod, { token, status: STATUS.Ok })
+    prod.title = productTitle()
+    const resCreate = await create(prod, { token, status: STATUS.Created })
+    const createdProduct = resCreate.body
 
+    // Act
+    const updateProduct = { categoryId: 3 }
+    const res = await update(createdProduct.id, updateProduct, {
+      token,
+      status: STATUS.Ok,
+    })
+
+    // Assert
     assert.equal(res.status, STATUS.Ok)
     assert.equal(res.body.categoryId, 3)
     assert.end()
