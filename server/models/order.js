@@ -7,7 +7,13 @@ const { SHIPPING_UNSHIPPED } = require('../types/ShippingStatus')
 
 const queries = require('../lib/queryBuilder')(TABLE_NAME, SELECTABLE_FIELDS)
 
-const create = async ({ order, userId }) => {
+/**
+ * Creates an order based on stripe webhook that includes total and subtotal.
+ * @param {order} order order to create
+ * @param {int} userId order's user
+ * @returns
+ */
+const createForStripe = async ({ order, userId }) => {
   const { dateOrder, subtotal, total, items, paymentStatus, shippingAddress } =
     order
 
@@ -57,6 +63,84 @@ const create = async ({ order, userId }) => {
   if (!id) return null
 
   for (const item of items) {
+    const orderItem = await knex('orderItem').insert({ ...item, orderId: id })
+    if (!orderItem) return null
+  }
+  const createdOrder = await findById(id)
+  return createdOrder
+}
+
+/**
+ * Creates an order calculating total and subtotal.
+ * @param {order} order order to create
+ * @param {int} userId order's user
+ * @returns
+ */
+const create = async ({ order, userId }) => {
+  const { dateOrder, items, paymentStatus, shippingAddress } = order
+
+  const paymentStatusSelected = await knex('paymentStatus')
+    .select('id')
+    .where('name', paymentStatus.toString())
+    .first()
+  const paymentStatusId = paymentStatusSelected.id
+
+  const shippingStatus = await knex('shippingStatus')
+    .select('id')
+    .where('name', SHIPPING_UNSHIPPED)
+    .first()
+
+  if (!shippingStatus) return null
+
+  const shippingStatusId = shippingStatus.id
+
+  const addressFound = await knex('shippingAddresses')
+    .select('id')
+    .where(shippingAddress)
+    .first()
+
+  let shippingAddressId
+
+  if (addressFound) {
+    shippingAddressId = addressFound.id
+  } else {
+    shippingAddressId = await knex('shippingAddresses').insert(shippingAddress)
+  }
+
+  const dateFormat = 'yyyy-MM-dd-hh-mm-ss'
+  const date = dateOrder ? dateOrder : format(new Date(), dateFormat)
+
+  const itemsAcc = await Promise.all(
+    items.map(async (i) => {
+      const product = await knex('products')
+        .select('*')
+        .where('id', i.productId)
+        .first()
+      if (!product) return null
+
+      const total = i.quantity * product.price
+      return { ...i, price: product.price, total, subtotal: total }
+    }),
+  )
+
+  const total = itemsAcc.reduce((acc, cur) => acc + cur.price * cur.quantity, 0)
+  const subtotal = total
+
+  const newOrder = {
+    subtotal,
+    total,
+    dateOrder: date,
+    userId,
+    paymentStatusId,
+    shippingStatusId,
+    shippingAddressId,
+  }
+
+  const id = await knex('orders').insert(newOrder)
+
+  if (!id) return null
+
+  for (const item of itemsAcc) {
     const orderItem = await knex('orderItem').insert({ ...item, orderId: id })
     if (!orderItem) return null
   }
@@ -125,6 +209,7 @@ module.exports = {
   fields: SELECTABLE_FIELDS,
   ...queries,
   create,
+  createForStripe,
   find,
   findAll,
   findOneByUser,

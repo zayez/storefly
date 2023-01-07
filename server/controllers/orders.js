@@ -4,14 +4,18 @@ const controllerName = path.parse(__filename).name
 const controller = require('../helpers/controllerHelper')(controllerName)
 const Order = require('../models/order')
 const ActionStatus = require('../types/ActionStatus')
+const { ORDER_STRIPE } = require('../types/OrderType')
 const mapper = require('../helpers/propsMapper').output
 
-const placeOrder = async ({ order, userId }) => {
+const placeOrder = async ({ order, userId }, orderType) => {
   try {
-    const savedOrder = await Order.create({
-      order,
-      userId,
-    })
+    const savedOrder =
+      orderType === ORDER_STRIPE
+        ? await Order.createForStripe({
+            order,
+            userId,
+          })
+        : await Order.create({ order, userId })
 
     if (savedOrder) {
       return {

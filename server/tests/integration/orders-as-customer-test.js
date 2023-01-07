@@ -39,17 +39,12 @@ test('As a customer I should:', (t) => {
     delete addr.id
 
     const order = {
-      total: 10,
-      subtotal: 10,
       paymentStatus: 'paid',
       shippingAddress: addr,
       items: [
         {
           productId: product.id,
           quantity: 1,
-          total: 10,
-          subtotal: 10,
-          price: 10,
         },
       ],
     }
@@ -73,8 +68,6 @@ test('As a customer I should:', (t) => {
       delete addr.id
 
       const order = {
-        total: 999,
-        subtotal: 999,
         paymentStatus: 'paid',
         shippingAddress: addr,
         items: [
@@ -98,8 +91,6 @@ test('As a customer I should:', (t) => {
     delete addr.id
 
     const order = {
-      total: 0,
-      subtotal: 0,
       paymentStatus: 'paid',
       shippingAddress: addr,
       items: [],
@@ -124,8 +115,6 @@ test('As a customer I should:', (t) => {
       delete addr.id
 
       const order = {
-        total: 100,
-        subtotal: 100,
         paymentStatus: 'paid',
         shippingAddress: addr,
         items: [{ productId: product.id, quantity }],
@@ -149,34 +138,24 @@ test('As a customer I should:', (t) => {
     delete addr2.id
 
     const order1 = {
-      total: 10,
-      subtotal: 10,
       paymentStatus: 'paid',
       shippingAddress: addr1,
       items: [
         {
           productId: products[1].id,
           quantity: 1,
-          total: 10,
-          subtotal: 10,
-          price: 10,
         },
       ],
       dateOrder: new Date().toISOString(),
     }
 
     const order2 = {
-      total: 10,
-      subtotal: 10,
       paymentStatus: 'paid',
       shippingAddress: addr2,
       items: [
         {
           productId: products[2].id,
           quantity: 1,
-          total: 10,
-          subtotal: 10,
-          price: 10,
         },
       ],
       dateOrder: new Date().toISOString(),

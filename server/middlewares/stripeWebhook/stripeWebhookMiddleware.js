@@ -1,5 +1,6 @@
 const { setResponse } = require('../../helpers/middlewareHelpers')
 const ActionStatus = require('../../types/ActionStatus')
+const { ORDER_STRIPE } = require('../../types/OrderType')
 const OrdersController = require('../../controllers/orders')
 const STRIPE_KEY = require('../../config').stripe.KEY
 const STRIPE_CLI_KEY = require('../../config').stripe.CLI_KEY
@@ -49,10 +50,13 @@ const create = async (ctx) => {
         paymentStatus,
       }
       order.items = items
-      const { action, payload } = await OrdersController.placeOrder({
-        order,
-        userId,
-      })
+      const { action, payload } = await OrdersController.placeOrder(
+        {
+          order,
+          userId,
+        },
+        ORDER_STRIPE,
+      )
       setResponse(ctx, { action, payload })
     }
   } catch (err) {
