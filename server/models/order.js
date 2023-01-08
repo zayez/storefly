@@ -1,4 +1,5 @@
-const { format, isFirstDayOfMonth } = require('date-fns')
+const { format } = require('date-fns')
+
 const knex = require('../db')
 const TABLE_NAME = 'orders'
 const SELECTABLE_FIELDS = ['id']
@@ -45,8 +46,10 @@ const createForStripe = async ({ order, userId }) => {
     shippingAddressId = await knex('shippingAddresses').insert(shippingAddress)
   }
 
-  const dateFormat = 'yyyy-MM-dd-hh-mm-ss'
-  const date = dateOrder ? dateOrder : format(new Date(), dateFormat)
+  //TODO: Try to use the best format
+  // const dateFormat = 'yyyy-MM-dd-hh-mm-ss'
+  // const date = dateOrder ? dateOrder : format(new Date(), dateFormat)
+  const date = dateOrder ? dateOrder : new Date()
 
   const newOrder = {
     subtotal,
@@ -107,8 +110,10 @@ const create = async ({ order, userId }) => {
     shippingAddressId = await knex('shippingAddresses').insert(shippingAddress)
   }
 
-  const dateFormat = 'yyyy-MM-dd-hh-mm-ss'
-  const date = dateOrder ? dateOrder : format(new Date(), dateFormat)
+  //TODO: Try to use the best format
+  // const dateFormat = 'yyyy-MM-dd-hh-mm-ss'
+  // const date = dateOrder ? dateOrder : format(new Date(), dateFormat)
+  const date = dateOrder ? dateOrder : new Date()
 
   const itemsAcc = await Promise.all(
     items.map(async (i) => {
@@ -151,7 +156,19 @@ const create = async ({ order, userId }) => {
 const queryOrders = knex('orders as o')
   .distinct()
   .join('orderItem as i', 'i.orderId', 'o.id')
-  .select('o.id as id', 'o.dateOrder as dateOrder', 'o.userId as userId')
+  .join('users as u', 'u.id', 'o.userId')
+  .join('paymentStatus as ps', 'ps.id', 'o.paymentStatusId')
+  .join('shippingStatus as ss', 'ss.id', 'o.shippingStatusId')
+  .select(
+    'o.id as id',
+    'o.dateOrder as dateOrder',
+    'o.userId as userId',
+    'o.total as total',
+    'u.firstName as firstName',
+    'u.lastName as lastName',
+    'ps.name as paymentStatus',
+    'ss.name as shippingStatus',
+  )
 
 const queryOrderItems = knex('products as p')
   .join('orderItem as i', 'i.productId', 'p.id')
@@ -183,9 +200,14 @@ const find = async (filters, { page = 1, perPage = ITEMS_PER_PAGE } = {}) => {
   if (!orders) return null
 
   for (const order of orders) {
+    order.customer = {
+      firstName: order.firstName,
+      lastName: order.lastName,
+    }
     order.items = await findItems(order.id)
   }
 
+  console.log(orders)
   return orders
 }
 
