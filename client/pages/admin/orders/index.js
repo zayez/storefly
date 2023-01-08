@@ -2,36 +2,20 @@ import Head from 'next/head'
 import { adminLayout } from '../../../comps/Layout'
 import IOrders from '../../../node_modules/feather-icons/dist/icons/layers.svg'
 import OrderList from '../../../comps/admin/OrderList'
+import { fetchOrders, selectOrders } from '../../../store/slices/ordersSlice'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import Loader from '../../../comps/Loader'
+import { SPINNER_TYPE } from '../../../types/LoaderType'
 
-const orders = [
-  {
-    id: 1,
-    client: 'Lando',
-    total: 35.5,
-  },
-  {
-    id: 2,
-    client: 'Ricciardo',
-    total: 150,
-  },
-  {
-    id: 3,
-    client: 'Lopez',
-    total: 1500,
-  },
-  {
-    id: 4,
-    client: 'Alonso',
-    total: 340.25,
-  },
-  {
-    id: 5,
-    client: 'Lewis',
-    total: 832.99,
-  },
-]
+const Orders = () => {
+  const dispatch = useDispatch()
+  const orders = useSelector(selectOrders)
 
-const Orders = ({}) => {
+  useEffect(() => {
+    dispatch(fetchOrders())
+  }, [])
+
   return (
     <>
       <Head>
@@ -43,7 +27,13 @@ const Orders = ({}) => {
           <h1>Orders</h1>
         </div>
         <hr />
-        <OrderList orders={orders} />
+        {orders.loading ? <Loader type={SPINNER_TYPE} /> : null}
+        {!orders.loading && orders.error ? (
+          <div>Error: {orders.error}</div>
+        ) : null}
+        {!orders.loading && orders.orders?.length ? (
+          <OrderList orders={orders.orders} />
+        ) : null}
       </div>
     </>
   )
