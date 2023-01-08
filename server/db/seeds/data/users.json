@@ -13,6 +13,13 @@
       "email": "janedoe@google.com",
       "password": "4321",
       "roles": ["editor"]
+    },
+    {
+      "firstName": "Steven",
+      "lastName": "Smith",
+      "email": "stevensmith@google.com",
+      "password": "abcd",
+      "roles": ["customer"]
     }
   ]
 }
