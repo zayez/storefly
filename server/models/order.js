@@ -156,7 +156,7 @@ const create = async ({ order, userId }) => {
 const queryOrders = knex('orders as o')
   .distinct()
   .join('orderItem as i', 'i.orderId', 'o.id')
-  .join('users as u', 'u.id', 'o.userId')
+  .leftJoin('users as u', 'u.id', 'o.userId')
   .join('paymentStatus as ps', 'ps.id', 'o.paymentStatusId')
   .join('shippingStatus as ss', 'ss.id', 'o.shippingStatusId')
   .select(
@@ -207,7 +207,6 @@ const find = async (filters, { page = 1, perPage = ITEMS_PER_PAGE } = {}) => {
     order.items = await findItems(order.id)
   }
 
-  console.log(orders)
   return orders
 }
 
