@@ -141,7 +141,8 @@ const create = async ({ order, userId }) => {
     shippingAddressId,
   }
 
-  const id = await knex('orders').insert(newOrder)
+  const resInsert = await knex('orders').insert(newOrder)
+  const id = resInsert[0]
 
   if (!id) return null
 

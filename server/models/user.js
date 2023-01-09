@@ -62,7 +62,9 @@ async function create(user, roles = ['customer']) {
     lastName: user.lastName,
   }
 
-  const userId = await knex('users').insert(newUser)
+  const resInsert = await knex('users').insert(newUser)
+  const userId = resInsert[0]
+
   if (!userId) return null
 
   const createdUser = await queries.findById(userId)
