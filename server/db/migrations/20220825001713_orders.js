@@ -18,9 +18,18 @@ exports.up = async function (knex) {
   await knex.schema.createTable('orders', (table) => {
     table.increments()
     table.integer('userId').references('users.id').notNullable()
-    table.integer('paymentStatusId').references('paymentStatus.id')
-    table.integer('shippingStatusId').references('shippingStatus.id')
-    table.integer('shippingAddressId').references('shippingAddress.id')
+    table
+      .integer('paymentStatusId')
+      .references('paymentStatus.id')
+      .notNullable()
+    table
+      .integer('shippingStatusId')
+      .references('shippingStatus.id')
+      .notNullable()
+    table
+      .integer('shippingAddressId')
+      .references('shippingAddresses.id')
+      .notNullable()
     table.datetime('dateOrder')
     table.decimal('subtotal').notNullable()
     table.decimal('total').notNullable()
