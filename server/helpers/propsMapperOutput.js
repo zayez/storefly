@@ -111,10 +111,19 @@ const mapUser = ({
   return user
 }
 
-const mapOrderItem = ({ id, title, total, subtotal, price, quantity }) => {
+const mapOrderItem = ({
+  id,
+  title,
+  image,
+  total,
+  subtotal,
+  price,
+  quantity,
+}) => {
   const item = {}
   if (id) item.id = id
   if (title) item.title = title
+  if (image) item.image = image
   if (total) item.total = total
   if (subtotal) item.subtotal = subtotal
   if (price) item.price = price
@@ -131,6 +140,7 @@ const mapOrder = ({
   customer,
   paymentStatus,
   shippingStatus,
+  shippingAddress,
 }) => {
   const order = {}
   if (id) order.id = id
@@ -142,8 +152,28 @@ const mapOrder = ({
   if (total) order.total = total
   if (shippingStatus) order.shippingStatus = shippingStatus
   if (paymentStatus) order.paymentStatus = paymentStatus
+  if (shippingAddress)
+    order.shippingAddress = mapShippingAddress(shippingAddress)
 
   return order
+}
+
+const mapShippingAddress = ({
+  addressLine1,
+  addressLine2,
+  city,
+  country,
+  state,
+  postalCode,
+}) => {
+  const addr = {}
+  if (addressLine1) addr.addressLine1 = addressLine1
+  if (addressLine2) addr.addressLine2 = addressLine2
+  if (city) addr.city = city
+  if (country) addr.country = country
+  if (state) addr.state = state
+  if (postalCode) addr.postalCode = postalCode
+  return addr
 }
 
 module.exports = {
