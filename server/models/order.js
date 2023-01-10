@@ -107,7 +107,8 @@ const create = async ({ order, userId }) => {
   if (addressFound) {
     shippingAddressId = addressFound.id
   } else {
-    shippingAddressId = await knex('shippingAddresses').insert(shippingAddress)
+    const res = await knex('shippingAddresses').insert(shippingAddress)
+    shippingAddressId = res[0]
   }
 
   //TODO: Try to use the best format
@@ -165,23 +166,50 @@ const queryOrders = knex('orders as o')
     'o.dateOrder as dateOrder',
     'o.userId as userId',
     'o.total as total',
+    'o.subtotal as subtotal',
     'u.firstName as firstName',
     'u.lastName as lastName',
+    'u.email as email',
     'ps.name as paymentStatus',
     'ss.name as shippingStatus',
+    'o.shippingAddressId as shippingAddressId',
   )
 
 const queryOrderItems = knex('products as p')
   .join('orderItem as i', 'i.productId', 'p.id')
   .join('orders as o', 'o.id', 'i.orderId')
-  .select('p.id as id', 'p.title as title', 'i.quantity as quantity')
+  .select(
+    'p.id as id',
+    'p.title as title',
+    'i.quantity as quantity',
+    'p.image as image',
+    'i.price as price',
+    'i.total as total',
+  )
 
 const findById = async (id) => {
   const order = await queryOrders.clone().where('o.id', id).first()
 
   if (!order) return null
 
+  order.customer = {
+    firstName: order.firstName,
+    lastName: order.lastName,
+    email: order.email,
+  }
+
+  const shippingAddress = await knex('shippingAddresses')
+    .select('*')
+    .where('id', order.shippingAddressId)
+    .first()
+  if (!shippingAddress) return null
+
+  order.shippingAddress = {
+    ...shippingAddress,
+  }
+
   order.items = await findItems(id)
+
   return order
 }
 
