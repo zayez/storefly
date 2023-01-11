@@ -65,10 +65,28 @@ const getOneByUser = async ({ orderId, userId }) => {
   }
 }
 
+const markShippingStatus = async (orderId, status) => {
+  try {
+    const order = await Order.markShippingStatus(orderId, status)
+    if (order) {
+      return {
+        action: ActionStatus.Ok,
+        payload: mapper.mapOrder(order),
+      }
+    }
+    return {
+      action: ActionStatus.Error,
+    }
+  } catch (err) {
+    throw err
+  }
+}
+
 module.exports = {
   getAll: controller.getAll,
   getOne: controller.getOne,
   placeOrder,
   getAllByUser,
   getOneByUser,
+  markShippingStatus,
 }

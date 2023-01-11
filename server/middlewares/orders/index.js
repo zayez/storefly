@@ -8,6 +8,7 @@ const {
   validateGetOneByUser,
   validateAuthorization,
   validateGetAll,
+  validateShippingStatus,
 } = require('./ordersValidation')
 const OrdersMiddleware = require('./ordersMiddleware')
 
@@ -40,10 +41,17 @@ const getAll = compose([
 
 const get = compose([authorizeManagers, isValidId, OrdersMiddleware.get])
 
+const markShippingStatus = compose([
+  authorizeManagers,
+  validateShippingStatus,
+  OrdersMiddleware.markShippingStatus,
+])
+
 module.exports = {
   placeOrder,
   getAllByUser,
   getOneByUser,
   getAll,
   get,
+  markShippingStatus,
 }

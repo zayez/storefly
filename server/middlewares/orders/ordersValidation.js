@@ -9,6 +9,7 @@ const {
   GetAllByUser,
   GetOneByUser,
   GetAll,
+  ShippingStatus,
 } = require('./ordersSchema')
 const ProductsController = require('../../controllers/products')
 const { setResponse } = require('../../helpers/middlewareHelpers')
@@ -52,6 +53,9 @@ const validateItems = async (ctx, next) => {
   }
 }
 
+const validateShippingStatus = async (ctx, next) =>
+  await validateBody({ ctx, next }, ShippingStatus)
+
 module.exports = {
   validateGetAll,
   validateOrder,
@@ -59,4 +63,5 @@ module.exports = {
   validateGetAllByUser,
   validateGetOneByUser,
   validateAuthorization,
+  validateShippingStatus,
 }

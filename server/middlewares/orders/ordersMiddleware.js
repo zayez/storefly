@@ -61,10 +61,27 @@ const getOneByUser = async (ctx) => {
   }
 }
 
+const markShippingStatus = async (ctx) => {
+  try {
+    const { status } = ctx.request.body
+    const { id } = ctx.params
+
+    const { action, payload } = await OrdersController.markShippingStatus(
+      id,
+      status,
+    )
+
+    setResponse(ctx, { action, payload })
+  } catch (err) {
+    setResponse(ctx, { action: ActionStatus.Error })
+  }
+}
+
 module.exports = {
   getAll,
   get,
   placeOrder,
   getAllByUser,
   getOneByUser,
+  markShippingStatus,
 }

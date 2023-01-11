@@ -254,6 +254,19 @@ const findOneByUser = async ({ orderId, userId }) => {
   return order
 }
 
+const markShippingStatus = async (orderId, status) => {
+  const resSelect = await knex('shippingStatus').where({ name: status }).first()
+  const shippingStatusId = resSelect.id
+  if (!shippingStatusId) return null
+
+  const resUpdate = await knex(TABLE_NAME)
+    .update({ shippingStatusId })
+    .where({ id: orderId })
+
+  const order = await findById(orderId)
+  return order
+}
+
 module.exports = {
   tableName: TABLE_NAME,
   fields: SELECTABLE_FIELDS,
@@ -264,4 +277,5 @@ module.exports = {
   findAll,
   findOneByUser,
   findById,
+  markShippingStatus,
 }

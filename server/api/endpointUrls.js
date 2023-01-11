@@ -39,6 +39,8 @@ const POST_ORDER = `${ORDERS}`
 const GET_ORDER = `${ORDERS}/:id`
 const GET_ORDERS = `${ORDERS}`
 
+const PATCH_ORDER_MARK_SHIPPING_STATUS = `${ORDERS}/mark-shipping-status/:id`
+
 const STRIPE_CHECKOUT = `${BASE_URL}/stripe-checkout`
 const POST_STRIPE_CHECKOUT = `${STRIPE_CHECKOUT}`
 const GET_STRIPE_CHECKOUT = `${STRIPE_CHECKOUT}`
@@ -121,6 +123,8 @@ const EndpointUrls = {
   GET_USER_ORDERS,
   /** @member {string} */
   GET_USER_ORDER,
+  /** @member {string} */
+  PATCH_ORDER_MARK_SHIPPING_STATUS,
 
   /** @member {string} */
   POST_STRIPE_CHECKOUT,

@@ -14,6 +14,12 @@ const ShippingAddress = Joi.object().keys({
   postalCode: Joi.number().integer().required(),
 })
 
+const ShippingStatus = Joi.object().keys({
+  status: Joi.string()
+    .valid(...['shipped', 'unshipped', 'delivered'])
+    .required(),
+})
+
 const PlaceOrder = Joi.object().keys({
   items: Joi.array().items(OrderItem).required(),
   dateOrder: Joi.date(),
@@ -41,4 +47,5 @@ module.exports = {
   GetAllByUser,
   GetOneByUser,
   GetAll,
+  ShippingStatus,
 }
