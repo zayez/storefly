@@ -1,14 +1,4 @@
-.table-basic
-  width: 100%
-
-  & tbody
-    & tr
-      &:nth-child(odd)
-        background-color: $table-basic-stripe-background
-      &:hover
-        background: $table-basic-hover-background
-        cursor: pointer
-
+.table
   & tr
     padding: 1rem
     border-bottom: 1px solid $table-basic-border-color
@@ -30,7 +20,23 @@
   & .col-center
     text-align: center
 
+.table-basic
+  @extend .table
+  width: 100%
+  & tbody
+    & tr
+      &:nth-child(odd)
+        background-color: $table-basic-stripe-background
+      &:hover
+        background: $table-basic-hover-background
+        cursor: pointer
+
+
 .col-delete
   display: flex
   justify-content: center
   align-items: center
+
+.table-basic-auto
+  @extend .table-basic
+  width: auto
