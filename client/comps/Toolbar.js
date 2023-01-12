@@ -1,15 +1,17 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAuth, signOut } from '../store/slices/authSlice'
 import { selectCart } from '../store/slices/cartSlice'
-import ICart from '../node_modules/feather-icons/dist/icons/shopping-cart.svg'
-import IUser from '../node_modules/feather-icons/dist/icons/user.svg'
-import ILogout from '../node_modules/feather-icons/dist/icons/log-out.svg'
-import ILogin from '../node_modules/feather-icons/dist/icons/log-in.svg'
-import ISearch from '../node_modules/feather-icons/dist/icons/search.svg'
-import ISignUp from '../node_modules/feather-icons/dist/icons/user-plus.svg'
-import { useRouter } from 'next/router'
+import {
+  ShoppingCart as ICart,
+  User as IUser,
+  LogOut as ILogOut,
+  LogIn as ILogIn,
+  Search as ISearch,
+  UserPlus as ISignUp,
+} from 'react-feather'
 
 const Profile = () => {
   return (
@@ -25,7 +27,7 @@ const SignIn = () => {
   return (
     <Link href="/signin">
       <a className="toolbar-item" title="Login">
-        <ILogin />
+        <ILogIn />
       </a>
     </Link>
   )
@@ -60,7 +62,7 @@ const SignOut = () => {
   return (
     <li>
       <a className="toolbar-item" title="Logout" onClick={handleSignOut}>
-        <ILogout />
+        <ILogOut />
       </a>
     </li>
   )

@@ -1,9 +1,11 @@
 import Link from 'next/link'
-import IHome from '../node_modules/feather-icons/dist/icons/home.svg'
-import IUsers from '../node_modules/feather-icons/dist/icons/users.svg'
-import ICategories from '../node_modules/feather-icons/dist/icons/grid.svg'
-import IProducts from '../node_modules/feather-icons/dist/icons/package.svg'
-import IOrders from '../node_modules/feather-icons/dist/icons/layers.svg'
+import {
+  Home as IHome,
+  Users as IUsers,
+  Grid as ICategories,
+  Package as IProducts,
+  Layers as IOrders,
+} from 'react-feather'
 
 const Sidebar = ({}) => {
   return (
