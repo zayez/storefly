@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import IUsers from '../../../node_modules/feather-icons/dist/icons/users.svg'
+import { Users as IUsers } from 'react-feather'
 import { adminLayout } from '../../../comps/Layout'
 import UserList from '../../../comps/admin/UserList'
 import {

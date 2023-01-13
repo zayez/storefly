@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import IDelete from '../../node_modules/feather-icons/dist/icons/x-circle.svg'
+import { XCircle as IDelete } from 'react-feather'
 
 const CategoryItem = ({ category, id, onDelete }) => {
   const router = useRouter()

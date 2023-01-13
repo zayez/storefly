@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import IClose from '../node_modules/feather-icons/dist/icons/x.svg'
+import { X as IClose } from 'react-feather'
 
 const getType = (type) => {
   switch (type) {

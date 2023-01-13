@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { adminLayout } from '../../../comps/Layout'
-import IOrders from '../../../node_modules/feather-icons/dist/icons/layers.svg'
+
+import { Layers as IOrders } from 'react-feather'
 import OrderList from '../../../comps/admin/OrderList'
 import { fetchOrders, selectOrders } from '../../../store/slices/ordersSlice'
 import { useEffect } from 'react'

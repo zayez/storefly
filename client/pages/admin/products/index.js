@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { adminLayout } from '../../../comps/Layout'
-import IProducts from '../../../node_modules/feather-icons/dist/icons/package.svg'
+import { Package as IProducts } from 'react-feather'
 import {
   destroy,
   fetchProducts,
