@@ -28,6 +28,14 @@ const Sidebar = ({}) => {
           </Link>
         </li>
         <li className="sidebar-nav-item">
+          <Link href="/admin/customers">
+            <a className="nav-link">
+              <IUsers />
+              <span className="link-text">Customers</span>
+            </a>
+          </Link>
+        </li>
+        <li className="sidebar-nav-item">
           <Link href="/admin/products">
             <a className="nav-link">
               <IProducts />
