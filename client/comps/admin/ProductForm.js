@@ -92,7 +92,6 @@ const ProductForm = ({
 
   const handleRemoveImage = (e) => {
     e.preventDefault()
-    setImage(null)
     setImageSource(null)
     setImageData(null)
     setImageRemove(true)
