@@ -24,7 +24,26 @@ const create = async (user, roles) => {
   }
 }
 
+const getAllByRole = async (role) => {
+  try {
+    const users = await User.findAllByRole(role)
+    if (users) {
+      return {
+        action: ActionStatus.Ok,
+        payload: users.map(mapper.mapUser),
+      }
+    }
+
+    return {
+      action: ActionStatus.Error,
+    }
+  } catch (err) {
+    throw err
+  }
+}
+
 module.exports = {
   ...controller,
   create,
+  getAllByRole,
 }

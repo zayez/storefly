@@ -106,6 +106,18 @@ const findById = async (id) => {
   return user
 }
 
+const findAllByRole = async (role) => {
+  const selectedRole = await knex('roles').where({ name: role }).first()
+  if (!selectedRole) return []
+
+  const userRoles = await knex('userRoles').where({ roleId: selectedRole.id })
+  if (!userRoles) return []
+
+  const ids = userRoles.map((u) => u.id)
+  const users = await knex(TABLE_NAME).whereIn('id', ids)
+  return users
+}
+
 module.exports = {
   ...queries,
   hasRole,
@@ -115,4 +127,5 @@ module.exports = {
   update,
   findOne,
   findById,
+  findAllByRole,
 }

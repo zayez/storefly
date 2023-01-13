@@ -50,8 +50,14 @@ const get = async (ctx) => {
 
 const getAll = async (ctx) => {
   try {
-    const { action, payload } = await UsersController.getAll()
-    setResponse(ctx, { action, payload })
+    const { role } = ctx.query
+    if (role) {
+      const { action, payload } = await UsersController.getAllByRole(role)
+      setResponse(ctx, { action, payload })
+    } else {
+      const { action, payload } = await UsersController.getAll()
+      setResponse(ctx, { action, payload })
+    }
   } catch (err) {
     setResponse(ctx, { action: ActionStatus.Error })
   }
