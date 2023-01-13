@@ -82,7 +82,7 @@ const ViewOrder = (order) => {
           {date} at {hours}
         </span>
       </h3>
-      <div className="line">
+      <div className="order-content">
         <div className="left">
           <h4 className="heading-order-status">
             <Octagon
