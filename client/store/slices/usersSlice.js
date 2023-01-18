@@ -10,10 +10,16 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
   return fetch(`/api/users`).then((res) => res.json())
 })
 
-export const fetchUsersByRole = createAsyncThunk(
-  'users/fetchUsersByRole',
-  async (role) => {
-    const data = await fetch(`/api/users?role=${role}`)
+export const fetchUser = createAsyncThunk('users/fetchUser', async (id) => {
+  const res = await fetch(`/api/users/${id}`)
+  const data = await res.json()
+  return data
+})
+
+export const fetchUsersByRoles = createAsyncThunk(
+  'users/fetchUsersByRoles',
+  async (roles) => {
+    const data = await fetch(`/api/users?roles=${roles.join(',')}`)
     const res = await data.json()
     return res
   },
@@ -55,16 +61,30 @@ const usersSlice = createSlice({
       state.error = action.error.message
     })
 
-    builder.addCase(fetchUsersByRole.pending, (state) => {
+    builder.addCase(fetchUsersByRoles.pending, (state) => {
       state.loading = true
     })
-    builder.addCase(fetchUsersByRole.fulfilled, (state, action) => {
+    builder.addCase(fetchUsersByRoles.fulfilled, (state, action) => {
       state.loading = false
       state.users = action.payload
       state.error = ''
     })
-    builder.addCase(fetchUsersByRole.rejected, (state, action) => {
+    builder.addCase(fetchUsersByRoles.rejected, (state, action) => {
       state.users = []
+      state.error = action.error.message
+    })
+
+    builder.addCase(fetchUser.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(fetchUser.fulfilled, (state, action) => {
+      state.loading = false
+      state.selectedUser = action.payload
+      state.error = ''
+    })
+    builder.addCase(fetchUser.rejected, (state, action) => {
+      state.loading = false
+      state.selectUser = null
       state.error = action.error.message
     })
 
@@ -82,7 +102,6 @@ const usersSlice = createSlice({
   },
 })
 
-export const selectUser = (state) => state.users
-export const selectUsers = (state) => state.users.users
+export const selectUsers = (state) => state.users
 
 export default usersSlice.reducer

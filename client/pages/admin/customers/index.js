@@ -5,18 +5,16 @@ import { Users as IUsers } from 'react-feather'
 import { adminLayout } from '../../../comps/Layout'
 import UserList from '../../../comps/admin/UserList'
 import {
-  fetchUsersByRole,
-  selectUser,
+  fetchUsersByRoles,
   selectUsers,
 } from '../../../store/slices/usersSlice'
 import { CUSTOMER_ROLE } from '../../../types/Roles'
 
 const Users = ({}) => {
-  const user = useSelector(selectUser)
   const users = useSelector(selectUsers)
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(fetchUsersByRole(CUSTOMER_ROLE))
+    dispatch(fetchUsersByRoles([CUSTOMER_ROLE]))
   }, [])
   return (
     <>
@@ -25,13 +23,15 @@ const Users = ({}) => {
       </Head>
       <div>
         <h1 className="heading">
-          <IUsers /> <span>Users</span>
+          <IUsers /> <span>Customers</span>
         </h1>
         <hr />
 
-        {user.loading && <div>Loading...</div>}
-        {!user.loading && user.error ? <div>Error: {user.error}</div> : null}
-        {!user.loading && users.length ? <UserList users={users} /> : null}
+        {users.loading && <div>Loading...</div>}
+        {!users.loading && users.error ? <div>Error: {users.error}</div> : null}
+        {!users.loading && users?.users.length ? (
+          <UserList users={users.users} role={`customer`} />
+        ) : null}
       </div>
     </>
   )

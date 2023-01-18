@@ -5,17 +5,16 @@ import { Users as IUsers } from 'react-feather'
 import { adminLayout } from '../../../comps/Layout'
 import UserList from '../../../comps/admin/UserList'
 import {
-  fetchUsers,
-  selectUser,
+  fetchUsersByRoles,
   selectUsers,
 } from '../../../store/slices/usersSlice'
+import { ADMIN_ROLE, EDITOR_ROLE } from '../../../types/Roles'
 
 const Users = ({}) => {
-  const user = useSelector(selectUser)
   const users = useSelector(selectUsers)
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(fetchUsers())
+    dispatch(fetchUsersByRoles([ADMIN_ROLE, EDITOR_ROLE]))
   }, [])
   return (
     <>
@@ -28,9 +27,11 @@ const Users = ({}) => {
         </h1>
         <hr />
 
-        {user.loading && <div>Loading...</div>}
-        {!user.loading && user.error ? <div>Error: {user.error}</div> : null}
-        {!user.loading && users.length ? <UserList users={users} /> : null}
+        {users.loading && <div>Loading...</div>}
+        {!users.loading && users.error ? <div>Error: {users.error}</div> : null}
+        {!users.loading && users.users?.length ? (
+          <UserList users={users.users} />
+        ) : null}
       </div>
     </>
   )

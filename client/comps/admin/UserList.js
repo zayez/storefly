@@ -1,10 +1,12 @@
 import { useRouter } from 'next/router'
+import { CUSTOMER_ROLE } from '../../types/Roles'
 
-const UserItem = ({ user }) => {
+const UserItem = ({ user, role }) => {
   const router = useRouter()
   const handleItemClick = (e) => {
+    const roleRoute = role === CUSTOMER_ROLE ? `customers` : `users`
     e.preventDefault()
-    router.push(`/admin/users/${user.id}`)
+    router.push(`/admin/${roleRoute}/${user.id}`)
   }
   return (
     <tr onClick={handleItemClick}>
@@ -17,7 +19,7 @@ const UserItem = ({ user }) => {
   )
 }
 
-const UserList = ({ users }) => {
+const UserList = ({ users, role }) => {
   return (
     <div className="users-list">
       <table className="table-basic">
@@ -30,7 +32,7 @@ const UserList = ({ users }) => {
         </thead>
         <tbody>
           {users.map((user) => (
-            <UserItem user={user} key={user.id} />
+            <UserItem user={user} role={role} key={user.id} />
           ))}
         </tbody>
       </table>
