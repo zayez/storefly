@@ -24,9 +24,9 @@ const create = async (user, roles) => {
   }
 }
 
-const getAllByRole = async (role) => {
+const getAllByRoles = async (role) => {
   try {
-    const users = await User.findAllByRole(role)
+    const users = await User.findAllByRoles(role)
     if (users) {
       return {
         action: ActionStatus.Ok,
@@ -45,5 +45,5 @@ const getAllByRole = async (role) => {
 module.exports = {
   ...controller,
   create,
-  getAllByRole,
+  getAllByRoles,
 }

@@ -50,9 +50,10 @@ const get = async (ctx) => {
 
 const getAll = async (ctx) => {
   try {
-    const { role } = ctx.query
-    if (role) {
-      const { action, payload } = await UsersController.getAllByRole(role)
+    const queryRoles = ctx.query.roles
+    const roles = queryRoles ? queryRoles.split(',') : null
+    if (roles) {
+      const { action, payload } = await UsersController.getAllByRoles(roles)
       setResponse(ctx, { action, payload })
     } else {
       const { action, payload } = await UsersController.getAll()
