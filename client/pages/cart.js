@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import CartList from '../comps/CartList'
-import IArrowLeft from '../node_modules/feather-icons/dist/icons/arrow-left.svg'
+import IArrowLeft from '../node_modules/react-feather/dist/icons/arrow-left.js'
 import {
   calculateSubtotal,
   clearCart,

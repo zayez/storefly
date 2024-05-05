@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useDispatch } from 'react-redux'
-import IPlus from '../node_modules/feather-icons/dist/icons/plus.svg'
-import IMinus from '../node_modules/feather-icons/dist/icons/minus.svg'
+import IPlus from '../node_modules/react-feather/dist/icons/plus.js'
+import IMinus from '../node_modules/react-feather/dist/icons/minus.js'
 import {
   increaseItem,
   decreaseItem,
